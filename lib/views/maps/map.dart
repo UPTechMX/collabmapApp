@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong/latlong.dart';
@@ -24,14 +26,18 @@ class MapWidget extends StatefulWidget {
   List problems = [];
   bool spatial;
   var question;
+  Map spatialData;
+  var vId;
 
   MapWidget({
     Key key,
     this.datos,
     this.tiles,
     this.problems,
+    this.spatialData,
     this.spatial = true,
     this.question,
+    this.vId,
   }):super(key:key);
 
   @override
@@ -89,29 +95,27 @@ class MapWidgetState extends State<MapWidget> {
   @override
   Widget build(BuildContext context) {
 
-    center ??= LatLng(
-      widget.datos['centro']['coordinates'][1],
-      widget.datos['centro']['coordinates'][0],
-    );
 
     if(recentrar){
       center = newCentro;
       recentrar = false;
     }
 
-    double zoom = double.parse('${widget.datos['zoom']}');
+    double zoom = 13;
 
-    List poligonos = widget.datos['areaEstudio']['coordinates'];
-    double n = -100;
-    double s = 100;
-    double e = 0;
+    List poligonos = widget.spatialData['studyareas'];
+    double n = -360;
+    double s = 360;
+    double e = -360;
     double w = 360;
 
+//    print("POLIGONOS: $poligonos");
     List<Poly.Point> puntosPoligono = [];
     List polygons = <Polygon>[];
     for(int j = 0; j<poligonos.length; j++){
-      List poligono = poligonos[j];
-
+      var geometry = jsonDecode(poligonos[j]['geometry']);
+      var poligono = geometry['coordinates'];
+//      print('POLIGONO: $poligono');
       for(int k = 0;k<poligono.length;k++){
         List subPoligono = poligono[k];
         List subPolygonPoints = <LatLng>[];
@@ -130,9 +134,21 @@ class MapWidgetState extends State<MapWidget> {
           points: subPolygonPoints,
           color: Color.fromARGB(110 , 125, 124, 128),
         );
-       polygons.add(polygon);
+        polygons.add(polygon);
       }
     }
+
+    var latC = (n+s)/2;
+    var lngC = (w+e)/2;
+//    print([latC,lngC]);
+
+    center ??= LatLng(
+      latC,
+      lngC,
+    );
+
+
+//    print([n,s,w,e]);
 
     poly = Poly.Polygon(puntosPoligono);
 
@@ -141,6 +157,7 @@ class MapWidgetState extends State<MapWidget> {
     List polylinesProblems = <Polyline>[];
     List polygonProblems = <Polygon>[];
 
+    // TODO problema con los puntos.
     for(int j = 0; j<widget.problems.length;j++){
       Map problem = widget.problems[j];
       List points = <LatLng>[];
@@ -149,6 +166,7 @@ class MapWidgetState extends State<MapWidget> {
       }
       switch(problem['type']){
         case 'Marker':
+//          print('AAAA');
           markersProblems.add(
               Marker(
                 width: 40.0,
@@ -166,6 +184,7 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
           );
+          print('POINTSSS: $points');
           break;
         case 'Polyline':
           if(points != null){
@@ -194,10 +213,10 @@ class MapWidgetState extends State<MapWidget> {
       }
     }
     var PolylineProblemLayer = PolylineLayerOptions(
-        polylines: polylinesProblems,
+      polylines: polylinesProblems,
     );
     var PolygoneProblemLayer = PolygonLayerOptions(
-        polygons: polygonProblems,
+      polygons: polygonProblems,
     );
 
     List marcadoresEdt = <Marker>[];
@@ -363,6 +382,7 @@ class MapWidgetState extends State<MapWidget> {
     Widget barrita = Container(width: 0,height: 0,);
 //    print('ACTIVIDAD!!!! : $actividad, edtGral: $edtGral, type: $typeEdt');
     if(actividad != null && (tappedPlPoints.length > 0 || tappedPgPoints.length > 0) ){
+
       barrita = Barrita(
         undo: undo,
         actividad: actividad,
@@ -419,11 +439,11 @@ class MapWidgetState extends State<MapWidget> {
                 mapController: _mapctl,
                 options: MapOptions(
                   center: center,
-                  minZoom: widget.datos['zoom']!= null?zoom-1:0,
+                  minZoom: 10,
                   maxZoom: 17.0,
-                  zoom: widget.datos['zoom']!= null?zoom:15,
-                  swPanBoundary: LatLng(s, w),
-                  nePanBoundary: LatLng(n, e),
+                  zoom: 12,
+//                  swPanBoundary: LatLng(s, w),
+//                  nePanBoundary: LatLng(n, e),
                   onTap: (latlng){
                     actividadFncTap(latlng: latlng,context: context);
                   },
@@ -478,19 +498,19 @@ class MapWidgetState extends State<MapWidget> {
               spatial: widget.spatial,
             ),
             !widget.spatial?
-              RaisedButton(
-                color: Colors.grey[400],
-                child: Text(
-                  Translations.of(context).text('finish_map').toUpperCase(),
-                  style: TextStyle(
+            RaisedButton(
+              color: Colors.grey[400],
+              child: Text(
+                Translations.of(context).text('finish_map').toUpperCase(),
+                style: TextStyle(
                     color: Colors.white
-                  ),
                 ),
-                onPressed: (){
-                  Navigator.of(context).pop();
-                },
-              ):
-              Container(),
+              ),
+              onPressed: (){
+                Navigator.of(context).pop();
+              },
+            ):
+            Container(),
 
           ],
         ),
@@ -532,23 +552,23 @@ class MapWidgetState extends State<MapWidget> {
 
 //    print('QUITAR el true de abajo y cambiar este chequeo a otro lugar');
 //    if(inside || true){
-      switch(actividad){
-        case 'addMarker':
-          setState(() {
-            tappedPoints = [center];
-          });
-          break;
-        case 'edtMarker':
-          widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] = latlng;
-          setState((){
-            actividad = 'edtMarker';
+    switch(actividad){
+      case 'addMarker':
+        setState(() {
+          tappedPoints = [center];
+        });
+        break;
+      case 'edtMarker':
+        widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] = latlng;
+        setState((){
+          actividad = 'edtMarker';
 //            print('typeEdt: $typeEdt');
-            if(typeEdt != 'Marker'){
-              marcadorEditando = [latlng];
-            }
-          });
-          break;
-      }
+          if(typeEdt != 'Marker'){
+            marcadorEditando = [latlng];
+          }
+        });
+        break;
+    }
 //    }else{
 //      Alert(context: context,texto: Translations.of(context).text('outside_the_polygon'));
 //    }
@@ -597,7 +617,10 @@ class MapWidgetState extends State<MapWidget> {
           break;
       }
     }else{
-      Alert(context: context,texto: Translations.of(context).text('outside_the_polygon'));
+      if(actividad != null){
+        Alert(context: context,texto: Translations.of(context).text('outside_the_polygon'));
+
+      }
     }
   }
 
@@ -607,7 +630,7 @@ class MapWidgetState extends State<MapWidget> {
       nPolygon.add(polygon[i]);
     }
     if(latlng != null){
-     nPolygon.add(latlng);
+      nPolygon.add(latlng);
     }
 
     if(nPolygon.length <4){
@@ -670,9 +693,9 @@ class MapWidgetState extends State<MapWidget> {
     DB db = DB.instance;
     var lat = latlang.latitude;
     var lng = latlang.longitude;
-    
+
     db.query('UPDATE points SET lat = $lat, lng = $lng WHERE id = $markerEdtId');
-    
+
   }
 
   centrar({var lat, var lng, bool ubic = true, bool makeZoom = true}){
@@ -702,8 +725,8 @@ class MapWidgetState extends State<MapWidget> {
     bool ya = false;
 
     bool apareceDraft;
-    if(widget.datos['edit_inputs']){
-//    if(false){
+//    if(widget.datos['edit_inputs']){
+    if(false){
       apareceDraft = false;
     }else{
       apareceDraft = true;
@@ -724,41 +747,47 @@ class MapWidgetState extends State<MapWidget> {
 
     if(edit && !ya){
       ya = true;
-      inputController = TextEditingController(text:problem['input']);
+      inputController = TextEditingController(text:problem['description']);
       nameController = TextEditingController(text:problem['name']);
-      catId = problem['catId'];
+      catId = problem['categoriesId'];
       photo = problem['photo'];
       print('CATID: $catId');
     }
 
     DB db = DB.instance;
+//    print('PREGUNTA: ${widget.question}');
     List cats = await db.query('''
       SELECT c.* 
-      FROM categories c
-      LEFT JOIN categoriesSurvey cc ON cc.category_id = c.id
-      WHERE cc.survey_id = ${widget.question['survey_id']} 
+      FROM Categories c
+      WHERE c.preguntasId = ${widget.question['id']} 
     ''');
 
+    cats ??= [];
+
+//    print('CATS $cats');
     var ansId;
-    var ans = await db.query("SELECT * FROM answers WHERE survey_id = ${widget.question['survey_id']} AND question_id = ${widget.question['id']}");
+
+    var ans = await db.query("SELECT * FROM RespuestasVisita WHERE visitasId = ${widget.vId} AND preguntasId = ${widget.question['id']}");
+//    print('------ ANS $ans ---------');
     if(ans == null){
       Map<String,dynamic> dAns = Map();
-      dAns['survey_id'] = widget.question['survey_id'];
-      dAns['question_id'] = widget.question['id'];
-      dAns['value'] = '';
+      dAns['visitasId'] = widget.vId;
+      dAns['preguntasId'] = widget.question['id'];
+      dAns['respuesta'] = 'spatial';
       dAns['new'] = 1;
 
-      ansId = await db.insert('answers', dAns, true);
+      ansId = await db.insert('RespuestasVisita', dAns, true);
+//      print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=ANS CREADO $ansId');
+
     }else{
       ansId = ans[0]['id'];
     }
 
-
+    print('ANSID: $ansId');
 
     if(!widget.spatial){
-
       if(nameController.text == ''){
-        var cuantos = await db.query('SELECT COUNT(*) as cuantos FROM problems WHERE answers_id = ${ansId}');
+        var cuantos = await db.query('SELECT COUNT(*) as cuantos FROM problems WHERE respuestasVisitaId = ${ansId}');
         nameController = TextEditingController(text: '${Translations.of(context).text('problem')}_${cuantos[0]['cuantos'] + 1}');
       }
 
@@ -789,7 +818,7 @@ class MapWidgetState extends State<MapWidget> {
                   TextField(
                     maxLines: 1,
                     decoration: InputDecoration(
-                      isDense: true,
+                        isDense: true,
                         enabledBorder: OutlineInputBorder(
                             borderSide: BorderSide(
                                 color: Color(0xFF2568D8),
@@ -845,10 +874,10 @@ class MapWidgetState extends State<MapWidget> {
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                      border: Border.all(
-                        color: Colors.transparent,
-                        width: 1
-                      )
+                        border: Border.all(
+                            color: Colors.transparent,
+                            width: 1
+                        )
                     ),
                     child: Text(
                       Translations.of(context).text('category').toUpperCase(),
@@ -863,7 +892,7 @@ class MapWidgetState extends State<MapWidget> {
                     cats: cats,
                     setCat: setCat,
                     edit:edit,
-                    catId: problem == null?0:problem['catId'],
+                    catId: problem == null?0:problem['categoriesId'],
                     fix: fix,
                   ),
                   Container(height: 30,),
@@ -908,6 +937,7 @@ class MapWidgetState extends State<MapWidget> {
 
                   if(allOk){
                     Navigator.of(context).pop();
+                    print('aaa');
                     fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: true);
                   }
                 },
@@ -936,6 +966,7 @@ class MapWidgetState extends State<MapWidget> {
 //                    problem['draft'] = null;
                     }
                     print('(actVentana:$actVentana,edit:$edit,id:${problem == null?0:problem['id']},draft: ${false},question: ${widget.question},answer_id: $ansId)');
+                    print('bbb');
                     fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: false,question: widget.question,answer_id: ansId);
                   }
 
@@ -947,10 +978,12 @@ class MapWidgetState extends State<MapWidget> {
       );
     }else{
 
-
-
+      Map aaa = {'actVentana':actVentana,'edit':edit,'id':problem == null?0:problem['id'],'draft': false,'question': widget.question,'answer_id': ansId};
+      print(aaa);
+      print('ccc');
       fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: false,question: widget.question,answer_id: ansId);
 
+        // TODO: ESTO ESTÁ GENERANDO PROBLEMAS CON EL WIDGET
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -1040,16 +1073,21 @@ class MapWidgetState extends State<MapWidget> {
     print('AnswerId: $answer_id');
 
     Map problemDat = Map<String,dynamic>();
-    problemDat['catId'] = catId;
-    problemDat['input'] = input;
+
+
+    problemDat['categoriesId'] = catId;
+    problemDat['description'] = input;
     problemDat['name'] = name;
-    problemDat['answers_id'] = answer_id;
+    problemDat['respuestasVisitaId'] = answer_id;
 //    print('PHOTOOOOO: $photo');
     problemDat['photo'] = photo;
-    problemDat['draft'] = draft?1:null;
+//    problemDat['draft'] = draft?1:null;
     problemDat['edit'] = edit;
 
 
+//    print(problemDat);
+//    print(question);
+//    print("- - - - - - - - - - -ACAAAAAA- - - - - - - - - - - - -");
 
 //    print(problemDat);
     switch(actVentana){
@@ -1064,7 +1102,7 @@ class MapWidgetState extends State<MapWidget> {
         break;
     }
 
-    print('EDIT : $edit');
+//    print('EDIT : $edit');
     if(edit){
       print('edit');
       problemDat['id'] = id;
@@ -1072,8 +1110,8 @@ class MapWidgetState extends State<MapWidget> {
 
       String sql = '''
         UPDATE problems 
-        SET catId = '${problemDat['catId']}', input = '${problemDat['input']}',name = '${problemDat['name']}',
-        answers_id = '${problemDat['answers_id']}', photo = ${problemDat['photo']==null?'NULL':"'${problemDat['photo']}'"},
+        SET categoriesId = '${problemDat['categoriesId']}', description= '${problemDat['description']}',name = '${problemDat['name']}',
+        respuestasVisitaId = '${answer_id}', photo = ${problemDat['photo']==null?'NULL':"'${problemDat['photo']}'"},
         edit = ${problemDat['edit']?1:'NULL'} $draftDB
         WHERE id = ${problemDat['id']}   
         ''';
@@ -1082,13 +1120,17 @@ class MapWidgetState extends State<MapWidget> {
       await db.query(sql);
 //      await db.replace('problems', problemDat);
     }else{
-//      print('NVO');
-      if(question['type'] == 'spatial'){
-        await db.query('DELETE FROM problems WHERE answers_id = $answer_id');
+//      print('NVO: ${question}');
+      if(question['tipo'] == 'spatial' || question['tipo'] == 'op'){
+        await db.query('DELETE FROM problems WHERE respuestasVisitaId = $answer_id');
       }
-      id = await db.insert('problems', problemDat,false);
+      print('problemDat: $problemDat');
+      id = await db.insert('problems', problemDat,true);
+      print('ID: $id');
     }
 
+    var problems = await db.query("SELECT * FROM Problems");
+//    print('Problems:${problems}');
 
     Map prb = Map();
     Map pointsDat = Map<String,dynamic>();
@@ -1101,6 +1143,8 @@ class MapWidgetState extends State<MapWidget> {
         if(tappedPoints.length>0){
           pointsDat['lat'] = tappedPoints[0].latitude;
           pointsDat['lng'] = tappedPoints[0].longitude;
+          print('pointsDat: $pointsDat');
+
           int id = await db.insert('points', pointsDat,false);
           tmp['latLng'] = tappedPoints[0];
           tmp['id'] = id;
@@ -1138,7 +1182,7 @@ class MapWidgetState extends State<MapWidget> {
 //        print(tappedPgPoints);
         break;
     }
-
+    setState(() {});
     if(cType == sendProblemsSettings){
 //      print('ENVIANDO....');
       var problemDB = await db.query("SELECT * FROM problems WHERE id = $id");
@@ -1153,9 +1197,10 @@ class MapWidgetState extends State<MapWidget> {
     if(!edit){
       prb['id'] = id;
       prb['catId'] = catId;
-      prb['consultationsId'] = widget.datos['id'];
+      //ToDo: echarle un ojo a esto
+//      prb['consultationsId'] = widget.datos['id'];
       prb['photo'] = photo;
-      if(question['type'] == 'spatial'){
+      if(question['tipo'] == 'spatial'){
         widget.problems = [prb];
       }else{
         widget.problems.add(prb);
@@ -1404,17 +1449,17 @@ class Marcador{
                 if(keyMapa.currentState.centerEdt){
                   keyMapa.currentState.centerEdt = false;
                   keyMapa.currentState.centrar(
-                    lat:latlng.latitude,
-                    lng:latlng.longitude,
-                    ubic: false,
-                    makeZoom: makeZoom
+                      lat:latlng.latitude,
+                      lng:latlng.longitude,
+                      ubic: false,
+                      makeZoom: makeZoom
                   );
                 }
 
                 keyMapa.currentState.setEdtMarker(act: 'edtMarker',markerId: id,markerIndex: index);
                 if(type == 'Polygon' || type == 'Polyline'){
                   keyMapa.currentState.setMarcadorEditando(
-                      latlng: latlng,
+                    latlng: latlng,
                   );
                 }
 

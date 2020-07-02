@@ -136,6 +136,7 @@
   "successfulImport": "Importación exitosa",
   "importError": "Hubo un error al importar el archivo ",
 
+
   "users": "Usuarios",
   "user": "Usuario",
   "internalUsers": "Usuarios internos",
@@ -146,6 +147,7 @@
   "confirmed": "Confirmado",
   "validate": "Validar",
   "validated": "Validado",
+  "needTarget": "Necesitas seleccionar un objetivo",
   "targetAlert": "El objetivo que quieres agregar ya existe para este usuario",
   "oneTime": "Una vez",
   "daily": "Daily",

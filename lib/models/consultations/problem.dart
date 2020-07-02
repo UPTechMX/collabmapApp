@@ -14,7 +14,12 @@ class Problem {
     List problems = await db.query("SELECT * FROM problems WHERE id = $pId");
   }
 
+
+
   insertProb() async {
+
+    print("PROBLEMSSSSSS");
+
     DB db = DB.instance;
     Map dats = new Map();
     dats['type'] = type;

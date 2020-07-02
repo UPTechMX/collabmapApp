@@ -3,9 +3,7 @@ import 'package:flutter/services.dart';
 import 'views/home/home.dart';
 import 'views/login/login.dart';
 import 'views/home/privacidad.dart';
-
 import 'package:shared_preferences/shared_preferences.dart';
-
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'models/translations.dart';
 

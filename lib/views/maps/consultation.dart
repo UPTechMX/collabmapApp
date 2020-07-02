@@ -10,17 +10,22 @@ import 'drawerEdt.dart';
 
 class Consultation extends StatefulWidget {
 
-  Map datos;
+  GlobalKey<MapWidgetState> keyMapa = GlobalKey();
   File tiles;
-  List problems;
-  Map question;
-
+  List problems = [];
+  var question;
+  Map spatialData;
+  var vId;
+  Map datos;
 
   Consultation({
+    this.keyMapa,
     this.datos,
     this.tiles,
     this.problems,
     this.question,
+    this.spatialData,
+    this.vId,
   });
 
   @override
@@ -44,14 +49,23 @@ class ConsultationState extends State<Consultation>{
       appBar: Barra(),
 //      drawer: Opciones(_nivel,_accion),
       body: MapWidget(
-        key:keyMapa,
-        datos: widget.datos,
+//        key:keyMapa,
+//        datos: widget.datos,
+//        tiles: widget.tiles,
+//        problems: problems,
+//        question: question,
+//        spatial: false,
+
+        key: keyMapa,
         tiles: widget.tiles,
-        problems: problems,
-        question: question,
+        spatialData: widget.spatialData,
+        problems: widget.problems,
+        question: widget.question,
         spatial: false,
+        vId:widget.vId
+
       ),
-      drawer: DrawerEdt(question: widget.question,keyMapa: keyMapa,),
+      drawer: DrawerEdt(question: widget.question,keyMapa: keyMapa,vId: widget.vId,),
 //      body: Container(),
 //      floatingActionButton: FancyFab(keyMapa: keyMapa,context: context,),
     );

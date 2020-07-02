@@ -35,9 +35,11 @@ class CatSelState extends State<CatSel> {
   }
 
 
+
   @override
   Widget build(BuildContext context) {
 
+    print('${widget.cats},${widget.setCat}');
     if(widget.edit && !ya){
       ya = true;
       selected = widget.catId;
@@ -46,6 +48,7 @@ class CatSelState extends State<CatSel> {
     List items = new List<DropdownMenuItem>();
     List cats = widget.cats;
     for(int i = 0;i<cats.length;i++){
+      print('CAT: ${cats[i]}');
       var cat = cats[i];
       var item = DropdownMenuItem(
         child: Text(

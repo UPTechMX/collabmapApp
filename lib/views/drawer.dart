@@ -125,13 +125,13 @@ class OpcionesState extends State<Opciones>{
     return PopupMenuButton<int>(
       icon: Icon(Icons.menu),
       itemBuilder: (context) => [
-        webPage,
-        about,
-        separador,
+//        webPage,
+//        about,
+//        separador,
         privacidad,
-        separador,
-        mapManager,
-        separador,
+//        separador,
+//        mapManager,
+//        separador,
         cerrarSesionBtn,
       ],
     );

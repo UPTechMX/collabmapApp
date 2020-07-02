@@ -326,7 +326,7 @@ class Spatial extends StatelessWidget {
                 height: MediaQuery.of(context).size.height*.55,
                 width: double.infinity,
                 child: MapWidget(
-                  key: keyMapa,
+
                   tiles: snapshot.data['mapFile'],
                   datos: acomodado,
                   problems: snapshot.data['problems'],

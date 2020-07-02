@@ -142,6 +142,7 @@ class ListaState extends State<Lista> {
               return Text('Error: ${snapshot.error}');
             }
             List elementos = snapshot.data;
+//            print('DATA : ${snapshot.data}');
             if(snapshot.data.length == 0){
               return Container(
                 height: 100,
@@ -151,9 +152,11 @@ class ListaState extends State<Lista> {
               );
             }
             for(int i = 0; i < elementos.length; i++){
+
 //              print(elementos[i]);
               rows.add(widget.elemento(datos: elementos[i],));
             }
+
             return Container(
               padding: EdgeInsets.all(15),
               child: Column(

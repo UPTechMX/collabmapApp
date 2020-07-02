@@ -108,12 +108,12 @@ class SyncState extends State<Sync> {
 
     SharedPreferences userData = await SharedPreferences.getInstance();
     userData.setBool('firstSync', true);
-
+//
     setState(() {
       loading = false;
       etapa = '';
     });
-
+//
     List<Widget> actions = [];
     if(!ventana){
       actions.add(

@@ -13,10 +13,12 @@ class DrawerEdt extends StatefulWidget {
 
   GlobalKey<MapWidgetState> keyMapa = GlobalKey();
   Map question;
+  var vId;
 
   DrawerEdt({
     this.keyMapa,
     this.question,
+    this.vId
   });
 
   @override
@@ -96,7 +98,7 @@ class DrawerEdtState extends State<DrawerEdt> {
                     return Text('Error: ${snapshot.error}');
                   }
 
-//                  print(snapshot.data);
+                  print(snapshot.data);
                   int i = 0;
                   return Container(
                     padding: EdgeInsets.all(15),
@@ -123,23 +125,26 @@ class DrawerEdtState extends State<DrawerEdt> {
   Future<List> getProblems() async {
     DB db = DB.instance;
 
+
     var ansId;
-    var ans = await db.query("SELECT * FROM answers WHERE survey_id = ${widget.question['survey_id']} AND question_id = ${widget.question['id']}");
+    var ans = await db.query("SELECT * FROM RespuestasVisita WHERE preguntasId = ${widget.question['id']} AND visitasId = ${widget.vId}");
     if(ans == null){
       Map<String,dynamic> dAns = Map();
-      dAns['survey_id'] = widget.question['survey_id'];
-      dAns['question_id'] = widget.question['id'];
-      dAns['value'] = '';
+      dAns['visitasId'] = widget.vId;
+      dAns['preguntasId'] = widget.question['id'];
+      dAns['valor'] = 'spatial';
       dAns['new'] = 1;
-      ansId = await db.insert('answers', dAns, true);
+      ansId = await db.insert('RespuestasVisita', dAns, true);
+      print('- - - - -aca- - - - -');
     }else{
       ansId = ans[0]['id'];
+      print('- - - - - alla - - - -');
     }
 
 
     List problemsDB = await db.query('''SELECT * 
       FROM problems 
-      WHERE answers_id = ${ansId}
+      WHERE respuestasVisitaId = ${ansId}
       AND (del != 1 OR del IS NULL)
     ''');
     problemsDB ??= [];
@@ -166,6 +171,8 @@ class DrawerEdtState extends State<DrawerEdt> {
       }
 
     }
+
+    print('PROBLEMS: $problems');
     return problems;
   }
 
@@ -184,10 +191,11 @@ class DrawerEdtState extends State<DrawerEdt> {
         break;
     }
 
+    print('0000000------');
     bool editable = true;
 //    print('PROBLEM: $problem, editableC: ${widget.keyMapa.currentState.widget.datos['edit_inputs']}');
-    if(!widget.keyMapa.currentState.widget.datos['edit_inputs']){
-//    if(!false){
+//    if(!widget.keyMapa.currentState.widget.datos['edit_inputs']){
+    if(!false){
       print('ENTRA ACA');
       if(problem['idServer'] != null){
         editable = false;
@@ -195,7 +203,6 @@ class DrawerEdtState extends State<DrawerEdt> {
         editable = true;
       }
     }
-
 
     Future<void> EditBtns({BuildContext context,String texto,int problemId,int problemIndex, String type}) async {
       return showDialog<void>(
@@ -333,9 +340,9 @@ class DrawerEdtState extends State<DrawerEdt> {
                 icon: Icon(Icons.info,color: Colors.grey[600],),
                 onPressed: (){
 //                  print('click');
-//                  print('(context: $context,edit: true,problem: $problem,editable: $editable,fix: true)');
+                  print('(context: $context,edit: true,problem: $problem,editable: $editable,fix: true)');
                   Navigator.of(context).pop();
-                  widget.keyMapa.currentState.addProblem(context: context,edit: true,problem: problem,editable: editable,fix: true);
+                  widget.keyMapa.currentState.addProblem(context: context,edit: true,problem: problem,editable: editable,fix: false);
                 },
               ),
             ),

@@ -136,6 +136,7 @@
   "successfulImport": "Successful import",
   "importError": "There was an error importing the file ",
 
+
   "users": "Users",
   "user": "User",
   "internalUsers": "Internal users",
@@ -146,6 +147,7 @@
   "confirmed": "Confirmed",
   "validate": "Validate",
   "validated": "Validated",
+  "needTarget": "You need to select a target",
   "targetAlert": "The target you want to add already exists for this user",
   "oneTime": "One time",
   "daily": "Daily",

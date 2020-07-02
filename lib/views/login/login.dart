@@ -63,12 +63,13 @@ class _Login extends State<Login>{
         SharedPreferences userData = await SharedPreferences.getInstance();
 
         if(resp.token != null){
-//          print('aaaa: ${resp.userId}');
+          print('Token: ${resp.token}');
           userData.setBool('login', true);
           userData.setString('token', resp.token);
           userData.setString('username', _datosLogin['username'].text);
           userData.setString('password', _datosLogin['password'].text);
           userData.setInt('userId', resp.userId);
+          userData.setString('name', resp.name);
 
           Navigator.pushReplacementNamed(context, 'home');
 //          Navigator.of(context).pushNamed('home');
