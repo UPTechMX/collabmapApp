@@ -46,24 +46,24 @@ class About extends StatelessWidget {
                         ),
                         SizedBox(height: 10,),
                         Html(
-                          data:'${datos['content']}',
+                          data:'${datos['texto']}',
                           customTextAlign: (a) {
                             return TextAlign.justify;
                           },
 
                         ),
-                        SizedBox(height: 10,),
-                        Container(
-                          child: datos['image'],
-                        ),
-                        SizedBox(height: 10,),
-                        Html(
-                          data:'${datos['content2']}',
-                          customTextAlign: (a) {
-                            return TextAlign.justify;
-                          },
-
-                        ),
+//                        SizedBox(height: 10,),
+//                        Container(
+//                          child: datos['image'],
+//                        ),
+//                        SizedBox(height: 10,),
+//                        Html(
+//                          data:'${datos['content2']}',
+//                          customTextAlign: (a) {
+//                            return TextAlign.justify;
+//                          },
+//
+//                        ),
                       ],
                     ),
                   ),
@@ -79,16 +79,15 @@ class About extends StatelessWidget {
 
   getData() async {
     DB db = DB.instance;
-    List datos = await db.query("SELECT * FROM Projects WHERE id = 1");
-
+    List datos = await db.query("SELECT * FROM General WHERE name = 'about'");
     datos ??= [];
 
     Map dat = Map.from(datos[0]);
-    String dir = (await getApplicationDocumentsDirectory()).path;
+//    String dir = (await getApplicationDocumentsDirectory()).path;
 
-    File file = File('${dir}/projects/${dat['image']}');
-    Image img = Image.file(file);
-    dat['image'] = img;
+//    File file = File('${dir}/projects/${dat['image']}');
+//    Image img = Image.file(file);
+//    dat['image'] = img;
 
 
     return dat;

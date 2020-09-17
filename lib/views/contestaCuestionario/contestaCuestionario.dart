@@ -45,52 +45,54 @@ class ContestaCuestionario extends StatelessWidget{
   Widget build(BuildContext context) {
     
 //    print('bb');
-    return Scaffold(
-      appBar: Barra(),
+    return SafeArea(
+      child: Scaffold(
+        appBar: Barra(),
 //      drawer: Opciones(_nivel,_accion),
 
-      body: new Center(
-        child: new ListView(
-          children: <Widget>[
-            Container(
-              height: 60.0,
-              child: BloquesBtn(
-                chk:chk,
-                key:KeyBloques,
-                KeyAreas:KeyAreas,
-                KeyPreguntas:KeyPreguntas,
-                KeyPregunta: KeyPregunta,
-                bloquesAct:bloquesAct,
-                activo:'__general__'
+        body: new Center(
+          child: new ListView(
+            children: <Widget>[
+              Container(
+                height: 60.0,
+                child: BloquesBtn(
+                    chk:chk,
+                    key:KeyBloques,
+                    KeyAreas:KeyAreas,
+                    KeyPreguntas:KeyPreguntas,
+                    KeyPregunta: KeyPregunta,
+                    bloquesAct:bloquesAct,
+                    activo:'__general__'
+                ),
               ),
-            ),
-            Container(
-              height: 60,
-              child: Areas(
-                  chk:chk,
-                  key:KeyAreas,
-                  KeyBloques:KeyBloques,
-                  KeyPreguntas:KeyPreguntas,
-                  KeyPregunta:KeyPregunta,
-                  areas:areas,
-                  areasAct:areasAct,
-                  activo:'_datGral_'
+              Container(
+                height: 60,
+                child: Areas(
+                    chk:chk,
+                    key:KeyAreas,
+                    KeyBloques:KeyBloques,
+                    KeyPreguntas:KeyPreguntas,
+                    KeyPregunta:KeyPregunta,
+                    areas:areas,
+                    areasAct:areasAct,
+                    activo:'_datGral_'
+                ),
               ),
-            ),
-            Container(
-              child: PreguntasCont(
-                key:KeyPreguntas,
-                keyAreas: KeyAreas,
-                keyBloques: KeyBloques,
-                keyPregunta: KeyPregunta,
-                pagina: 'preguntas',
-                bId: 'bId',
-                aId: 'aId',
-                pId: 'pId',
-                chk: chk,
+              Container(
+                child: PreguntasCont(
+                  key:KeyPreguntas,
+                  keyAreas: KeyAreas,
+                  keyBloques: KeyBloques,
+                  keyPregunta: KeyPregunta,
+                  pagina: 'preguntas',
+                  bId: 'bId',
+                  aId: 'aId',
+                  pId: 'pId',
+                  chk: chk,
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );

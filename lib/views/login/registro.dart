@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:siap/views/barra.dart';
 import 'package:siap/models/translations.dart';
@@ -31,9 +33,9 @@ class RegistroState extends State<Registro> {
   Widget build(BuildContext context) {
 
     List genders = [
-      {'value':'female','name':Translations.of(context).text('female')},
-      {'value':'male','name':Translations.of(context).text('male')},
-      {'value':'x','name':Translations.of(context).text('prefer_not_answer')}
+      {'value':'F','name':Translations.of(context).text('female')},
+      {'value':'M','name':Translations.of(context).text('male')},
+      {'value':'X','name':Translations.of(context).text('prefer_not_answer')}
     ];
     List items = new List<DropdownMenuItem>();
 
@@ -290,32 +292,35 @@ class RegistroState extends State<Registro> {
 //                  print('allOk : $allOk');
                     if(allOk){
                       Map datos = Map();
-                      datos['username'] = generaDatoString(name: 'username',value: usernameChange);
-                      datos['email'] = generaDatoString(name: 'email',value: emailChange);
-                      datos['firstname'] = generaDatoString(name: 'first_name',value: firstnameChange);
-                      datos['lastname'] = generaDatoString(name: 'last_name',value: lastnameChange);
-                      datos['password'] = generaDatoString(name: 'password',value: passwordChange);
-                      datos['age'] = generaDatoString(name: 'age',value: ageChange);
-                      datos['gender'] = generaDatoString(name: 'gender',value: genderSel);
+                      datos['username'] = usernameChange;
+                      datos['email'] = emailChange;
+                      datos['name'] = firstnameChange;
+                      datos['lastname'] = lastnameChange;
+                      datos['pwd'] = passwordChange;
+                      datos['age'] = ageChange;
+                      datos['gender'] = genderSel;
+
+                      Map post = Map();
+                      post['datos'] = {};
+                      post['datos']['type'] = 'String';
+                      post['datos']['name'] = 'datos';
+                      post['datos']['value'] = jsonEncode(datos);
 
                       var resp = await postDatos(
-                        datos: datos,
-                        opt: 'profile/',
+                        datos: post,
+                        opt: 'signup/',
                         metodo: 'POST',
                         imprime: true,
                       );
-//                    print(resp);
-                      if(resp != null && resp['id'] != null){
+                      print(resp);
+                      if(resp != null && resp['ok'] == 1){
                         Navigator.of(context).pop();
-//                      Alert(texto: Translations.of(context).text('user_created'));
-                      }else{
-                        String errors = '';
-                        for(var i in resp.keys){
-                          for(int j = 0;j<resp[i].length;j++){
-                            errors = '$errors ${resp[i][j]} \n';
-                          }
-                        }
-                        Alert(context: context,texto: errors);
+                        Alert(texto: Translations.of(context).text('user_created'));
+                      }else
+                      if(resp != null && resp['ok'] == 2){
+                        Alert(context: context,texto: Translations.of(context).text('userExist'));
+                      }else if(resp != null){
+                        Alert(context: context,texto: resp['err']);
                       }
                     }
                   },

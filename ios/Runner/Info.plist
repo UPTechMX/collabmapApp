@@ -12,14 +12,30 @@
 	<string>6.0</string>
 	<key>CFBundleName</key>
 	<string>siap</string>
+
+	<key>NSLocationWhenInUseUsageDescription</key>
+    <string>Your location is required to facilitate the location on the map</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Your location is required to facilitate the location on the map</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>Your location is required to facilitate the location on the map</string>
+
+    <key>NSPhotoLibraryUsageDescription</key>
+    <string>If you want to upload photos, we need permission to use your camera and your gallery</string>
+    <key>NSCameraUsageDescription</key>
+    <string>If you want to upload photos, we need permission to use your camera and your gallery</string>
+    <key>NSMicrophoneUsageDescription</key>
+    <string>If you want to upload photos, we need permission to use your camera and your gallery</string>
+
+
 	<key>CFBundlePackageType</key>
 	<string>APPL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(FLUTTER_BUILD_NAME)</string>
+	<string>$(MARKETING_VERSION)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>$(FLUTTER_BUILD_NUMBER)</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

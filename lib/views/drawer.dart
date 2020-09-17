@@ -6,9 +6,11 @@ import 'package:siap/views/configuration/settings/settings.dart';
 import 'package:siap/views/home/sync.dart';
 import 'package:siap/models/conexiones/DBEst.dart';
 import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap/models/conexiones/api.dart';
 import 'package:siap/views/home/about.dart';
 import 'package:siap/views/home/privacidad.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:siap/views/questionnaires/targets/targetsHome.dart';
 
 
 
@@ -45,8 +47,6 @@ class OpcionesState extends State<Opciones>{
       ),
     );
 
-
-
     final cerrarSesionBtn = PopupMenuItem(
         value: 1,
         child: Boton(
@@ -54,9 +54,6 @@ class OpcionesState extends State<Opciones>{
             onClick: cerrarSesion
         )
     );
-
-
-
 
     final mapManager = PopupMenuItem(
       value: 1,
@@ -75,7 +72,7 @@ class OpcionesState extends State<Opciones>{
       child: Boton(
         texto: Translations.of(context).text('web_page'),
         onClick: () async {
-          var url = 'http://paraguay.collabmap.in/';
+          var url = '$urlHtml/consultations';
           if (await canLaunch(url)) {
             await launch(url);
           } else {
@@ -95,6 +92,21 @@ class OpcionesState extends State<Opciones>{
           Navigator.push(context,
               new MaterialPageRoute(builder: (context)=>
                   About()
+              )
+          );
+        }
+      )
+    );
+
+    final siap = PopupMenuItem(
+      value: 1,
+      child: Boton(
+        texto: Translations.of(context).text('siap'),
+        onClick: (){
+          Navigator.of(context).pop();
+          Navigator.push(context,
+              new MaterialPageRoute(builder: (context)=>
+                  TargetsHome()
               )
           );
         }
@@ -125,13 +137,15 @@ class OpcionesState extends State<Opciones>{
     return PopupMenuButton<int>(
       icon: Icon(Icons.menu),
       itemBuilder: (context) => [
-//        webPage,
-//        about,
-//        separador,
+        webPage,
+        separador,
+        about,
+        separador,
         privacidad,
-//        separador,
+        separador,
 //        mapManager,
-//        separador,
+        siap,
+        separador,
         cerrarSesionBtn,
       ],
     );

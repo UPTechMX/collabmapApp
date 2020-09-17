@@ -333,7 +333,7 @@ class PreguntaState extends State<Pregunta>{
       case 'op':
       case 'spatial':
       case 'cm':
-        print('PREG: $preg');
+//        print('PREG: $preg');
         return Spatial(
           question: preg,
           vId: chk.vId,

@@ -128,8 +128,8 @@ class TargetsElemsListState extends State<TargetsElemsList> {
   getTargetsElems() async {
     DB db = DB.instance;
 
-    SharedPreferences userData = await SharedPreferences.getInstance();
-    int userId = userData.getInt('userId');
+//    SharedPreferences userData = await SharedPreferences.getInstance();
+//    int userId = userData.getInt('userId');
 
     String sqlTC = '''
       SELECT tc.checklistId, c.nombre as cNom, 

@@ -35,7 +35,7 @@ class TarjetaConsultation extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Text(
-                    '${datos['actual'] == 'true'?datos['finish_date']:datos['start_date']}',
+                    '${datos['actual'] == 'true'?datos['finishDate']:datos['initDate']}',
                     style: TextStyle(
                       color: Colors.grey[500],
                       fontWeight: FontWeight.bold,
@@ -46,14 +46,14 @@ class TarjetaConsultation extends StatelessWidget {
                     color: color,
                     thickness: 2,
                   ),
-                  Text(
-                    '${Translations.of(context).text('code').toUpperCase()}: ${datos['slug']}',
-                    style: TextStyle(
-                      color: color,
-//                      fontWeight: FontWeight.bold,
-                      fontSize: 17,
-                    ),
-                  ),
+//                  Text(
+//                    '${Translations.of(context).text('code').toUpperCase()}: ${datos['slug']}',
+//                    style: TextStyle(
+//                      color: color,
+////                      fontWeight: FontWeight.bold,
+//                      fontSize: 17,
+//                    ),
+//                  ),
                   SizedBox(height: 5,),
                   Text(
                     '${datos['name']}',

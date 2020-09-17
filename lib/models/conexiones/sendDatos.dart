@@ -49,6 +49,55 @@ class DatosDB {
 
   }
 
+  getUserConsultationsChecklist(bool creadoOffline, bool offline) async {
+    String sql;
+    List UsersConsultationsChecklist = [];
+    String wCreadoOffline;
+    String wOffline;
+
+
+    if(creadoOffline){
+      wCreadoOffline = ' creadoOffline = 1 ';
+    }else{
+      wCreadoOffline = ' (creadoOffline = 0 OR creadoOffline IS NULL) ';
+    }
+    if(offline){
+      wOffline = ' offline = 1 ';
+    }else{
+      wOffline = ' (offline = 0 OR offline IS NULL) ';
+    }
+
+    sql = 'SELECT * FROM UsersConsultationsChecklist WHERE $wCreadoOffline AND $wOffline';
+
+    List uccs = await db.query(sql);
+
+//    print('CTES = $uccs');
+
+    uccs ??= List();
+    for(int i = 0;i<uccs.length;i++){
+      var c = uccs[i];
+      print('UCC: $c');
+
+      Map ucc = Map();
+      ucc['ucc'] = c;
+      print('elemID: ${c['id']}');
+      ucc['visitas'] = await getVis(elemId:c['id'], creadoOffline: false, offline: false,type: 'cons');
+      print('VISITAS: ${ucc['visitas']}');
+      UsersConsultationsChecklist.add(ucc);
+    }
+
+    List vis = await db.query("SELECT * FROM Visitas WHERE type = 'cons'");
+    print("VISITAS: $vis");
+//    print('UsersConsultationsChecklist: $UsersConsultationsChecklist');
+//    print('======= TargetsELem SOLICITADOS $creadoOffline, $offline ========');
+//    for(int i = 0;i<UsersConsultationsChecklist.length;i++){
+//      print('${UsersConsultationsChecklist[i]['nombre']} ');
+//    }
+
+    return UsersConsultationsChecklist;
+  }
+
+
   getTargetsElem(bool creadoOffline, bool offline, int dimensionesElemId) async {
     String sql;
     List targetsElem = [];
@@ -97,6 +146,10 @@ class DatosDB {
 
   getVis({int elemId, bool creadoOffline, bool offline, String type}) async {
 
+    var vvv = await db.query("SELECT * FROM Visitas WHERE type = 'cons'");
+    print('VVVV: $vvv');
+    print("ELEMID: $elemId");
+
     List visitas = [];
     String sql;
 
@@ -120,6 +173,7 @@ class DatosDB {
       sql = 'SELECT * FROM Visitas WHERE $wCreadoOffline AND $wOffline';
     }
 
+    print('SQL: $sql');
     var vis = await db.query(sql);
 
     vis ??= List();
@@ -206,6 +260,16 @@ class DatosDB {
 
   }
 
+  getPolls() async {
+
+    SharedPreferences userData = await SharedPreferences.getInstance();
+    int usrId = userData.getInt('userId');
+
+    List polls = await db.query("SELECT * FROM UsersQuickPoll WHERE usersId = $usrId");
+
+    return polls;
+
+  }
 
 
   List<Map<String, dynamic>> makeModifiableResults(

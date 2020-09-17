@@ -1,3 +1,5 @@
+import 'package:intl/intl.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siap/views/consultations/consultation.dart';
 import 'package:siap/views/consultations/healthPoll.dart';
 import 'package:flutter/material.dart';
@@ -9,8 +11,9 @@ import 'dart:convert';
 
 class Poll extends StatefulWidget {
   var poll;
+  var datos;
 
-  Poll({this.poll});
+  Poll({this.poll,this.datos});
 
   @override
   PollState createState() => PollState();
@@ -34,54 +37,54 @@ class PollState extends State<Poll> {
     );
 
 //    print('POLL: ${widget.poll}');
-    print('QUESTIONS = = = = =');
-    print(widget.poll['questions']);
-    List preguntas = widget.poll['questions'];
+//    print('QUESTIONS = = = = =');
+//    print(widget.poll);
+//    List preguntas = widget.poll['questions'];
     String textoPregunta;
     int idPregunta = null;
 
     bool conHealth = false;
-    bool conQuick = false;
+    bool conQuick = true;
     textoPregunta = '';
-    if(preguntas.length > 0){
-//      print('++++ MAS DE UNA ++++');
-
-      for(int i = 0; i<preguntas.length;i++){
-//        print(preguntas[i]);
-        if(preguntas[i]['type'] == 'quick'){
-          textoPregunta = '${preguntas[i]['content']}';
-          idPregunta = preguntas[i]['id'];
-          conQuick = true;
-          break;
-        }
-      }
-
-      for(int i = 0; i<preguntas.length;i++){
-//        print(preguntas[i]);
-        if(preguntas[i]['type'] == 'health'){
-          conHealth = true;
-          break;
-        }
-      }
-    }
+//    if(preguntas.length > 0){
+////      print('++++ MAS DE UNA ++++');
+//
+//      for(int i = 0; i<preguntas.length;i++){
+////        print(preguntas[i]);
+//        if(preguntas[i]['type'] == 'quick'){
+//          textoPregunta = '${preguntas[i]['content']}';
+//          idPregunta = preguntas[i]['id'];
+//          conQuick = true;
+//          break;
+//        }
+//      }
+//
+//      for(int i = 0; i<preguntas.length;i++){
+////        print(preguntas[i]);
+//        if(preguntas[i]['type'] == 'health'){
+//          conHealth = true;
+//          break;
+//        }
+//      }
+//    }
 
     return Column(
       children: <Widget>[
 
-        conHealth?Container(
-          child: Column(
-            children: <Widget>[
-              Accion(
-                color: Color(0xFFFF0000),
-                height: MediaQuery.of(context).size.height*.1,
-                texto: Translations.of(context).text('pollHealth').toUpperCase(),
-                icono: 'accCOVID',
-                elemento: HealthPoll(pollId: widget.poll['id'],),
-              ),
-              SizedBox(height: 10,)
-            ],
-          )
-        ):Container(),
+//        conHealth?Container(
+//          child: Column(
+//            children: <Widget>[
+//              Accion(
+//                color: Color(0xFFFF0000),
+//                height: MediaQuery.of(context).size.height*.1,
+//                texto: Translations.of(context).text('pollHealth').toUpperCase(),
+//                icono: 'accCOVID',
+//                elemento: HealthPoll(pollId: widget.poll['id'],),
+//              ),
+//              SizedBox(height: 10,)
+//            ],
+//          )
+//        ):Container(),
 
         conQuick?Container(
           width: double.infinity,
@@ -97,7 +100,7 @@ class PollState extends State<Poll> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
               Text(
-                widget.poll['name'].toUpperCase(),
+                widget.poll.toUpperCase(),
                 style: TextStyle(
                     color: Colors.grey
                 ),
@@ -122,18 +125,18 @@ class PollState extends State<Poll> {
                             iconSize: MediaQuery.of(context).size.width*.2,
                             icon: Image.asset(
                               'images/caritaTriste.png',
-                              color: value == 1?Color(0xFF2A6CD5):null,
+                              color: value == 0?Color(0xFF2A6CD5):null,
                             ),
                             onPressed: (){
                               sync();
-                              saveValue(value: 1,idPregunta: idPregunta);
+                              saveValue(value: 0,idPregunta: idPregunta);
                               setState(() {
-                                value = 1;
+                                value = 0;
                               });
                             },
                           ),
                         ),
-                        value == 1?palomita:Container(),
+                        value == 0?palomita:Container(),
                       ],
                     ),
                   ),
@@ -146,18 +149,18 @@ class PollState extends State<Poll> {
                             iconSize: MediaQuery.of(context).size.width*.2,
                             icon: Image.asset(
                               'images/caritaNeutra.png',
-                              color: value == 2?Color(0xFF2A6CD5):null,
+                              color: value == 5?Color(0xFF2A6CD5):null,
                             ),
                             onPressed: (){
                               sync();
-                              saveValue(value: 2,idPregunta: idPregunta);
+                              saveValue(value: 5,idPregunta: idPregunta);
                               setState(() {
-                                value = 2;
+                                value = 5;
                               });
                             },
                           ),
                         ),
-                        value == 2?palomita:Container(),
+                        value == 5?palomita:Container(),
                       ],
                     ),
                   ),
@@ -170,18 +173,18 @@ class PollState extends State<Poll> {
                             iconSize: MediaQuery.of(context).size.width*.2,
                             icon: Image.asset(
                               'images/caritaFeliz.png',
-                              color: value == 3?Color(0xFF2A6CD5):null,
+                              color: value == 10?Color(0xFF2A6CD5):null,
                             ),
                             onPressed: (){
                               sync();
-                              saveValue(value: 3,idPregunta: idPregunta);
+                              saveValue(value: 10,idPregunta: idPregunta);
                               setState(() {
-                                value = 3;
+                                value = 10;
                               });
                             },
                           ),
                         ),
-                        value == 3?palomita:Container(),
+                        value == 10?palomita:Container(),
                       ],
                     ),
                   ),
@@ -197,12 +200,21 @@ class PollState extends State<Poll> {
   saveValue({int value,int idPregunta}) async {
     DB db = DB.instance;
 
-    Map<String,dynamic> datos = Map();
-    datos['poll_id'] = widget.poll['id'];
-    datos['question_id'] = idPregunta;
-    datos['value'] = value;
+    SharedPreferences userData = await SharedPreferences.getInstance();
+    int userId = userData.getInt('userId');
 
-    var r = await db.insert('pollsAnswers', datos, true);
+    DateTime now = new DateTime.now();
+    String formattedDate = DateFormat('yyyy-MM-dd H:m:s').format(now);
+//    print(formattedDate);
+
+
+    Map<String,dynamic> datos = Map();
+    datos['usersId'] = userId;
+    datos['timestamp'] = formattedDate;
+    datos['consultationsId'] = widget.datos['id'];
+    datos['score'] = value;
+
+    var r = await db.insert('UsersQuickPoll', datos, true);
 
 //    print(r);
   }

@@ -5,6 +5,7 @@ import 'package:siap/models/componentes/boton.dart';
 import 'survey.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'package:siap/views/consultations/downloadMaps.dart';
+import 'package:siap/views/consultations/chkAction.dart';
 
 class Surveys extends StatefulWidget {
   var consultationId;
@@ -67,7 +68,14 @@ class SurveysState extends State<Surveys> {
     DB db = DB.instance;
 
 
-    List datos = await db.query("SELECT * FROM surveys WHERE consultation_id = ${widget.consultationId}");
+    List datos = await db.query('''
+        SELECT c.* 
+        FROM ConsultationsChecklist cc
+        LEFT JOIN Checklist c ON c.id = cc.checklistId 
+        WHERE cc.consultationsId = ${widget.consultationId}
+      ''');
+
+//    List datos = await db.query("SELECT * FROM surveys WHERE consultation_id = ${widget.consultationId}");
     datos ??= [];
 
 //    print('DATOS: $datos');
@@ -76,84 +84,16 @@ class SurveysState extends State<Surveys> {
     for(int i = 0;i<datos.length;i++){
 //      print('I: $i');
 
-
-      var dato = Map.from(datos[i]);
-      dato['questions'] = await db.query('''
-        SELECT q.*, qs.survey_id 
-        FROM questions q
-        LEFT JOIN questionsSurvey qs ON q.id = qs.question_id  
-        WHERE qs.survey_id = ${dato['id']} ORDER BY `order`
-      ''');
-
-//      print( 'QUESTIONS: ${dato['questions']}');
-
-      if(dato['questions'] == null || dato['questions'].length == 0){
-        continue;
-      }
-
-//      print('Dato: ${dato['name']} : ${dato['questions']}');
-
-      var lastQ = await db.query('''
-        SELECT q.id, a.value, qs.`order` 
-        FROM questions q
-        LEFT JOIN questionsSurvey qs ON qs.question_id = q.id
-        LEFT JOIN answers a ON a.question_id = q.id AND a.survey_id = qs.survey_id
-        WHERE qs.survey_id = ${dato['id']} AND a.value IS NULL 
-        ORDER BY qs.`order`
-      ''');
-
-      lastQ ??= await db.query('''
-        SELECT q.id, a.value, qs.`order` 
-        FROM questions q
-        LEFT JOIN questionsSurvey qs ON qs.question_id = q.id
-        LEFT JOIN answers a ON a.question_id = q.id AND a.survey_id = qs.survey_id
-        WHERE qs.survey_id = ${dato['id']} 
-        ORDER BY qs.`order`
-      ''');
-
-      lastQ ??= [];
-
-
-
-//      var pregs = await db.query('SELECT `order` FROM questions');
-//      print('PREGS: $pregs');
-//      print('SQL: $sql');
-
-//      var aaa = await db.query("SELECT * FROM questionsSurvey");
-//      print('questionsSurvey: $aaa');
-//      print('DATO["questions"]: ${dato['questions']}');
-
-//      print('lastQ: ${lastQ}');
-
-
-      if(lastQ != null && lastQ.length > 0){
-        dato['lastQ'] = lastQ[0]['id'];
-        dato['lastA'] = lastQ[0]['value'];
-      }else{
-        dato['lastQ'] = 0;
-        dato['lastA'] = 0;
-      }
-
-      dato['questions'] ??= [];
-      var numQuest = dato['questions'].length;
-
-      if(numQuest == 0){
-        dato['avance'] = '- -';
-        dato['avanceDouble'] = 0;
-      }else{
-        var numAnsDB = await db.query("SELECT COUNT(*) as cuenta FROM answers WHERE survey_id = ${dato['id']}");
-        var numAns = numAnsDB != null ? numAnsDB[0]['cuenta']:0;
-        double avance = numAns/numQuest*100;
-        dato['avance'] = '${avance.toStringAsFixed(0)}';
-        dato['avanceDouble'] = avance;
-      }
+      Map dato = Map.from(datos[i]);
       datosExt.add(dato);
-//      print(dato['questions']);
+
 
 
     }
 
-
+//    var vis = await db.query("SELECT * FROM Visitas WHERE type = 'cons'");
+//    print("VIS: $vis");
+//    print(datosExt);
 
     return datosExt;
   }
@@ -200,7 +140,7 @@ class SurveysState extends State<Surveys> {
                   Expanded(
                     flex: 1,
                     child: Text(
-                      datos['name'],
+                      datos['nombre'],
                       textAlign: TextAlign.left,
                       style: TextStyle(
                           color: Colors.black,
@@ -210,26 +150,27 @@ class SurveysState extends State<Surveys> {
                   ),
                   Expanded(
                     flex: 1,
-                    child: Text(
-                      '${datos['avance']} %',
-                      textAlign: TextAlign.right,
-                      style: TextStyle(color: Colors.black),
-                    ),
+                    child: ChkAction(datChk: datos,consultationId: widget.consultationId,)
+//                    child: Text(
+//                      'continuar',
+//                      textAlign: TextAlign.right,
+//                      style: TextStyle(color: Colors.black),
+//                    ),
                   ),
                 ],
               ),
             ),
-            Container(
-              padding: EdgeInsets.only(top: 0,bottom: 10),
-              width: double.infinity,
-              child: LinearPercentIndicator(
-//             width: 500,
-                lineHeight: 7,
-                percent: datos['avanceDouble']/100,
-                backgroundColor: Colors.grey[300],
-                progressColor: Colors.blue,
-              ),
-            )
+//            Container(
+//              padding: EdgeInsets.only(top: 0,bottom: 10),
+//              width: double.infinity,
+//              child: LinearPercentIndicator(
+////             width: 500,
+//                lineHeight: 7,
+//                percent: datos['avanceDouble']/100,
+//                backgroundColor: Colors.grey[300],
+//                progressColor: Colors.blue,
+//              ),
+//            )
           ],
         ),
       ),

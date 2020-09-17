@@ -101,7 +101,7 @@
   "add": "Add",
   "alert":"Alert",
   "confAction":"Confirm action",
-  "existingUser" : "The username is already registered in the system, try another",
+  "userExist" : "The username is already registered in the system, try another",
   "invalidEmail" : "Invalid email. Please correct it",
   "regConf" : "Thank you for registering, confirm your email to be able to enter the system",
   "confHashNotFound": "The user was not found, contact the team for a manual confirmation",
@@ -135,7 +135,7 @@
   "amswerNotFoundAnswer": "An attempt was made to enter ",
   "successfulImport": "Successful import",
   "importError": "There was an error importing the file ",
-
+  "siap": "SIAP",
 
   "users": "Users",
   "user": "User",

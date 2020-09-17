@@ -41,7 +41,8 @@ class HomeState extends State<Home>{
   @override
   Widget build(BuildContext context) {
 
-    return widget.aceptaPriv?(widget.firstSync?TargetsHome():Sync(firstSync: false,barraSinBoton: true,)):Privacidad(conAcept: true,barraSinBoton: true,);
+//    return widget.aceptaPriv?(widget.firstSync?TargetsHome():Sync(firstSync: false,barraSinBoton: true,)):Privacidad(conAcept: true,barraSinBoton: true,);
+    return widget.aceptaPriv?(widget.firstSync?ConsultationsHome():Sync(firstSync: false,barraSinBoton: true,)):Privacidad(conAcept: true,barraSinBoton: true,);
   }
 
   Future <Null> refrescar() async {

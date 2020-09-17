@@ -13,7 +13,9 @@ import 'package:flutter/material.dart';
 import 'package:siap/models/translations.dart';
 import 'package:latlong/latlong.dart';
 
-String SERVER = 'http://siapetest.collabmap.in/api/public/siapApp/';
+//String urlHtml = 'http://paraguaytest.collabmap.in';
+String urlHtml = 'http://192.168.1.104/~juanma/collabmap';
+String SERVER = '$urlHtml/api/public/siapApp/';
 
 Future getDatos({String opt,String varNom = null, bool imprime,bool cache = false}) async {
   var respuesta;
@@ -140,7 +142,7 @@ Future<List> sendDatos({List problems, bool imprime = false, String token = null
       }
       var response = await request.send();
 
-      print("MANDA DATOS ESPACIALES");
+//      print("MANDA DATOS ESPACIALES");
       if(response.statusCode == 201){
         db.query('DELETE FROM problems WHERE id = ${problem['id']}');
         if(problem['photo'] != null){
@@ -312,6 +314,7 @@ Future getDatos2({String opt,String varNom = null, bool imprime}) async {
   String body;
 
   String token = userData.getString('token');
+  token ??= '';
   if(imprime){
     print('Token: $token');
   }
@@ -319,6 +322,7 @@ Future getDatos2({String opt,String varNom = null, bool imprime}) async {
     String url = '${SERVER}$opt';
 
     Map<String, String> headersMap = {
+
       'Authorization' : 'Bearer ' + token,
     };
 
@@ -433,35 +437,17 @@ sendData() async {
 
   DB db = DB.instance;
 
-//  List dimensionesElemOff = await db.query("SELECT * FROM DimensionesElem WHERE creadoOffline = 1");
-//
-//  dimensionesElemOff ??= [];
-//
-////  print(dimensionesElemOff);
-//  for(int i = 0; i<dimensionesElemOff.length;i++){
-//
-//    List targetsElem  = await db.query("SELECT * FROM TargetsElems WHERE dimensionesElemId = ${dimensionesElemOff[i]['id']}");
-////    targetsElem ??= [];
-//
-//    if(targetsElem != null){
-//      List visitas = await db.query("SELECT * FROM Visitas WHERE elemId = ${targetsElem[0]['id']} AND type = 'trgt' ");
-//    }
-//
-//
-////    print(targetsElem);
-//
-//  }
-
   SharedPreferences userData = await SharedPreferences.getInstance();
 
   String token = userData.getString('token');
   int userId = userData.getInt('userId');
 
   var datos = DatosDB();
+  Map post = {};
+
   List dimensionesElems = await datos.getDimensionesElem(creadoOffline: true,offline: true);
   dimensionesElems ??= [];
 //  print(dimensionesElems);
-  Map post = {};
   post['dimensionesElems'] = {};
   post['dimensionesElems']['type'] = 'String';
   post['dimensionesElems']['name'] = 'dimensionesElems';
@@ -533,8 +519,52 @@ sendData() async {
 
   }
 
-  List visitasCreadoOffline = await datos.getVis(elemId: null, creadoOffline: true, offline: true,type: 'trgt');
+
+//////////////
+
+
+  List uccs= await datos.getUserConsultationsChecklist(true,true);
+  uccs ??= [];
+
+  print('UCCS: $uccs');
+  post['UsersConsultationsChecklist'] = {};
+  post['UsersConsultationsChecklist']['type'] = 'String';
+  post['UsersConsultationsChecklist']['name'] = 'UsersConsultationsChecklist';
+  post['UsersConsultationsChecklist']['value'] = jsonEncode(uccs);
+  var respUCC = await postDatos(
+      datos: post,
+      imprime: true,
+      metodo: 'post',
+      verif: true,
+      opt: 'sendUCC/user/${userId}',
+      token: token
+  );
+
+  if(respUCC['ok'] != 1){
+    return;
+  }
+
+  for(int j = 0; j<uccs.length; j++){
+    var ucc = uccs[j]['trgtElem'];
+    await db.query("DELETE FROM UserConsultationsChecklist WHERE id = ${ucc['id']}");
+
+    var visitas = uccs[j]['visitas'];
+//    print("VISITAS: $visitas");
+    for(int k =0;k<visitas.length;k++){
+      var visita = visitas[k]['visita'];
+//      print('vId: ${visita['id']}');
+      await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
+      await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+    }
+
+  }
+
+
+  List visitasCreadoOffline = await datos.getVis(elemId: null, creadoOffline: true, offline: true,type: null);
   visitasCreadoOffline ??= [];
+
+  print(visitasCreadoOffline);
+
   post['visitas'] = {};
   post['visitas']['type'] = 'String';
   post['visitas']['name'] = 'visitas';
@@ -560,7 +590,7 @@ sendData() async {
   }
 
 
-  List visitasOffline = await datos.getVis(elemId: null, creadoOffline: false, offline: true,type: 'trgt');
+  List visitasOffline = await datos.getVis(elemId: null, creadoOffline: false, offline: true,type: null);
   visitasOffline ??= [];
   post['visitas'] = {};
   post['visitas']['type'] = 'String';
@@ -587,256 +617,34 @@ sendData() async {
   }
 
 
+  List polls = await datos.getPolls();
+  polls ??= [];
+  print('POLLS: $polls');
+  post['polls'] = {};
+  post['polls']['type'] = 'String';
+  post['polls']['name'] = 'polls';
+  post['polls']['value'] = jsonEncode(polls);
+  var respPoll = await postDatos(
+      datos: post,
+      imprime: true,
+      metodo: 'post',
+      verif: true,
+      opt: 'sendPolls/user/${userId}',
+      token: token
+  );
 
-//  List answers = await db.query('''
-//    SELECT a.*, q.type, q.content as pregunta
-//    FROM answers a
-//    LEFT JOIN questions q ON q.id = a.question_id
-//    WHERE edit = 1 OR new = 1 OR (q.type = 'cm' OR q.type = 'spatial')
-//  ''');
-//
-//
-//  answers ??= [];
-//
-//  Map<List,dynamic> responses = Map();
-//
-////    print('ANSWERS $answers');
-//  SharedPreferences userData = await SharedPreferences.getInstance();
-//  String username = userData.getString('username');
-//  String password = userData.getString('password');
-//  Post getToken = await loginPost(username, password);
-//  String token = getToken.token;
-//
-//  for(int i = 0; i<answers.length;i++){
-//      Map answer = answers[i];
-//
-////      print('ANSWER: $answer');
-//
-//      List response = [answer['survey_id'],answer['question_id']];
-//
-//      SharedPreferences userData = await SharedPreferences.getInstance();
-//      int userId = userData.getInt('userId');
-////      print('Response: $response');
-//
-//
-//      if(responses[response] == null){
-////        print('No tenemos response local');
-//        var getResponse = await getDatos(
-//          opt: 'surveys/responses/?survey=${answer['survey_id']}&owner=$userId',
-//          cache: false,
-//          imprime: false,
-//          varNom: 'survey_${answer['survey_id']}',
-//        );
-////        print('getResponse:  $getResponse ');
-////        print('OPTIONS:  surveys/responses/?survey=${answer['survey_id']}&owner=$userId ');
-//
-//
-//        if(getResponse.length != 0){
-////          print('Existe response en el server');
-//          responses[response] = getResponse[0];
-//        }else{
-////          print('NO Existe response en el server');
-//          var postResponse = await postDatos(
-//            opt: 'surveys/responses/',
-//            verif: true,
-//            token: token,
-//            datos: {'survey':{'type':'String','name':'survey','value':answer['survey_id']}},
-//            metodo: 'post',
-//            imprime: true,
-//          );
-////          print('ENVIA ${{'survey':{'type':'String','name':'survey','value':answer['survey_id']}}}');
-////          print('RESPONSE RESP: $postResponse');
-//
-//          responses[response] = postResponse;
-//        }
-//      }
-//
-////      print('Responses: $responses');
-//      var responseId = responses[response]['id'];
-//
-//      Map<String,dynamic> datosAns = Map();
-//      datosAns['question'] = Map();
-//      datosAns['question']['name'] = 'question';
-//      datosAns['question']['type'] = 'String';
-//      datosAns['question']['value'] = '${answer['question_id']}';
-//
-//      datosAns['response'] = Map();
-//      datosAns['response']['name'] = 'response';
-//      datosAns['response']['type'] = 'String';
-//      datosAns['response']['value'] = '${responseId}';
-//
-//      datosAns['content'] = Map();
-//      datosAns['content']['name'] = 'content';
-//      datosAns['content']['type'] = 'String';
-//      switch(answer['type']){
-//        case 'spatial':
-//          List problems = await db.query("SELECT * FROM problems WHERE answers_id = ${answer['id']}");
-////          print('PROBLEMS: $problems');
-//          if(problems != null){
-//            Map problemToAPI = await problemDBtoAPI(problemDB: problems[0]);
-//            String geometry = jsonEncode(problemToAPI['geometry']);
-////            print('typeOf: ${geometry.runtimeType}');
-////            print('Geometry: $geometry');
-//            datosAns['content']['value'] = '{"value":${geometry}}';
-//
-////            datosAns['content']['value'] = geometry;
-//          }else{
-//            datosAns['content']['value'] = '{"value":${answer['value']}}';
-//          }
-//          break;
-//        case 'bool':
-//          var value;
-//          switch(answer['value']){
-//            case '1':
-//            case 'true':
-//              value = true;
-//              break;
-//            case '0':
-//            case 'false':
-//              value = false;
-//              break;
-//            default:
-//              value = false;
-//              break;
-//          }
-//          datosAns['content']['value'] = '{"value":"${value}"}';
-//          break;
-//        default:
-//          datosAns['content']['value'] = '{"value":"${answer['value']}"}';
-//          break;
-//      }
-////      print('Pregunta: ${answer['pregunta']} datosAns: $datosAns');
-//
-//    var aIdServer = null;
-//      for(int a = 0; a<responses[response]['answers'].length;a++){
-//        Map answerResp = responses[response]['answers'][a];
-////        print('Answer: $answerResp');
-//
-////        print('ans[question][id]: ${answerResp['question']['id']}, answer[question_id]: ${answer['question_id']} ');
-//        if(answerResp['question']['id'] == answer['question_id']){
-////          print('encontrado');
-//          aIdServer = answerResp['id'];
-//        }
-//      }
-//
-//      var resp;
-//      if(aIdServer == null){
-//        print('Post a server (nueva entrada)');
-////        print('datosAns: $datosAns');
-////        print('valueContent = ${datosAns['content']['value']}');
-//        resp = await postDatos(
-//          opt: 'surveys/answers/',
-//          verif: true,
-//          datos: datosAns,
-//          metodo: 'post',
-//          token: token,
-//          imprime: false,
-//        );
-////        print('Resp: $resp');
-//      }else{
-////        print('Put a server (edita)');
-//
-//        resp = await postDatos(
-//          opt: 'surveys/answers/${aIdServer}/',
-//          verif: true,
-//          datos: datosAns,
-//          metodo: 'put',
-//          token: token,
-//          imprime: false,
-//        );
-//      }
-//      aIdServer = resp['id'];
-////      print('aIdServer: $aIdServer');
-////      print('type: ${answer['type']}');
-//      if(answer['type'] == 'cm'){
-////        print('Pregunta tipo CM');
-//
-//        String sql = '''SELECT *
-//          FROM problems
-//          WHERE answers_id = ${answer['id']}
-//        ''';
-////        print('SQL: $sql');
-//
-//        List problemsDB = await db.query(sql);
-//
-////        print('ProblemsDB = $problemsDB');
-//
-//
-//        List problems = [];
-//        problemsDB ??= [];
-//        for(int p = 0;p<problemsDB.length;p++){
-//
-////          print('problemDB: ${problemsDB[p]}');
-//
-//          Map problemToAPI = await problemDBtoAPI(problemDB: problemsDB[p]);
-//          problemToAPI['answer'] = aIdServer;
-//
-//          problems.add(problemToAPI);
-////          print('problemDB: ${problems[p]}');
-////          print('problemToAPI: $problemToAPI');
-//
-//        }
-//        print('PROBLEMS: $problems');
-//        print('====== ACA 01======');
-//        sendDatos(problems: problems,token: token,imprime: true);
-//      }
-//    }
-//
+  if(respPoll['ok'] != 1){
+    print('respPoll: $respPoll');
+    return;
+  }
 
-//  /////// POLLS
-//
-//  List pollsDB = await db.query("SELECT * FROM pollsAnswers");
-//  pollsDB ??= [];
-////  print('PollsDB: $pollsDB');
-//
-//  for(int i = 0;i<pollsDB.length;i++){
-//
-//    var poll = pollsDB[i];
-//    var pollResponse = await postDatos(
-//      opt: 'polls/responses/',
-//      verif: true,
-//      token: token,
-//      datos: {'poll':{'type':'String','name':'poll','value':poll['poll_id']}},
-//      metodo: 'post',
-//      imprime: false,
-//    );
-//    print('PollResponse: $pollResponse');
-//
-//    Map<String,dynamic> datosAns = Map();
-//
-//    datosAns['question'] = Map();
-//    datosAns['question']['name'] = 'question';
-//    datosAns['question']['type'] = 'String';
-//    datosAns['question']['value'] = '${poll['question_id']}';
-//
-//    datosAns['response'] = Map();
-//    datosAns['response']['name'] = 'response';
-//    datosAns['response']['type'] = 'String';
-//    datosAns['response']['value'] = '${pollResponse['id']}';
-//
-//    datosAns['content'] = Map();
-//    datosAns['content']['name'] = 'content';
-//    datosAns['content']['type'] = 'String';
-//    datosAns['content']['value'] = '${poll['value']}';
-//
-//
-//    print('datosAns: $datosAns');
-//    var pollAnsPost = await postDatos(
-//      opt: 'polls/answers/',
-//      verif: true,
-//      token: token,
-//      datos: datosAns,
-//      metodo: 'post',
-//      imprime: false,
-//    );
-//
-//    print('=== POLLANS : ${pollAnsPost}');
-//
-//    await db.query('DELETE FROM pollsAnswers');
-//
-////    print('pollAnsPost: $pollAnsPost');
-//
-//  }
+  for(int k =0;k<polls.length;k++){
+    var pollId = polls[k]['id'];
+//    print('vId: ${visita['id']}');
+    await db.query("DELETE FROM UsersQuickPoll WHERE id = ${pollId}");
+
+  }
+
 
 }
 
@@ -899,11 +707,15 @@ getAllData() async {
   Map r = await getDatos2(opt: 'getAll/user/${userId}',varNom: null,imprime: false);
 
   for(var i in r.keys){
-    if(i == 'Visitas'){
-//      print(r[i]);
-    }
-//    print('$i: ${r[i].runtimeType}');
-    db.insertaLista(i, r[i], true, false);
+//    if(i == 'Problems'){
+//      for(int j = 0; r['Problems'].length; j++){
+//
+//      }
+////      print('ConsultationsChecklist: ${r[i]}');
+//    }else{
+//    }
+      print('$i: ${r[i].runtimeType}');
+      db.insertaLista(i, r[i], true, false);
   }
 
   List TargetsElems = r['TargetsElems'];
@@ -1115,6 +927,7 @@ getSpatialData({int pregId, int vId}) async {
 
       var problem = Map.from(problemsDB[i]);
       List pointsDB = await db.query("SELECT * FROM points WHERE problemsId = ${problem['id']}");
+//      print('POINTSDB: $pointsDB');
       pointsDB ??= [];
       List puntos = [];
       for(int j = 0;j<pointsDB.length;j++){

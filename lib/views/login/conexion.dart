@@ -9,7 +9,7 @@ Future<Post> loginPost(String username,String password) async {
   bool error = false;
   try{
     url = '${SERVER}users/login/';
-    print('asasas: $url');
+//    print('asasas: $url');
     response = await http.post(url,body:{'username':username,'pwd':password});
   }catch(e){
     error = true;
@@ -18,9 +18,9 @@ Future<Post> loginPost(String username,String password) async {
 //  print(response);
   if (response.statusCode == 200) {
     // If the call to the server was successful, parse the JSON
-//    print('Inicia respuesta del server');
-//    print(response.body);
-//    print('Finaliza respuesta del server');
+    print('Inicia respuesta del server');
+    print(response.body);
+    print('Finaliza respuesta del server');
 //
 //    print(response.body);
     return Post.fromJson(json.decode(response.body));

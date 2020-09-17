@@ -6,6 +6,7 @@ import 'package:siap/views/surveys/surveys.dart';
 import 'poll.dart';
 import 'dart:ui' as ui;
 import 'package:url_launcher/url_launcher.dart';
+import 'package:siap/models/conexiones/api.dart';
 
 
 
@@ -47,8 +48,10 @@ class ConsultationState extends State<Consultation> {
       ),
     );
 
-    print('-- poll --');
-    print(widget.datos['poll']);
+    var poll = widget.datos['poll'] != null ? widget.datos['poll']:'';
+//    print('-- poll --');
+//    print(poll);
+//    print('length: ${poll.length}');
 
     return Pagina(
       esLista: false,
@@ -73,7 +76,7 @@ class ConsultationState extends State<Consultation> {
               ),
             ),
             Text(
-              '${widget.datos['start_date']} / ${widget.datos['slug'].toUpperCase()}',
+              '${widget.datos['initDate']} / ${widget.datos['finishDate'].toUpperCase()}',
               style: TextStyle(
                   color: Colors.grey[600],
                   fontWeight: FontWeight.bold,
@@ -146,7 +149,7 @@ class ConsultationState extends State<Consultation> {
               ],
             ),
             SizedBox(height: MediaQuery.of(context).size.height*.01,),
-            widget.datos['poll'].length > 0?Poll(poll: widget.datos['poll'],):Container(),
+            poll.length > 0?Poll(poll: poll,datos: widget.datos,):Container(),
           ],
         ),
       ),
@@ -155,9 +158,9 @@ class ConsultationState extends State<Consultation> {
 
   envConsult() async {
     var lang = ui.window.locale.languageCode;
-    var code = widget.datos['slug'];
-    print('http://paraguay.collabmap.in/${lang}/consultation/${code}');
-    var url = 'http://paraguay.collabmap.in/${lang}/consultation/${code}';
+    var code = widget.datos['description'];
+//    print('http://paraguay.collabmap.in/${lang}/consultation/${code}');
+    var url = '$urlHtml/consultations/?acc=consultation&consultationId=${widget.datos['id']}';
     if (await canLaunch(url)) {
       await launch(url);
     } else {

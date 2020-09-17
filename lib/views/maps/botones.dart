@@ -217,9 +217,10 @@ class BotonesBarra extends StatefulWidget {
   BuildContext context;
   GlobalKey<MapWidgetState> keyMapa;
   bool spatial;
+  Map question;
 
 
-  BotonesBarra({Key key,this.onPressed, this.tooltip, this.icon,this.keyMapa,this.context,this.spatial}):super(key:key);
+  BotonesBarra({Key key,this.onPressed, this.tooltip, this.icon,this.keyMapa,this.context,this.spatial,this.question}):super(key:key);
 
   @override
   BotonesBarraState createState() => BotonesBarraState();
@@ -337,6 +338,8 @@ class BotonesBarraState extends State<BotonesBarra> {
       );
     }
 
+//    print('-=-=-=-=-=-=');
+//    print(widget.question['tipo']);
     return Container(
       child: Row(
         children: <Widget>[
@@ -345,20 +348,20 @@ class BotonesBarraState extends State<BotonesBarra> {
             child: add(),
           ),
           Expanded(
-            flex: 1,
-            child: linea(),
+            flex: (widget.question['tipo'] == 'op')?0:1,
+            child: (widget.question['tipo'] == 'op')?Container():linea(),
           ),
           Expanded(
-            flex: 1,
-            child: area(),
+            flex: (widget.question['tipo'] == 'op')?0:1,
+            child: (widget.question['tipo'] == 'op')?Container():area(),
           ),
           Expanded(
-            flex: 1,
-            child: miUbic(),
+            flex: (widget.question['tipo'] == 'op')?0:1,
+            child: (widget.question['tipo'] == 'op')?Container():miUbic(),
           ),
           Expanded(
-            flex: !widget.spatial?1:0,
-            child: !widget.spatial?edit():Container(),
+            flex: (widget.question['tipo'] == 'cm')?1:0,
+            child: (widget.question['tipo'] == 'cm')?edit():Container(),
           )
         ],
       ),

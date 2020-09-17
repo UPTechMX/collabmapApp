@@ -40,68 +40,70 @@ class Pagina extends StatefulWidget {
 class PaginaState extends State<Pagina> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: Barra(
-        sync: widget.sync,
-        botonBack: widget.botonBack,
-        sinBoton: widget.barraSinBoton,
-      ),
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFE9E9E9),
-                  Color(0xFFFBFBFB),
-                ],
+    return SafeArea(
+      child: Scaffold(
+        appBar: Barra(
+          sync: widget.sync,
+          botonBack: widget.botonBack,
+          sinBoton: widget.barraSinBoton,
+        ),
+        body: Stack(
+          children: <Widget>[
+            Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    Color(0xFFE9E9E9),
+                    Color(0xFFFBFBFB),
+                  ],
+                ),
               ),
             ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
-            children: <Widget>[
-              Image.asset('images/fondo.png')
-            ],
-          ),
-          Container(
-            child: ListView(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.center,
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.end,
               children: <Widget>[
-                Container(
-                  padding: EdgeInsets.only(top: 15),
-                  child: widget.nombrePagina != null?
-                  Text(
-                    widget.nombrePagina,
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        fontSize: 20
-                    ),
-                  ):
-                  Container(),
-                ),
-                widget.esLista?Lista(
-                  future: widget.future,
-                  elemento: widget.elemento,
-                  textoVacio: widget.textoVacio,
-                ):(widget.slider?
-                SliderPagina(
-                  future: widget.future,
-                  elemento: widget.elemento,
-                  textoVacio: widget.textoVacio,
-                  height: widget.sliderHeight,
-                ):
-                widget.elemento),
+                Image.asset('images/fondo.png')
               ],
             ),
-          )
-        ],
+            Container(
+              child: ListView(
+                children: <Widget>[
+                  Container(
+                    padding: EdgeInsets.only(top: 15),
+                    child: widget.nombrePagina != null?
+                    Text(
+                      widget.nombrePagina,
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          fontSize: 20
+                      ),
+                    ):
+                    Container(),
+                  ),
+                  widget.esLista?Lista(
+                    future: widget.future,
+                    elemento: widget.elemento,
+                    textoVacio: widget.textoVacio,
+                  ):(widget.slider?
+                  SliderPagina(
+                    future: widget.future,
+                    elemento: widget.elemento,
+                    textoVacio: widget.textoVacio,
+                    height: widget.sliderHeight,
+                  ):
+                  widget.elemento),
+                ],
+              ),
+            )
+          ],
+        ),
+        drawer: widget.drawer?Opciones():null,
       ),
-      drawer: widget.drawer?Opciones():null,
     );
   }
 }

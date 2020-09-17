@@ -74,22 +74,21 @@ class Privacidad extends StatelessWidget {
   getData() async {
     DB db = DB.instance;
     // TODO :: ARREGLAR ESTO!
-//    List datos = await db.query("SELECT * FROM Projects WHERE id = 1");
+    Map dat = Map();
+    List datos = await db.query("SELECT * FROM General WHERE name = 'privacy' ");
+
+    if(datos == null){
+//      print('entra');
+      Map r = await getDatos2(opt: 'getGeneral/privacy',varNom: null,imprime: false);
+//      print('R: $r');
+      dat['privacidad'] = r['texto'];
+    }else{
+      dat['privacidad'] = datos[0]['texto'];
+    }
 //
 //    datos ??= [];
 //
-    Map dat = Map();
-//
-//    var project = await getDatos(
-//      opt: 'projects/projects/1/',
-//      cache: true,
-//      imprime: false,
-//      varNom: 'privacidad',
-//    );
 
-//    print('PROJECT: $project');
-
-    dat['privacidad'] = 'bla';
 
     return dat;
 

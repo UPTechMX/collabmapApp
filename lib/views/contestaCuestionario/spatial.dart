@@ -58,11 +58,11 @@ class Spatial extends StatelessWidget {
             if (snapshot.hasError){
               return Text('Error: ${snapshot.error}');
             }
-            print('SNAPSHOT: ${snapshot.data}');
-            print('question: ${question}');
+//            print('SNAPSHOT: ${snapshot.data}');
+//            print('question: ${question}');
 //            print('FILE: ${snapshot.data['mapFile']}');
 //            return Text('aa');
-            return question['tipo'] == 'cm'?RaisedButton(
+            return RaisedButton(
               onPressed: (){
                 Navigator.push(context,
                   new MaterialPageRoute(builder: (context)=>Consultation(
@@ -81,44 +81,41 @@ class Spatial extends StatelessWidget {
                   )));
               },
               child: Text('ir al mapa'),
-            ):Container(
-              height: MediaQuery.of(context).size.height*.55,
-              width: double.infinity,
-//              child: FlutterMap(
-//                options: new MapOptions(
-//                  center: new LatLng(19, -99),
-//                  zoom: 12.0,
-//                ),
-//                layers: [
-//                  new TileLayerOptions(
-//                      urlTemplate:
-//                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-//                      subdomains: ['a', 'b', 'c']),
-//                  new MarkerLayerOptions(
-//                    markers: [
-//                      new Marker(
-//                        width: 80.0,
-//                        height: 80.0,
-//                        point: new LatLng(51.5, -0.09),
-//                        builder: (ctx) =>
-//                        new Container(
-//                          child: new FlutterLogo(),
-//                        ),
-//                      ),
-//                    ],
-//                  ),
-//                ],
-//              ),
-              child: MapWidget(
-                key: keyMapa,
-                tiles: snapshot.data['mapFile'],
-                spatialData: snapshot.data,
-                problems: snapshot.data['problems'],
-                question: question,
-                spatial: true,
-                vId:vId
-              ),
             );
+
+//            return question['tipo'] == 'cm'?RaisedButton(
+//              onPressed: (){
+//                Navigator.push(context,
+//                  new MaterialPageRoute(builder: (context)=>Consultation(
+////                    datos:acomodado,
+////                    tiles: snapshot.data['mapFile'],
+////                    problems:snapshot.data['problems'],
+////                    question: question,
+//
+//                    keyMapa: keyMapa,
+//                    tiles: snapshot.data['mapFile'],
+//                    spatialData: snapshot.data,
+//                    problems: snapshot.data['problems'],
+//                    question: question,
+//                    vId:vId
+//
+//                  )));
+//              },
+//              child: Text('ir al mapa'),
+//            )
+//            :Container(
+//              height: MediaQuery.of(context).size.height*.55,
+//              width: double.infinity,
+//              child: MapWidget(
+//                key: keyMapa,
+//                tiles: snapshot.data['mapFile'],
+//                spatialData: snapshot.data,
+//                problems: snapshot.data['problems'],
+//                question: question,
+//                spatial: true,
+//                vId:vId
+//              ),
+//            );
         }
         return Column();
       },

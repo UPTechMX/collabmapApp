@@ -62,7 +62,7 @@ class _Login extends State<Login>{
 
         SharedPreferences userData = await SharedPreferences.getInstance();
 
-        if(resp.token != null){
+        if(resp.token != null && resp.token != ''){
           print('Token: ${resp.token}');
           userData.setBool('login', true);
           userData.setString('token', resp.token);

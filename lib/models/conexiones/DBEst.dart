@@ -4,47 +4,106 @@ class Tablas{
 
     Tablas(){
 
-      tablas['projects'] = '''
-      CREATE TABLE `projects` (
+      tablas['Projects'] = '''
+      CREATE TABLE `Projects` (
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         `name` varchar(255) DEFAULT NULL,
         `description` text DEFAULT NULL,
-        `content` text DEFAULT NULL,
-        `content2` text DEFAULT NULL,
-        `image` varchar(255) DEFAULT NULL,
+        `inactive` int DEFAULT NULL,
+        `code` text DEFAULT NULL,
         UNIQUE (`id`)
       );
       ''';
 
-      tablas['phases'] = '''
-      CREATE TABLE `phases` (
+      tablas['Consultations'] = '''
+      CREATE TABLE `Consultations` (
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        `slug` varchar(255) DEFAULT NULL,
         `name` varchar(255) DEFAULT NULL,
-        `image` varchar(255) DEFAULT NULL,
         `description` text DEFAULT NULL,
-        `order` int DEFAULT NULL,
-        `status` int DEFAULT NULL,
-        `project` int DEFAULT NULL,
+        `initDate` date DEFAULT NULL,
+        `finishDate` date DEFAULT NULL,
+        `projectsId` int DEFAULT NULL,
+        `complainsStructureId` int DEFAULT NULL,
+        `icon` varchar(45) DEFAULT NULL,
+        `poll` text DEFAULT NULL,
         UNIQUE (`id`)
       );
       ''';
 
-      tablas['consultations'] = '''
-      CREATE TABLE `consultations` (
+      tablas['UsersQuickPoll'] = '''
+      CREATE TABLE `UsersQuickPoll` (
         `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
-        `slug` varchar(255) DEFAULT NULL,
-        `name` varchar(255) DEFAULT NULL,
-        `icon` varchar(255) DEFAULT NULL,
-        `order` int DEFAULT NULL,
-        `status` text DEFAULT NULL,
-        `finish_date` DATETIME DEFAULT NULL,
-        `start_date` DATETIME DEFAULT NULL,
-        `phase_id` int DEFAULT NULL,
-        `description` text DEFAULT NULL,
+        `usersId` int DEFAULT NULL,
+        `consultationsId` int DEFAULT NULL,
+        `timestamp` timestamp NULL DEFAULT NULL,
+        `score` int DEFAULT NULL,
         UNIQUE (`id`)
       );
       ''';
+
+      tablas['Audiences'] = '''
+      CREATE TABLE `Audiences` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `name` varchar(255) DEFAULT NULL,
+        `description` text DEFAULT NULL,
+        `projectsId` int DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
+      tablas['ConsultationsChecklist'] = '''
+      CREATE TABLE `ConsultationsChecklist` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `consultationsId` int DEFAULT NULL,
+        `checklistId` int DEFAULT NULL,
+        `frequency` int DEFAULT NULL,
+        `multiple` int DEFAULT NULL,
+        `orden` int DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
+      tablas['UsersConsultationsChecklist'] = '''
+      CREATE TABLE `UsersConsultationsChecklist` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `consultationsChecklistId` int DEFAULT NULL,
+        `usersId` int DEFAULT NULL,
+        `offline` tinyint(4) DEFAULT NULL,
+        `creadoOffline` tinyint(4) DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
+      tablas['ConsultationsAudiencesCache'] = '''
+      CREATE TABLE `ConsultationsAudiencesCache` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `audiencesId` int DEFAULT NULL,
+        `consultationsId` int DEFAULT NULL,
+        `dimensionesElemId` int DEFAULT NULL,
+        `consultationAudiencesId` int DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
+      tablas['UsersAudiences'] = '''
+      CREATE TABLE `UsersAudiences` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `usersId` int DEFAULT NULL,
+        `audiencesId` int DEFAULT NULL,
+        `dimensionesElemId` int DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
+      tablas['General'] = '''
+      CREATE TABLE `General` (
+        `id` INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+        `name` varchar(255) DEFAULT NULL,
+        `texto` text DEFAULT NULL,
+        UNIQUE (`id`)
+      );
+      ''';
+
 
       tablas['surveys'] = '''
       CREATE TABLE `surveys` (
@@ -69,7 +128,6 @@ class Tablas{
         `mapName` varchar(255) DEFAULT NULL,
         `mapFile` varchar(255) DEFAULT NULL,
         `mapUrl` text DEFAULT NULL,
-        
         UNIQUE (`id`)
       );
       ''';

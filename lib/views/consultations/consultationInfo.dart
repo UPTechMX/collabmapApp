@@ -3,6 +3,7 @@ import 'package:siap/models/layout/paginaList.dart';
 import 'package:siap/models/componentes/iconos.dart';
 import 'package:siap/models/translations.dart';
 import 'consultation.dart';
+import 'package:flutter_html/flutter_html.dart';
 
 class ConsultationInfo extends StatelessWidget {
 
@@ -15,6 +16,8 @@ class ConsultationInfo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 //    print('datos: $datos');
+    String iconNom = datos['icon'];
+    iconNom = iconNom.replaceAll('fa-', '');
 
 
     double tamanoIcono = MediaQuery.of(context).size.width*.25;
@@ -26,7 +29,7 @@ class ConsultationInfo extends StatelessWidget {
 //        heightFactor: tamanoIcono,
 //        widthFactor: tamanoIcono,
         child: Icon(
-          FA.icono[datos['icon']],
+          FA.icono[iconNom],
           size: tamanoIcono*.49,
           color: color,
         ),
@@ -57,7 +60,7 @@ class ConsultationInfo extends StatelessWidget {
               ),
             ),
             Text(
-              '${datos['start_date']} / ${datos['slug'].toUpperCase()}',
+              '${datos['initDate']} / ${datos['finishDate'].toUpperCase()}',
               style: TextStyle(
                   color: Colors.grey[600],
                   fontWeight: FontWeight.bold,
@@ -84,21 +87,17 @@ class ConsultationInfo extends StatelessWidget {
             ),
 
             SizedBox(height: MediaQuery.of(context).size.height*.03,),
-            Text(
-              datos['description'],
-//              '''
-//                When your desired layout feels too complex for Columns and Rows, AlignPositioned is a real life saver. Flutter is very composable, which is good, but sometimes it's unnecessarily complex to translate some layout requirement into a composition of simpler widgets.
-//
-//                The AlignPositioned aligns, positions, sizes, rotates and transforms its child in relation to both the container and the child itself. In other words, it lets you easily and directly define where and how a widget should appear in relation to another.
-//
-//                For example, you can tell it to position the top-left of its child at 15 pixels to the left of the top-left corner of the container, plus move it two thirds of the child's height to the bottom plus 10 pixels, and then rotate 15 degrees. Do you even know how to start doing this by composing basic Flutter widgets? Maybe, but with AlignPositioned it's much easier, and it takes a single widget.
-//
-//                Besides layout, AlignPositioned is specially helpful for explicit animations (those that use a controller), since you can just calculate the final position, size and rotation you want for each frame. Without it you may find yourself having to animate a composition of widgets.
-//
-//                Meanwhile, AnimatedAlignPositioned and AnimChain widgets are helpful for implicit animations, which are very easy to create. If you change their parameters they animate automatically, interpolating between the old and new parameter values.
-//              ''',
-              textAlign: TextAlign.justify,
+//            Text(
+//              datos['description'],
+//              textAlign: TextAlign.justify,
+//            ),
+            Html(
+              data:'${datos['description']}',
+              customTextAlign: (a) {
+                return TextAlign.justify;
+              },
             ),
+
             SizedBox(height: MediaQuery.of(context).size.height*.03,),
             actual?RaisedButton(
               shape: RoundedRectangleBorder(

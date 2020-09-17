@@ -1,3 +1,4 @@
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siap/models/componentes/iconos.dart';
 import 'package:flutter/material.dart';
 import 'package:siap/models/layout/paginaList.dart';
@@ -45,21 +46,47 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 
     DB db = DB.instance;
 
-    String wherePhase = filterPhase == null ? '' : ' AND phase_id = $filterPhase ';
-    String whereCode = (filterCode == null || filterCode == '') ? '' : ' AND c.slug LIKE "$filterCode" ';
-    String whereKeyword = (filterKeyword == null || filterKeyword == '') ? '' : ' AND c.name LIKE "%${filterKeyword}%" ';
+    SharedPreferences userData = await SharedPreferences.getInstance();
+    int userId = userData.getInt('userId');
 
-    String sql = '''
-      SELECT c.*, '$actual' as actual, p.name as pName 
-      FROM consultations c
-      LEFT JOIN phases p ON p.id = c.phase_id 
-      WHERE $periodo $wherePhase $whereCode $whereKeyword
+    DateTime nowDate = new DateTime.now();
+//    print(' - - - - NOW: $now - - - - - -');
+    var today = '$nowDate'.split(' ')[0];
+
+    String sqlAll = '''
+      SELECT c.*, p.name as pName
+			FROM Consultations c
+			LEFT JOIN Projects p ON p.id = c.projectsId
+			WHERE c.id NOT IN (SELECT DISTINCT(consultationsId) FROM ConsultationsAudiencesCache)
+			AND initDate <= '$today' AND finishDate >= '$today'
      ''';
 
 //    print('SQL: $sql');
 
-    List datosDB = await db.query(sql);
-    datosDB ??= [];
+    List all = await db.query(sqlAll);
+    all ??= [];
+
+    String sqlNow = '''
+      SELECT c.*, p.name as pName 
+			FROM Consultations c
+			LEFT JOIN Projects p ON p.id = c.projectsId
+			LEFT JOIN ConsultationsAudiencesCache cac ON cac.consultationsId = c.id
+			LEFT JOIN UsersAudiences ua ON ua.dimensionesElemId = cac.dimensionesElemId AND ua.usersId = $userId
+			WHERE ua.id IS NOT NULL
+			AND c.initDate <= '$today' AND c.finishDate >= '$today'
+			GROUP BY c.id
+		''';
+
+//    print('SQL: $sql');
+
+
+    List now = await db.query(sqlNow);
+    now ??= [];
+//    print('NOW: $now');
+//    print('All: $all');
+
+//    var aaa = await db.query("SELECT * FROM Consultations");
+//    print("AAA: $aaa");
 
     List datos = [];
 
@@ -67,31 +94,14 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 
 //    print('LENGTH: ${datos.length}');
 
-    for(int i = 0; i<datosDB.length;i++){
-//      print('I: $i : ${datos[i]['id']}');
-      var polls = await db.query("SELECT * FROM polls WHERE consultation_id = ${datosDB[i]['id']}");
-      polls ??= [];
+    for(int i = 0; i<all.length;i++){
 
-      Map consulta = Map.from(datosDB[i]);
-
-      List pollsEdt = [];
-      for(int j = 0; j<polls.length;j++){
-        Map pollEdt = Map.from(polls[j]);
-//        print('pollId = ${polls[j]['id']}');
-        List pollQuestions = await db.query("SELECT * FROM pollsQuestions WHERE poll_id = ${polls[j]['id']}");
-        pollQuestions ??= [];
-        pollEdt['questions'] = pollQuestions;
-        pollsEdt.add(pollEdt);
-      }
-
-      consulta['poll'] = pollsEdt.length == 0?{}:pollsEdt[0];
-//      print('= = = = = = POLL = = = == =');
-//      print(consulta['poll']);
-
+      Map consulta = Map.from(all[i]);
 
       datos.add(consulta);
     }
 
+//    print('DATOS: $datos');
     return datos;
   }
 
@@ -183,22 +193,22 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
             botonFiltros(),
             slider(
               nombre: '${Translations.of(context).text('ongoingConsultations').toUpperCase()}',
-              periodo: "(start_date <= '$fechaHoy' AND finish_date >= '$fechaHoy' )",
-              actual: true,
+//              periodo: "(start_date <= '$fechaHoy' AND finish_date >= '$fechaHoy' )",
+//              actual: true,
               color: Color(0xFF2568D8),
             ),
-            slider(
-              nombre: '  ${Translations.of(context).text('futureConsultations').toUpperCase()}',
-              periodo: "(start_date >= '$fechaHoy')",
-              actual: false,
-              color: Color(0xFFA27AE4),
-            ),
-            slider(
-              nombre: '  ${Translations.of(context).text('pastConsultations').toUpperCase()}',
-              periodo: "(finish_date < '$fechaHoy')",
-              actual: false,
-              color: Color(0xFF848484),
-            ),
+//            slider(
+//              nombre: '  ${Translations.of(context).text('futureConsultations').toUpperCase()}',
+//              periodo: "(start_date >= '$fechaHoy')",
+//              actual: false,
+//              color: Color(0xFFA27AE4),
+//            ),
+//            slider(
+//              nombre: '  ${Translations.of(context).text('pastConsultations').toUpperCase()}',
+//              periodo: "(finish_date < '$fechaHoy')",
+//              actual: false,
+//              color: Color(0xFF848484),
+//            ),
           ],
         )
       ],
@@ -206,14 +216,14 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
   }
 
   consultation({var datos,Color color, bool actual = true}){
-//    print('Color $color');
+//    print('Datos $datos');
 
     // ToDo: Esperar a que nos manden el ícono y ponerlo en la lina de abajo
     String iconNom = datos['icon'];
-    iconNom = iconNom.replaceAll('-', ' ');
-    iconNom = camelize(iconNom);
-    iconNom = iconNom.replaceAll(' ', '');
-    iconNom = '${iconNom[0].toLowerCase()}${iconNom.substring(1)}';
+    iconNom = iconNom.replaceAll('fa-', '');
+//    iconNom = camelize(iconNom);
+//    iconNom = iconNom.replaceAll(' ', '');
+//    iconNom = '${iconNom[0].toLowerCase()}${iconNom.substring(1)}';
 //    print(iconNom);
 
     var icon = Container(
@@ -300,13 +310,13 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 
     DB db = DB.instance;
 
-    List phases = await db.query("SELECT * FROM phases");
-    var phaseSel = filterPhase;
+//    List phases = await db.query("SELECT * FROM phases");
+//    var phaseSel = filterPhase;
     var code = filterCode;
     var keyword = filterKeyword;
 
     varSel(var valor){
-      phaseSel = valor;
+//      phaseSel = valor;
     }
 
     varCode(var valor){
@@ -336,20 +346,20 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                     ),
                   ),
                   SizedBox(height: 10,),
-                  Text(
-                    Translations.of(context).text('phase').toUpperCase(),
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFA27AE4)
-                    ),
-                  ),
-                  DropPhases(
-                    phases: phases,
-                    selected: filterPhase,
-                    cambiaSel: varSel,
-                  ),
-                  SizedBox(height: 10,),
+//                  Text(
+//                    Translations.of(context).text('phase').toUpperCase(),
+//                    textAlign: TextAlign.center,
+//                    style: TextStyle(
+//                        fontWeight: FontWeight.bold,
+//                        color: Color(0xFFA27AE4)
+//                    ),
+//                  ),
+//                  DropPhases(
+//                    phases: phases,
+//                    selected: filterPhase,
+//                    cambiaSel: varSel,
+//                  ),
+//                  SizedBox(height: 10,),
                   Text(
                     Translations.of(context).text('code').toUpperCase(),
                     textAlign: TextAlign.center,
@@ -394,12 +404,12 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
               child: Text(Translations.of(context).text('filter')),
               onPressed: () {
                 setState(() {
-                  filterPhase = phaseSel;
+//                  filterPhase = phaseSel;
                   filterCode = code;
                   filterKeyword = keyword;
                 });
                 Navigator.of(context).pop();
-                print('PhaseSel: $phaseSel, code: $code, keyword: $keyword');
+                print(' code: $code, keyword: $keyword');
               },
             ),
           ],

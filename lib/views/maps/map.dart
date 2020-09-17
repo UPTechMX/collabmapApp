@@ -157,12 +157,39 @@ class MapWidgetState extends State<MapWidget> {
     List polylinesProblems = <Polyline>[];
     List polygonProblems = <Polygon>[];
 
-    // TODO problema con los puntos.
     for(int j = 0; j<widget.problems.length;j++){
       Map problem = widget.problems[j];
       List points = <LatLng>[];
       for(int k = 0; k<widget.problems[j]['points'].length;k++){
         points.add(widget.problems[j]['points'][k]['latLng']);
+      }
+
+      if(points.length == 0){
+        var geometry = jsonDecode(problem['geometry']);
+        switch(geometry['type']){
+          case 'Polygon':
+            List pointsGeom = geometry['coordinates'][0];
+            for(int h = 0;h<pointsGeom.length;h++){
+              var coords = pointsGeom[h];
+              points.add(LatLng(coords[1],coords[0]));
+            }
+            break;
+          case 'LineString':
+            List pointsGeom = geometry['coordinates'];
+            for(int h = 0;h<pointsGeom.length;h++){
+              var coords = pointsGeom[h];
+              points.add(LatLng(coords[1],coords[0]));
+            }
+            break;
+          case 'Point':
+            List pointsGeom = geometry['coordinates'];
+            points.add(LatLng(pointsGeom[1],pointsGeom[0]));
+            break;
+        }
+      }
+
+      if(points.length == 0){
+        continue;
       }
       switch(problem['type']){
         case 'Marker':
@@ -184,7 +211,7 @@ class MapWidgetState extends State<MapWidget> {
                 ),
               )
           );
-          print('POINTSSS: $points');
+//          print('POINTSSS: $points');
           break;
         case 'Polyline':
           if(points != null){
@@ -496,8 +523,8 @@ class MapWidgetState extends State<MapWidget> {
               keyMapa: widget.key,
               context: context,
               spatial: widget.spatial,
+              question: widget.question,
             ),
-            !widget.spatial?
             RaisedButton(
               color: Colors.grey[400],
               child: Text(
@@ -509,8 +536,21 @@ class MapWidgetState extends State<MapWidget> {
               onPressed: (){
                 Navigator.of(context).pop();
               },
-            ):
-            Container(),
+            ),
+//            !widget.spatial?
+//            RaisedButton(
+//              color: Colors.grey[400],
+//              child: Text(
+//                Translations.of(context).text('finish_map').toUpperCase(),
+//                style: TextStyle(
+//                    color: Colors.white
+//                ),
+//              ),
+//              onPressed: (){
+//                Navigator.of(context).pop();
+//              },
+//            ):
+//            Container(),
 
           ],
         ),
@@ -785,7 +825,8 @@ class MapWidgetState extends State<MapWidget> {
 
     print('ANSID: $ansId');
 
-    if(!widget.spatial){
+//    if(!widget.spatial){
+    if(widget.question['tipo'] == 'cm'){
       if(nameController.text == ''){
         var cuantos = await db.query('SELECT COUNT(*) as cuantos FROM problems WHERE respuestasVisitaId = ${ansId}');
         nameController = TextEditingController(text: '${Translations.of(context).text('problem')}_${cuantos[0]['cuantos'] + 1}');
@@ -916,33 +957,33 @@ class MapWidgetState extends State<MapWidget> {
                   fncCancel(actVentana);
                 },
               ),
-              apareceDraft && !fix?FlatButton(
-                child: Text(Translations.of(context).text('save_draft')),
-                onPressed: (){
-                  String input = inputController.text;
-                  String name = nameController.text;
-                  bool allOk = true;
-                  if(input.length < 3){
-                    allOk = false;
-                    Alert(context: context,texto: Translations.of(context).text('string_size'));
-                  }
-                  if(name.length < 3){
-                    allOk = false;
-                    Alert(context: context,texto: Translations.of(context).text('string_size'));
-                  }
-                  if(catId == null && allOk){
-                    allOk = false;
-                    Alert(context: context,texto: Translations.of(context).text('cat_not_null'));
-                  }
-
-                  if(allOk){
-                    Navigator.of(context).pop();
-                    print('aaa');
-                    fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: true);
-                  }
-                },
-              ):
-              Container(width: 0,height: 0,),
+//              apareceDraft && !fix?FlatButton(
+//                child: Text(Translations.of(context).text('save_draft')),
+//                onPressed: (){
+//                  String input = inputController.text;
+//                  String name = nameController.text;
+//                  bool allOk = true;
+//                  if(input.length < 3){
+//                    allOk = false;
+//                    Alert(context: context,texto: Translations.of(context).text('string_size'));
+//                  }
+//                  if(name.length < 3){
+//                    allOk = false;
+//                    Alert(context: context,texto: Translations.of(context).text('string_size'));
+//                  }
+//                  if(catId == null && allOk){
+//                    allOk = false;
+//                    Alert(context: context,texto: Translations.of(context).text('cat_not_null'));
+//                  }
+//
+//                  if(allOk){
+//                    Navigator.of(context).pop();
+//                    print('aaa');
+//                    fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: true);
+//                  }
+//                },
+//              ):
+//              Container(width: 0,height: 0,),
               editable && !fix?FlatButton(
                 child: Text(Translations.of(context).text('send')),
                 onPressed: () {
