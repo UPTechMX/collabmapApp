@@ -12,7 +12,10 @@ import 'package:siap/views/home/privacidad.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:siap/views/questionnaires/targets/targetsHome.dart';
 
-
+// Variables for SimpleDialog options
+  enum Confirmation {
+    yes, no
+  }
 
 class Opciones extends StatefulWidget{
   
@@ -51,7 +54,7 @@ class OpcionesState extends State<Opciones>{
         value: 1,
         child: Boton(
             texto: Translations.of(context).text('close_session'),
-            onClick: cerrarSesion
+            onClick: mostrarDialogCerrarSesion
         )
     );
 
@@ -203,7 +206,39 @@ class OpcionesState extends State<Opciones>{
 
   }
 
-
+  Future<void> mostrarDialogCerrarSesion() async {
+    switch(await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return SimpleDialog(
+      title: Text(Translations.of(context).text('close_session')),
+      children: [
+        Padding(
+          child: Text(Translations.of(context).text('close_session_text')),
+          padding: EdgeInsets.all(25.0)
+        ),
+        SimpleDialogOption(
+          onPressed: () {
+            Navigator.of(context).pop(Confirmation.yes);
+            cerrarSesion();
+          },
+          child: Text(Translations.of(context).text('yes')),
+        ),
+        SimpleDialogOption(
+          onPressed: () {Navigator.of(context).pop(Confirmation.no);},
+          child: Text(Translations.of(context).text('no')),
+        )
+      ],
+    );
+      }
+    )) {
+      case Confirmation.yes: 
+        print("Goodbye!");
+      break;
+      case Confirmation.no: 
+      break;
+    }
+  }
 }
 
 
