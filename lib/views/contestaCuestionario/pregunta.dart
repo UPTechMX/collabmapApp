@@ -352,10 +352,14 @@ class PreguntaState extends State<Pregunta>{
               ),
               TextField(
                 keyboardType: tipoPreg == 'num'? TextInputType.number:TextInputType.text,
+                textInputAction: TextInputAction.done,
                 controller: respuestaControlador,
                 autofocus: false,
                 onChanged: (text){
                   respChange = text;
+                },
+                onSubmitted: (term) {
+                  accSig();
                 },
               ),
             ],

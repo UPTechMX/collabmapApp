@@ -469,7 +469,7 @@ class DropPhasesState extends State<DropPhases> {
     return DropdownButtonFormField(
       items: items,
       decoration: InputDecoration(
-          contentPadding: EdgeInsets.fromLTRB(5.0, 00, 5.0, 0),
+          contentPadding: EdgeInsets.fromLTRB(20.0, 00, 20.0, 0),
           border: OutlineInputBorder(
             borderSide: new BorderSide(color: Color(0xFF2568D8),width: 10),
             borderRadius: new BorderRadius.circular(10),
@@ -512,6 +512,7 @@ class CampoTexto extends StatelessWidget {
     return TextFormField(
       keyboardType: TextInputType.text,
       autofocus: false,
+      textInputAction: TextInputAction.done,
       obscureText: false,
       controller: controller,
       onChanged: (value){

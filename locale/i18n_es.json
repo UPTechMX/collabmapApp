@@ -57,7 +57,7 @@
     "consultations": "Consultas",
     "describe": "Describe",
     "finalize": "Finalizar",
-    "data_saved": "Los datos fueron guardados correctamente",
+    "data_saved": "Los datos fueron guardados correctamente. Para editar la figura (punto, línea, polígono), simplemente genere una nueva.",
     "sync_rquired": "Sincronización requerida",
     "finish_map": "Finalizar y regresar al cuestionario",
     "filters": "Filtrar para mejorar la búsqueda",

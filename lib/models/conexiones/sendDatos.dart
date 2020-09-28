@@ -227,6 +227,7 @@ class DatosDB {
   getMult(int vId) async {
     List mResult = await db.query("SELECT * FROM Multimedia WHERE visitasId = $vId");
     List mult = [];
+    mult ??= [];
     mResult ??= List();
     for(int i = 0;i<mResult.length; i++){
       Map m = Map();

@@ -115,7 +115,6 @@ class SyncState extends State<Sync> {
     });
 //
     List<Widget> actions = [];
-    if(!ventana){
       actions.add(
           FlatButton(
             child: Text(Translations.of(context).text('ok')),
@@ -125,7 +124,7 @@ class SyncState extends State<Sync> {
             },
           )
       );
-    }
+    
 
     emergente(
       context: context,

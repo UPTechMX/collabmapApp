@@ -57,7 +57,7 @@
     "consultations": "Consultations",
     "describe": "Describe",
     "finalize": "Finalize",
-    "data_saved": "Data saved successfully",
+    "data_saved": "Data saved successfully. To edit the shape (point, line, polygon), simply create a new one.",
     "sync_rquired": "Synchronization required",
     "finish_map": "Finish and return to the survey",
     "filters": "Filter to improve the search",

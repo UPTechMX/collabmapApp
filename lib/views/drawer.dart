@@ -192,7 +192,7 @@ class OpcionesState extends State<Opciones>{
     userData.remove('password');
     userData.remove('token');
     userData.remove('firstSync');
-    userData.remove('aceptaPriv');
+    //userData.remove('aceptaPriv');
 
     Tablas DBTablas = Tablas();
     Map tablas = DBTablas.getTablas();

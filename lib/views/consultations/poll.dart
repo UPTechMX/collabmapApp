@@ -26,7 +26,7 @@ class PollState extends State<Poll> {
   Widget build(BuildContext context) {
 
     var palomita = Container(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width*.025),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width*.012),
       child: Align(
         alignment: Alignment.topRight,
         child: Icon(

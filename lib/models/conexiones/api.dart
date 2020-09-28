@@ -546,6 +546,10 @@ sendData() async {
 
   for(int j = 0; j<uccs.length; j++){
     var ucc = uccs[j]['trgtElem'];
+    if(ucc == null){
+      continue;
+    }
+
     await db.query("DELETE FROM UserConsultationsChecklist WHERE id = ${ucc['id']}");
 
     var visitas = uccs[j]['visitas'];
