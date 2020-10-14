@@ -11,12 +11,23 @@ import 'models/translations.dart';
 void main() => runApp(MyApp());
 
 class MyApp extends StatefulWidget{
+  static void setLocale(BuildContext context, Locale locale) {
+    _MyApp state = context.findAncestorStateOfType<_MyApp>();
+    state.setLocale(locale);
+  }
+
   @override
   _MyApp createState() => _MyApp();
 }
 
 class _MyApp extends State<MyApp>{
+  Locale _locale;
 
+  void setLocale(Locale locale) {
+    setState(() {
+      _locale = locale;
+    });
+  }
   @override
   void initState() {
     super.initState();
@@ -93,7 +104,7 @@ class _MyApp extends State<MyApp>{
       supportedLocales: supportedLocales,
       home: _logueado?Home(firstSync: _firstSync,aceptaPriv: _aceptaPriv,):Login(),
       routes:routes,
-
+      locale: _locale,
     );
   }
 

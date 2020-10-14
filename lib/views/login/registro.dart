@@ -341,7 +341,7 @@ class RegistroState extends State<Registro> {
                       print(resp);
                       if(resp != null && resp['ok'] == 1){
                         //Navigator.of(context).pop();
-                        RegistroExitoso(texto: Translations.of(context).text('user_created'));
+                        RegistroExitoso(context: context, texto: Translations.of(context).text('user_created'));
                       }else
                       if(resp != null && resp['ok'] == 2){
                         Alert(context: context,texto: Translations.of(context).text('userExist'));

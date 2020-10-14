@@ -5,6 +5,8 @@ import 'package:siap/views/contestaCuestionario/areas.dart';
 import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
 import 'package:siap/models/cuestionario/checklist.dart';
 import 'package:siap/views/contestaCuestionario/multimedia.dart';
+import 'package:siap/views/verCuestionario/verCuestionario.dart';
+import 'package:siap/views/verCuestionario/cuestionario.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -17,14 +19,15 @@ class Fotografias extends StatefulWidget{
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
-
+  GlobalKey<VerCuestionarioState> keyCuestionario;
 
 
   Fotografias({
     this.chk,
     this.keyBloques,
     this.keyAreas,
-    this.keyPreguntas
+    this.keyPreguntas,
+    this.keyCuestionario
   });
 
   @override
@@ -303,6 +306,7 @@ class FotografiasState extends State<Fotografias>{
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
+          //return verCuestionario();
           return AlertDialog(
             title: Text('Faltan fotografías por subir'),
             content: SingleChildScrollView(
@@ -329,18 +333,23 @@ class FotografiasState extends State<Fotografias>{
         },
       );
     }
-
     var chkDatos = await chk.datosChk(false);
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
+      builder:
+      (BuildContext context) {
         return AlertDialog(
           title: Text('Finalizar cuestionario'),
           content: SingleChildScrollView(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
+                Text(
+                  'Resumen del cuestionario:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Cuestionario(chk.vId),
                 Text(
                   'Una vez finalizado ya no podrá modificarse',
                   style: TextStyle(fontWeight: FontWeight.bold),

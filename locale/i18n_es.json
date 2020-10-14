@@ -48,7 +48,7 @@
     "close": "Cerrar",
     "edit": "Editar",
     "general_info": "Información",
-    "user_created": "Usuario creado",
+    "user_created": "Usuario creado exitosamente.",
     "prefer_not_answer": "Prefiero no contestar",
     "male": "Hombre",
     "female": "Mujer",
@@ -136,7 +136,7 @@
     "amswerNotFoundAnswer": "Se intentó ingresar ",
     "successfulImport": "Importación exitosa",
     "importError": "Hubo un error al importar el archivo ",
-    "siap": "Monitoreo por Objetivos",
+    "siap": "Monitoreo por Facilitadores",
 
     "users": "Usuarios",
     "user": "Usuario",

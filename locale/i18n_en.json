@@ -48,7 +48,7 @@
     "close": "Close",
     "edit": "Edit",
     "general_info": "Information",
-    "user_created": "User created",
+    "user_created": "User created successfully.",
     "prefer_not_answer": "Prefer not to answer",
     "male": "Male",
     "female": "Female",
@@ -136,7 +136,7 @@
     "amswerNotFoundAnswer": "An attempt was made to enter ",
     "successfulImport": "Successful import",
     "importError": "There was an error importing the file ",
-    "siap": "Objective Monitoring",
+    "siap": "Monitoring for Representatives",
 
     "users": "Users",
     "user": "User",
