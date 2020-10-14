@@ -2,11 +2,11 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_map/flutter_map.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/views/maps/map.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/views/maps/map.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:latlong/latlong.dart';
-import 'package:siap/views/maps/consultation.dart';
+import 'package:siap_monitoring/views/maps/consultation.dart';
 
 class Spatial extends StatelessWidget {
 

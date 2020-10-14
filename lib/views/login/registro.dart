@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:siap/views/barra.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/views/home/privacidad.dart';
+import 'package:siap_monitoring/views/barra.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/views/home/privacidad.dart';
 
 class Registro extends StatefulWidget {
   @override

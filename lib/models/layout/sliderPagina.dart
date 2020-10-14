@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:carousel_slider/carousel_slider.dart';
 
 class SliderPagina extends StatefulWidget {

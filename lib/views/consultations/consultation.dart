@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/models/componentes/iconos.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/views/surveys/surveys.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/views/surveys/surveys.dart';
 import 'poll.dart';
 import 'dart:ui' as ui;
 import 'package:url_launcher/url_launcher.dart';
-import 'package:siap/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
 
 
 

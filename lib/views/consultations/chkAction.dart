@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
 
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/contestaCuestionario.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/views/contestaCuestionario/pregunta.dart';
-import 'package:siap/views/verCuestionario/verCuestionario.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/contestaCuestionario.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
+import 'package:siap_monitoring/views/verCuestionario/verCuestionario.dart';
 
 class ChkAction extends StatefulWidget {
 

@@ -1,11 +1,11 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
 import 'tarjetaConsultation.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/layout/sliderPagina.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/layout/sliderPagina.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:strings/strings.dart';

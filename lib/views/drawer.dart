@@ -1,16 +1,16 @@
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/views/configuration/mapManager/mapManager.dart';
-import 'package:siap/views/configuration/settings/settings.dart';
-import 'package:siap/views/home/sync.dart';
-import 'package:siap/models/conexiones/DBEst.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/views/home/about.dart';
-import 'package:siap/views/home/privacidad.dart';
+import 'package:siap_monitoring/views/configuration/mapManager/mapManager.dart';
+import 'package:siap_monitoring/views/configuration/settings/settings.dart';
+import 'package:siap_monitoring/views/home/sync.dart';
+import 'package:siap_monitoring/models/conexiones/DBEst.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/views/home/about.dart';
+import 'package:siap_monitoring/views/home/privacidad.dart';
 import 'package:url_launcher/url_launcher.dart';
-import 'package:siap/views/questionnaires/targets/targetsHome.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsHome.dart';
 
 // Variables for SimpleDialog options
 enum Confirmation { yes, no }

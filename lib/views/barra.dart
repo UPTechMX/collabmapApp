@@ -1,10 +1,10 @@
-import 'package:siap/views/consultations/consultationsHome.dart';
-import 'package:siap/views/drawer.dart';
+import 'package:siap_monitoring/views/consultations/consultationsHome.dart';
+import 'package:siap_monitoring/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/views/home/sync.dart';
-import 'package:siap/models/componentes/iconos.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/views/home/sync.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
 
 import '../main.dart';
 import 'locales.dart';
@@ -46,7 +46,7 @@ class BarraState extends State<Barra> {
     return AppBar(
       title: Center(
         child: Image.asset(
-          'images/icons/tacumbu/Tacumbu_ikatu.png',
+          'images/icons/chacarita/chacarita.png',
           height: MediaQuery.of(context).size.height * 3,
         ),
       ),

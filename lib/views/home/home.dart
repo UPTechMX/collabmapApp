@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/views/home/sync.dart';
+import 'package:siap_monitoring/views/home/sync.dart';
 
-import 'package:siap/views/consultations/consultationsHome.dart'; // targetsHome
-import 'package:siap/views/questionnaires/targets/targetsHome.dart';
+//import 'package:siap_monitoring/views/consultations/consultationsHome.dart'; // targetsHome
+import 'package:siap_monitoring/views/questionnaires/targets/targetsHome.dart';
 import 'privacidad.dart';
 
 class Home extends StatefulWidget {
@@ -38,8 +38,8 @@ class HomeState extends State<Home> {
 
   @override
   Widget build(BuildContext context) {
-//    return widget.aceptaPriv?(widget.firstSync?TargetsHome():Sync(firstSync: false,barraSinBoton: true,)):Privacidad(conAcept: true,barraSinBoton: true,);
-    return widget.aceptaPriv
+    return widget.aceptaPriv?(widget.firstSync?TargetsHome():Sync(firstSync: false,barraSinBoton: true,)):Privacidad(conAcept: true,barraSinBoton: true,);
+    /* return widget.aceptaPriv
         ? (widget.firstSync
             ? ConsultationsHome()
             : Sync(
@@ -49,7 +49,7 @@ class HomeState extends State<Home> {
         : Privacidad(
             conAcept: true,
             barraSinBoton: true,
-          );
+          ); */
   }
 
   Future<Null> refrescar() async {}

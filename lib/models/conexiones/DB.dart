@@ -2,7 +2,7 @@ import 'dart:io';
 import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:siap/models/conexiones/DBEst.dart';
+import 'package:siap_monitoring/models/conexiones/DBEst.dart';
 
 // singleton class to manage the database
 class DB {

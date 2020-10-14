@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/componentes/boton.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/componentes/boton.dart';
 import 'survey.dart';
 import 'package:percent_indicator/percent_indicator.dart';
-import 'package:siap/views/consultations/downloadMaps.dart';
-import 'package:siap/views/consultations/chkAction.dart';
+import 'package:siap_monitoring/views/consultations/downloadMaps.dart';
+import 'package:siap_monitoring/views/consultations/chkAction.dart';
 
 class Surveys extends StatefulWidget {
   var consultationId;

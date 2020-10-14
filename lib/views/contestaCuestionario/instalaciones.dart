@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/views/contestaCuestionario/instalacionesList.dart';
-import 'package:siap/views/contestaCuestionario/instalacionSel.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/instalacionesList.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/instalacionSel.dart';
 
 
 class Instalaciones extends StatefulWidget{

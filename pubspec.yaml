@@ -1,4 +1,4 @@
-name: siap
+name: siap_monitoring
 description: SIAP TANGGAP
 
 # The following defines the version and build number for your application.
@@ -59,13 +59,13 @@ dependencies:
 flutter_icons:
   android: "launcher_icon"
   ios: true
-  #image_path: "images/icon.png"
-  image_path_ios: "images/icons/tacumbu/200x200 tacumbu_Mesa de trabajo 1.png"
-  image_path_android: "images/icons/tacumbu/200x200 tacumbu_Mesa de trabajo 1.png"
-  #image_path_ios: "images/icons/chacarita/200x200 chacarita_Mesa de trabajo 1.png"
-  #image_path_android: "images/icons/chacarita/200x200 chacarita_Mesa de trabajo 1.png"
-  adaptive_icon_background: "images/icons/fondoIcono.png"
-  #adaptive_icon_foreground: ""
+  image_path: "images/icon.png"
+  #image_path_ios: "images/icons/tacumbu/200x200 tacumbu_Mesa de trabajo 1.png"
+  #image_path_android: "images/icons/tacumbu/200x200 tacumbu_Mesa de trabajo 1.png"
+  image_path_ios: "images/icons/chacarita/200x200 chacarita_Mesa de trabajo 1.png"
+  image_path_android: "images/icons/chacarita/200x200 chacarita_Mesa de trabajo 1.png"
+  #adaptive_icon_background: "images/icons/fondoIcono.png"
+  adaptive_icon_foreground: ""
 
 
 
@@ -93,8 +93,8 @@ flutter:
     - images/
     - locale/
     - images/icons/
-    - images/icons/tacumbu/
-    #- images/icons/chacarita/
+    #- images/icons/tacumbu/
+    - images/icons/chacarita/
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'dimSelector.dart';
-import 'package:siap/models/layout/colores.dart';
+import 'package:siap_monitoring/models/layout/colores.dart';
 import 'targetsElemsList.dart';
 import 'dimensionesElemAdd.dart';
 

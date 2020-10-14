@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/views/login/conexion.dart';
+import 'package:siap_monitoring/views/login/conexion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'registro.dart';
 
 class Login extends StatefulWidget{

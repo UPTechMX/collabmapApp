@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/views/barra.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/views/configuration/settings/sendProblems.dart';
+import 'package:siap_monitoring/views/barra.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/views/configuration/settings/sendProblems.dart';
 
 class Settings extends StatefulWidget {
 

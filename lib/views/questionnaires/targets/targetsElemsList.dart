@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/views/questionnaires/targets/chkAction.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/chkAction.dart';
 
 class TargetsElemsList extends StatefulWidget {
 

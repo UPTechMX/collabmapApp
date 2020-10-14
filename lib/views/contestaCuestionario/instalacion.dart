@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
 
 class Instalacion extends StatelessWidget{
 

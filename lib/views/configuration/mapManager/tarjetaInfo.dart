@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'mapManager.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 

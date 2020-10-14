@@ -3,7 +3,7 @@ import 'map.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 
 class CatSel extends StatefulWidget {
 

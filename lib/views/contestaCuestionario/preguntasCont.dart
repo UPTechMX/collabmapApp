@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/pregunta.dart';
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/general.dart';
-import 'package:siap/views/contestaCuestionario/fotografias.dart';
-import 'package:siap/views/contestaCuestionario/instalaciones.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/general.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/fotografias.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/instalaciones.dart';
 
 
 class PreguntasCont extends StatefulWidget{
