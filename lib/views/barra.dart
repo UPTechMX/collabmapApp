@@ -1,4 +1,5 @@
-import 'package:siap_monitoring/views/consultations/consultationsHome.dart';
+//import 'package:siap_monitoring/views/consultations/consultationsHome.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsHome.dart';
 import 'package:siap_monitoring/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -78,7 +79,7 @@ class BarraState extends State<Barra> {
 
       actions: <Widget>[
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(3.0),
           child: DropdownButton<Language>(
             onChanged: (Language language) {
               _changeLanguage(language);
@@ -97,11 +98,23 @@ class BarraState extends State<Barra> {
           ),
         ),
         !widget.sync
+            ? Padding(
+                padding: EdgeInsets.all(3.0),
+                child: IconButton(
+                  icon: Icon(Icons.home, color: Colors.grey),
+                  //onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //    builder: (context) => ConsultationsHome())),
+                  onPressed: () => Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => TargetsHome())),
+                ),
+              )
+            : Container(),
+        !widget.sync
             ? IconButton(
                 icon: Icono(
                   svgName: 'sync',
                   color: Colors.grey,
-                  width: 30,
+                  width: 25,
                 ),
                 onPressed: () {
                   Navigator.push(

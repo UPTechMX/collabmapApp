@@ -307,7 +307,8 @@ class PreguntaState extends State<Pregunta> {
           items.add(item);
         }
 
-        return DropdownButton(
+        return Center(
+            child: DropdownButton(
           items: items,
           value: selected,
           hint: Text('Selecciona una respuesta'),
@@ -323,7 +324,7 @@ class PreguntaState extends State<Pregunta> {
               }
             });
           },
-        );
+        ));
         break;
       // TODO: DEFINIR ESPACIALES (PINTAR MAPAS)
       case 'op':
@@ -586,11 +587,13 @@ class PreguntaState extends State<Pregunta> {
     switch (preg['tipo']) {
       case 'num':
       case 'ab':
-      //TODO: DEFINIR ESPACIALES (TOMAR RESPUESTA)
+        //TODO: DEFINIR ESPACIALES (TOMAR RESPUESTA)
+        r['respuesta'] = respuestaControlador.text;
+        break;
       case 'spatial':
       case 'cm':
       case 'op':
-        r['respuesta'] = respuestaControlador.text;
+        r['respuesta'] = "spatial";
         break;
       case 'mult':
         if (selected != null) {
