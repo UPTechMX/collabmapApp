@@ -78,7 +78,7 @@ class BarraState extends State<Barra> {
 
       actions: <Widget>[
         Padding(
-          padding: EdgeInsets.all(8.0),
+          padding: EdgeInsets.all(3.0),
           child: DropdownButton<Language>(
             onChanged: (Language language) {
               _changeLanguage(language);
@@ -97,11 +97,23 @@ class BarraState extends State<Barra> {
           ),
         ),
         !widget.sync
+            ? Padding(
+                padding: EdgeInsets.all(3.0),
+                child: IconButton(
+                  icon: Icon(Icons.home, color: Colors.grey),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ConsultationsHome())),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //    builder: (context) => targetsHome())),
+                ),
+              )
+            : Container(),
+        !widget.sync
             ? IconButton(
                 icon: Icono(
                   svgName: 'sync',
                   color: Colors.grey,
-                  width: 30,
+                  width: 25,
                 ),
                 onPressed: () {
                   Navigator.push(

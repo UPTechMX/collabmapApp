@@ -109,6 +109,7 @@ class Checklist {
   }
 
   resultados(bool fromDB) async {
+    //print(this.preguntas);
     if (this.preguntas == null || fromDB) {
 //      print('TRUE');
       this.preguntas = await _getResultadosDB();

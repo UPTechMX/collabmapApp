@@ -307,7 +307,8 @@ class PreguntaState extends State<Pregunta> {
           items.add(item);
         }
 
-        return DropdownButton(
+        return Center(
+            child: DropdownButton(
           items: items,
           value: selected,
           hint: Text('Selecciona una respuesta'),
@@ -323,7 +324,7 @@ class PreguntaState extends State<Pregunta> {
               }
             });
           },
-        );
+        ));
         break;
       // TODO: DEFINIR ESPACIALES (PINTAR MAPAS)
       case 'op':
@@ -464,23 +465,24 @@ class PreguntaState extends State<Pregunta> {
     var respuesta;
     if (pregs.length != 0) {
       respuesta = getResp(pregs);
+      //print("Prueba:" + respuesta.toString());
     } else {
 //      ant['pId'] = null;
     }
 
-//      print('========= RESPUESTA allOk antes : $respuesta ======');
+    print('========= RESPUESTA allOk antes : $respuesta ======');
     if (respuesta != null) {
-//        print('aa: $respuesta');
+      //print('aa: $respuesta');
       if (allOk(respuesta)) {
-//        print('========= RESPUESTA allOk ======');
-//        print(respuesta);
+        //print('========= RESPUESTA allOk ======');
+        //print(respuesta);
         chk.guardaResp(respuesta);
-//      print('esperé');
+        // print('esperé');
 
         Map pregs = await chk.resultados(true);
 
         var sig = await chk.sigPregSaltos(identificador, pregs);
-//      print('SIG ${sig} a $identificador');
+        //print('SIG ${sig} a $identificador');
         if (sig['pId'] != null) {
           cambiaEstados(sig);
         } else {
@@ -509,7 +511,8 @@ class PreguntaState extends State<Pregunta> {
         }
       }
     } else {
-//      print( ' ===== ${chk.datosVis['etapa']} = = =');
+      //print('ERROR!!!!!');
+      print(' ===== ${chk.datosVis['etapa']} = = =');
 
       var paginaSig;
       var bloque;
@@ -586,11 +589,13 @@ class PreguntaState extends State<Pregunta> {
     switch (preg['tipo']) {
       case 'num':
       case 'ab':
-      //TODO: DEFINIR ESPACIALES (TOMAR RESPUESTA)
+        //TODO: DEFINIR ESPACIALES (TOMAR RESPUESTA)
+        r['respuesta'] = respuestaControlador.text;
+        break;
       case 'spatial':
       case 'cm':
       case 'op':
-        r['respuesta'] = respuestaControlador.text;
+        r['respuesta'] = "spatial";
         break;
       case 'mult':
         if (selected != null) {
