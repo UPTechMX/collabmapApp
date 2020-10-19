@@ -1,4 +1,4 @@
-package mx.capsus.siap
+package mx.capsus.siap_monitoring
 
 import androidx.annotation.NonNull;
 import io.flutter.embedding.android.FlutterActivity
