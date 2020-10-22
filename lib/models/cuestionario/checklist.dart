@@ -1794,7 +1794,7 @@ class Checklist {
     f['archivo'] = file;
     f['descripcion'] = '';
 
-//    await db.insert('Multimedia', f);
+    await db.insert('Multimedia', f, false);
   }
 
   getMultimedia() async {
