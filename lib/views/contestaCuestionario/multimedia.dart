@@ -5,8 +5,7 @@ import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:siap/models/conexiones/DB.dart';
 
-
-class Multimedia extends StatefulWidget{
+class Multimedia extends StatefulWidget {
   Checklist chk;
   Directory directory;
   String path;
@@ -15,11 +14,9 @@ class Multimedia extends StatefulWidget{
 
   @override
   MultimediaState createState() => MultimediaState(chk: chk);
-
 }
 
-class MultimediaState extends State<Multimedia>{
-
+class MultimediaState extends State<Multimedia> {
   Checklist chk;
   Directory directory;
   String path;
@@ -30,55 +27,68 @@ class MultimediaState extends State<Multimedia>{
   Widget build(BuildContext context) {
     return FutureBuilder<List>(
       future: multList(),
-      builder: (context,snapshot){
-        if(!snapshot.hasData && chk.datosVis['etapa'] != 'instalacion') return Center(child: Text('No se encontraron imágenes para esta visita.'));
+      builder: (context, snapshot) {
+        //print(snapshot.hasData.toString());
+        //print(chk.datosVis['etapa']);
+        if (!snapshot.hasData && chk.datosVis['etapa'] != 'instalacion')
+          return Center(
+              child: Text('No se encontraron imágenes para esta visita.'));
         int i = 0;
         List rowEles = [];
 //        print('aaa');
-        return chk.datosVis['etapa'] != 'instalacion'?
-        Column(
-          children:snapshot.data.map((img){
-//            print('IMG $img');
-            if(i%3 == 0){
-              rowEles = <Widget>[];
-            }
+        return chk.datosVis['etapa'] != 'instalacion'
+            ? Column(
+                children: snapshot.data.map((img) {
+                  print('IMG $img');
+                  if (i % 3 == 0) {
+                    rowEles = <Widget>[];
+                  }
 
-            File imagen = File('${path}/${img['archivo']}');
+                  File imagen = File('${path}/${img['archivo']}');
 //            print(imagen);
-            var tamano = (MediaQuery.of(context).size.width*.3)-10;
+                  var tamano = (MediaQuery.of(context).size.width * .3) - 10;
 
-            var widgetImg = Container(
-              padding: EdgeInsets.all(5),
-              child: Column(
-                children: <Widget>[
-                  Image.file(imagen,width: tamano,),
-                  Container(
-                    child: FlatButton(
-                        onPressed: (){
-                          delImg(img);
-                        },
-                        child: Icon(Icons.delete,size: 20,color: Colors.red,)
+                  var widgetImg = Container(
+                    padding: EdgeInsets.all(5),
+                    child: Column(
+                      children: <Widget>[
+                        Image.file(
+                          imagen,
+                          width: tamano,
+                        ),
+                        Container(
+                          child: FlatButton(
+                              onPressed: () {
+                                delImg(img);
+                              },
+                              child: Icon(
+                                Icons.delete,
+                                size: 20,
+                                color: Colors.red,
+                              )),
+                        )
+                      ],
                     ),
-                  )
-                ],
-              ),
-            );
+                  );
 
-
-            rowEles.add(widgetImg);
-            if(i%3 == 2 || i == (snapshot.data.length -1)){
-              i++;
-              return Row(
-                children:rowEles,
+                  rowEles.add(widgetImg);
+                  if (i % 3 == 2 || i == (snapshot.data.length - 1)) {
+                    i++;
+                    return Row(
+                      children: rowEles,
+                    );
+                  } else {
+                    i++;
+                    return Container(
+                      width: 0,
+                      height: 0,
+                    );
+                  }
+                }).toList(),
+              )
+            : FotografiasInst(
+                chk: chk,
               );
-            }else{
-              i++;
-              return Container(width: 0,height: 0,);
-            }
-            
-          }).toList(),
-        ):
-        FotografiasInst(chk: chk,);
       },
     );
   }
@@ -112,7 +122,7 @@ class MultimediaState extends State<Multimedia>{
               onPressed: () async {
                 await db.delete('Multimedia', ' id = ${img['id']}', []);
                 File imagen = File('${path}/${img['archivo']}');
-                imagen.delete(recursive:true);
+                imagen.delete(recursive: true);
                 Navigator.of(context).pop();
                 setState(() {
                   del = true;
@@ -123,10 +133,7 @@ class MultimediaState extends State<Multimedia>{
         );
       },
     );
-
   }
-
-
 
   Future<List> multList() async {
     directory = await getApplicationDocumentsDirectory(); // AppData folder path
@@ -135,8 +142,5 @@ class MultimediaState extends State<Multimedia>{
     List mult = await chk.getMultimedia();
 
     return mult;
-
   }
-
 }
-
