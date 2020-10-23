@@ -591,9 +591,13 @@ class PreguntaState extends State<Pregunta> {
         r['respuesta'] = respuestaControlador.text;
         break;
       case 'spatial':
+        r['respuesta'] = "Ubicación regisrada";
+        break;
       case 'cm':
+        r['respuesta'] = "Problema(s) registrado(s)";
+        break;
       case 'op':
-        r['respuesta'] = "spatial";
+        r['respuesta'] = "Punto registrado";
         break;
       case 'mult':
         if (selected != null) {

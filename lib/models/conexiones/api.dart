@@ -545,7 +545,7 @@ sendData() async {
   }
 
   for(int j = 0; j<uccs.length; j++){
-    var ucc = uccs[j]['trgtElem'];
+    var ucc = uccs[j]['id'];
     if(ucc == null){
       continue;
     }
