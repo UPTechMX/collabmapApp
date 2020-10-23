@@ -83,7 +83,7 @@ class BarraState extends State<Barra> {
             onChanged: (Language language) {
               _changeLanguage(language);
             },
-            icon: Icon(Icons.language),
+            icon: Icon(Icons.language, color: Colors.grey),
             items: Language.languageList()
                 .map<DropdownMenuItem<Language>>(
                     (Language lang) => DropdownMenuItem(
