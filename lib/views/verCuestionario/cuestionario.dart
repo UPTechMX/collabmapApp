@@ -506,6 +506,7 @@ class Pregunta extends StatelessWidget {
       var justificacion = pregChk['justificacion'] == null
           ? ''
           : parseHtmlString('${pregChk['justificacion']}');
+      print("Hola:" + chk.preguntas.toString());
       return Container(
           decoration: BoxDecoration(
               border: Border(

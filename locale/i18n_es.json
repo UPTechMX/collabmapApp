@@ -301,7 +301,9 @@
     "noAccess": "Sin acceso al sistema",
     "administratior": "Aministrador",
     "superuser": "Superusuario",
-    "level": "Nivel"
+    "level": "Nivel",
 
-
+    "resp_spatial": "Ubicación registrada",
+    "resp_cm": "Problema reportado",
+    "resp_op": "Punto registrado"
 }

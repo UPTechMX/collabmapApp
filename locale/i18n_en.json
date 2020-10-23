@@ -301,8 +301,10 @@
     "noAccess": "No access",
     "administrator": "Administrator",
     "superuser": "Superuser",
-    "level": "Level"
+    "level": "Level",
 
-
+    "resp_spatial": "Location registered",
+    "resp_cm": "Problem reported",
+    "resp_op": "Point registered"
 
 }
