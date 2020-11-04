@@ -514,6 +514,7 @@ sendData() async {
   post['UsersConsultationsChecklist']['type'] = 'String';
   post['UsersConsultationsChecklist']['name'] = 'UsersConsultationsChecklist';
   post['UsersConsultationsChecklist']['value'] = jsonEncode(uccs);
+  print("----------------------------------------");
   var respUCC = await postDatos(
       datos: post,
       imprime: true,
@@ -521,6 +522,7 @@ sendData() async {
       verif: true,
       opt: 'sendUCC/user/${userId}',
       token: token);
+  print("----------------------------------------");
 
   if (respUCC['ok'] != 1) {
     return;
