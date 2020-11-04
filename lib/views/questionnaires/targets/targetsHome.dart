@@ -40,10 +40,12 @@ class TargetsHome extends StatelessWidget {
     ''');
 
     trgts ??= [];
-    for(int i = 0; i<trgts.length;i++){
-      var dims = await db.query("SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${trgts[i]['id']} ");
+    print(trgts);
+    for (int i = 0; i < trgts.length; i++) {
+      var dims = await db.query(
+          "SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${trgts[i]['id']} ");
       dims ??= [];
-      if(dims.length>0){
+      if (dims.length > 0) {
         targets.add(trgts[i]);
       }
     }
@@ -51,8 +53,9 @@ class TargetsHome extends StatelessWidget {
     return targets;
   }
 
-  elemento({var datos}){
-    return UserTarget(datos: datos,);
+  elemento({var datos}) {
+    return UserTarget(
+      datos: datos,
+    );
   }
 }
-

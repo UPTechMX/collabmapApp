@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/cuestionario/checklist.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
@@ -7,14 +8,12 @@ import 'package:siap_monitoring/views/contestaCuestionario/general.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/fotografias.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/instalaciones.dart';
 
-
-class PreguntasCont extends StatefulWidget{
-
+class PreguntasCont extends StatefulWidget {
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> llave;
-
+  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   Checklist chk;
   String bId;
@@ -22,61 +21,54 @@ class PreguntasCont extends StatefulWidget{
   String pId;
   String pagina;
 
-  PreguntasCont({
-    Key key,
-    this.chk,
-    this.bId,
-    this.aId,
-    this.pId,
-    this.pagina,
-    this.keyAreas,
-    this.keyBloques,
-    this.keyPregunta,
-  }) : super(key:key);
+  PreguntasCont(
+      {Key key,
+      this.chk,
+      this.bId,
+      this.aId,
+      this.pId,
+      this.pagina,
+      this.keyAreas,
+      this.keyBloques,
+      this.keyPregunta,
+      this.keyTargElemList})
+      : super(key: key);
 
   @override
   PreguntasContState createState() => PreguntasContState(
-    chk:chk,
-    bId:bId,
-    aId:aId,
-    pId:pId,
-    pagina:pagina,
-  );
-
+        chk: chk,
+        bId: bId,
+        aId: aId,
+        pId: pId,
+        pagina: pagina,
+      );
 }
 
-class PreguntasContState extends State<PreguntasCont>{
-
+class PreguntasContState extends State<PreguntasCont> {
   String bId;
   String aId;
   String pId;
   Checklist chk;
   String pagina;
 
-  PreguntasContState({
-    this.chk,
-    this.bId,
-    this.aId,
-    this.pId,
-    this.pagina
-  });
+  PreguntasContState({this.chk, this.bId, this.aId, this.pId, this.pagina});
 
   TextEditingController justificacionControlador = TextEditingController();
 
   @override
   Widget build(BuildContext context) {
-    
 //    print('PAGINA $pagina');
-    switch(pagina){
+    switch (pagina) {
       case 'preguntas':
 //        print(chk.est);
         return Center(
           child: Pregunta(
-            key:widget.keyPregunta,
+            key: widget.keyPregunta,
             chk: chk,
             KeyPreguntas: widget.key,
             keyAreas: widget.keyAreas,
             keyBloques: widget.keyBloques,
+            keyTargElemList: widget.keyTargElemList,
           ),
         );
       case 'general':
@@ -86,6 +78,7 @@ class PreguntasContState extends State<PreguntasCont>{
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
           keyPregunta: widget.keyPregunta,
+          keyTargElemList: widget.keyTargElemList,
         );
       case 'instalacion':
         return Instalaciones(
@@ -93,6 +86,7 @@ class PreguntasContState extends State<PreguntasCont>{
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
           keyPreguntas: widget.key,
+          keyTargElemList: widget.keyTargElemList,
         );
       case 'fotografias':
         return Fotografias(
@@ -100,15 +94,14 @@ class PreguntasContState extends State<PreguntasCont>{
           keyPreguntas: widget.key,
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
+          keyTargElemList: widget.keyTargElemList,
         );
     }
-
   }
 
-  cambiaPagina(pag){
+  cambiaPagina(pag) {
     setState(() {
       pagina = pag;
     });
   }
-
 }

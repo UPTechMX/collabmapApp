@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:siap_monitoring/models/translations.dart';
 
@@ -13,21 +14,19 @@ import 'package:siap_monitoring/views/verCuestionario/verCuestionario.dart';
 class ChkAction extends StatefulWidget {
   Map datTE;
   Map datChk;
+  GlobalKey<TargetsElemsListState> keyTargElemList;
 
-  ChkAction({this.datTE, this.datChk});
+  ChkAction({this.datTE, this.datChk, this.keyTargElemList});
 
   @override
   ChkActionState createState() => ChkActionState();
 }
 
 class ChkActionState extends State<ChkAction> {
-  GlobalKey<ChkActionState> KeyChk = GlobalKey();
   GlobalKey<BloquesBtnState> KeyBloques = GlobalKey();
   GlobalKey<AreasState> KeyAreas = GlobalKey();
   GlobalKey<PreguntasContState> KeyPreguntas = GlobalKey();
   GlobalKey<PreguntaState> KeyPregunta = GlobalKey();
-
-  ChkActionState({this.KeyChk});
 
   @override
   Widget build(BuildContext context) {
@@ -186,30 +185,34 @@ class ChkActionState extends State<ChkAction> {
 
   Widget answerSurvey({int elemId, int checklistId}) {
     return FlatButton(
-      key: KeyChk,
+      key: widget.keyTargElemList,
       child: Text(
         '${Translations.of(context).text('answerSurvey')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
       onPressed: () {
-        creaVisita(elemId: elemId, checklistId: checklistId);
+        creaVisita(
+            elemId: elemId,
+            checklistId: checklistId,
+            key: widget.keyTargElemList);
       },
     );
   }
 
   Widget cont({int vId, int checklistId}) {
     return FlatButton(
+      key: widget.keyTargElemList,
       child: Text(
         '${Translations.of(context).text('continue')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
       onPressed: () {
-        goToSurvey(vId: vId);
+        goToSurvey(vId: vId, key: widget.keyTargElemList);
       },
     );
   }
 
-  void creaVisita({int elemId, int checklistId}) async {
+  void creaVisita({int elemId, int checklistId, Key key}) async {
     DB db = DB.instance;
 
     DateTime now = new DateTime.now();
@@ -225,10 +228,10 @@ class ChkActionState extends State<ChkAction> {
 
     var vId = await db.insert('Visitas', datVis, true);
 
-    goToSurvey(vId: vId);
+    goToSurvey(vId: vId, key: key);
   }
 
-  void goToSurvey({int vId}) async {
+  void goToSurvey({int vId, Key key}) async {
     Navigator.push(
         context,
         new MaterialPageRoute(
@@ -238,6 +241,7 @@ class ChkActionState extends State<ChkAction> {
                   KeyAreas: KeyAreas,
                   KeyPreguntas: KeyPreguntas,
                   KeyPregunta: KeyPregunta,
+                  KeyTargElemList: key,
                 )));
   }
 }

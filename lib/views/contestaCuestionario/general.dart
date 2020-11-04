@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
@@ -8,39 +9,36 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:intl/intl.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 
-
-class General extends StatefulWidget{
-
+class General extends StatefulWidget {
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<PreguntaState> keyPregunta;
+  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   Checklist chk;
   String bId;
   String aId;
   String pId;
 
-
-  General({
-    Key key,
-    this.chk,
-    this.keyPreguntas,
-    this.keyAreas,
-    this.keyBloques,
-    this.keyPregunta,
-    this.bId,
-    this.aId,
-    this.pId
-  }):super(key:key);
+  General(
+      {Key key,
+      this.chk,
+      this.keyPreguntas,
+      this.keyAreas,
+      this.keyBloques,
+      this.keyPregunta,
+      this.keyTargElemList,
+      this.bId,
+      this.aId,
+      this.pId})
+      : super(key: key);
 
   @override
-  GeneralState createState() => GeneralState(chk:chk);
-
+  GeneralState createState() => GeneralState(chk: chk);
 }
 
-class GeneralState extends State<General>{
-
+class GeneralState extends State<General> {
   Checklist chk;
 
   TextEditingController horaControlador = TextEditingController();
@@ -56,54 +54,59 @@ class GeneralState extends State<General>{
 
   GeneralState({this.chk});
 
-
   @override
   Widget build(BuildContext context) {
-
     return FutureBuilder<List>(
-      future:getDatosGral() ,
-      builder: (context,snapshot){
-        if(!snapshot.hasData) return Center(child: Text('No se encontraron datos.'));
+      future: getDatosGral(),
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(child: Text('No se encontraron datos.'));
         return Column(
-          children: snapshot.data.map(
-              (data) {
+          children: snapshot.data.map((data) {
 //                print(data['fechaRealizacion']);
-                if(data['fechaRealizacion'] != null){
-                  var f = data['fechaRealizacion'].split('-');
-                  if(data['fechaRealizacion'] != null && f[0] != null && f[1] != null && f[2] != null){
-                    fecha = fechaChange == null?DateTime(int.parse(f[0]),int.parse(f[1]),int.parse(f[2])):fechaChange;
-                  }else{
-                    fecha = DateTime.now();
-                  }
-                }else{
-                  fecha = fechaChange == null?DateTime.now():fechaChange;
-                }
-                if(data['horaRealizacion'] != null){
-                  var h = data['horaRealizacion'].split(':');
-                  hora = horaChange == null?TimeOfDay(hour: int.parse(h[0]), minute: int.parse(h[1])):horaChange;
-                }else{
-                  hora = horaChange == null?TimeOfDay.now():horaChange;
-                }
+            if (data['fechaRealizacion'] != null) {
+              var f = data['fechaRealizacion'].split('-');
+              if (data['fechaRealizacion'] != null &&
+                  f[0] != null &&
+                  f[1] != null &&
+                  f[2] != null) {
+                fecha = fechaChange == null
+                    ? DateTime(
+                        int.parse(f[0]), int.parse(f[1]), int.parse(f[2]))
+                    : fechaChange;
+              } else {
+                fecha = DateTime.now();
+              }
+            } else {
+              fecha = fechaChange == null ? DateTime.now() : fechaChange;
+            }
+            if (data['horaRealizacion'] != null) {
+              var h = data['horaRealizacion'].split(':');
+              hora = horaChange == null
+                  ? TimeOfDay(hour: int.parse(h[0]), minute: int.parse(h[1]))
+                  : horaChange;
+            } else {
+              hora = horaChange == null ? TimeOfDay.now() : horaChange;
+            }
 //                hora = horaChange == null?TimeOfDay(hour: 10, minute: 00):
 
-                resumenControlador = TextEditingController(text:resumenChange == null?data['resumen']:resumenChange);
+            resumenControlador = TextEditingController(
+                text: resumenChange == null ? data['resumen'] : resumenChange);
 //                horaControlador = TextEditingController(text:horaChange == null?data['horaRealizacion']:horaChange);
-                return Container(
-                  padding: EdgeInsets.all(15),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      fechaHora(),
-                      resumen(),
-                      botonesContinuar(),
-                    ],
-                  ),
-                );
-              }
-          ).toList(),
+            return Container(
+              padding: EdgeInsets.all(15),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  fechaHora(),
+                  resumen(),
+                  botonesContinuar(),
+                ],
+              ),
+            );
+          }).toList(),
         );
       },
-
     );
   }
 
@@ -120,7 +123,6 @@ class GeneralState extends State<General>{
   }
 
   Future<Null> _selectTime(BuildContext context) async {
-
     final TimeOfDay hpicked = await showTimePicker(
       context: context,
       initialTime: hora,
@@ -131,9 +133,7 @@ class GeneralState extends State<General>{
       });
   }
 
-
-
-  fechaHora(){
+  fechaHora() {
     return Column(
       children: <Widget>[
         Row(
@@ -167,12 +167,13 @@ class GeneralState extends State<General>{
               child: Row(
                 children: <Widget>[
                   Text(formateaFecha(fecha)),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   IconButton(
                     icon: Icon(Icons.event),
                     onPressed: () => _selectDate(context),
                   ),
-
                 ],
               ),
             ),
@@ -182,12 +183,14 @@ class GeneralState extends State<General>{
             ),
             Expanded(
               flex: 5,
-              child:Row(
+              child: Row(
                 children: <Widget>[
                   Text(formateaHora(hora)),
-                  SizedBox(height: 20.0,),
+                  SizedBox(
+                    height: 20.0,
+                  ),
                   IconButton(
-                    icon:Icon(Icons.timer),
+                    icon: Icon(Icons.timer),
                     onPressed: () => _selectTime(context),
                   )
                 ],
@@ -195,12 +198,11 @@ class GeneralState extends State<General>{
             ),
           ],
         ),
-
       ],
     );
   }
 
-  resumen(){
+  resumen() {
     return Container(
       padding: EdgeInsets.only(top: 30),
       child: Column(
@@ -217,7 +219,7 @@ class GeneralState extends State<General>{
               keyboardType: TextInputType.text,
               controller: resumenControlador,
               autofocus: false,
-              onChanged: (text){
+              onChanged: (text) {
                 resumenChange = text;
               },
             ),
@@ -225,18 +227,19 @@ class GeneralState extends State<General>{
         ],
       ),
     );
-
   }
 
-  botonesContinuar(){
+  botonesContinuar() {
     return Container(
-      padding: EdgeInsets.only(top:50),
+      padding: EdgeInsets.only(top: 50),
       child: Row(
         children: <Widget>[
           Expanded(
               flex: 5,
-              child: Container(width: 0,height: 0,)
-          ),
+              child: Container(
+                width: 0,
+                height: 0,
+              )),
           Expanded(
             flex: 1,
             child: Text(''),
@@ -248,7 +251,7 @@ class GeneralState extends State<General>{
               child: Text(
                 'Continuar',
               ),
-              onPressed: (){
+              onPressed: () {
                 aPregs();
               },
             ),
@@ -258,9 +261,7 @@ class GeneralState extends State<General>{
     );
   }
 
-
   Future<List> getDatosGral() async {
-
     var datos = await chk.datosVisita(true);
 
     List list = [];
@@ -268,12 +269,10 @@ class GeneralState extends State<General>{
     list.add(datos);
 
     return list;
-
   }
 
   aPregs() async {
     var db = DB.instance;
-
 
     Map r = new Map();
     r['fechaRealizacion'] = formateaFecha(fecha);
@@ -283,11 +282,9 @@ class GeneralState extends State<General>{
 
     SharedPreferences userData = await SharedPreferences.getInstance();
     int usrId;
-    if(userData.getBool('login') != null){
+    if (userData.getBool('login') != null) {
       usrId = userData.getInt('userId');
     }
-
-
 
     String sql = '''
       UPDATE Visitas SET 
@@ -301,18 +298,15 @@ class GeneralState extends State<General>{
 
     db.query(sql);
 
-
     widget.keyPreguntas.currentState.cambiaPagina('preguntas');
 //    print(r);
-
   }
 
-  formateaFecha(fecha){
+  formateaFecha(fecha) {
     return "${formatter.format(fecha)}";
   }
 
-  formateaHora(hora){
-    return '${hora.hour}:${hora.minute.toString().padLeft(2,'0')}';
+  formateaHora(hora) {
+    return '${hora.hour}:${hora.minute.toString().padLeft(2, '0')}';
   }
-
 }
