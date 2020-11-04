@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap/views/consultations/consultation.dart';
 import 'package:siap/views/contestaCuestionario/bloques.dart';
 import 'package:siap/views/contestaCuestionario/areas.dart';
 import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
 import 'package:siap/models/cuestionario/checklist.dart';
 import 'package:siap/views/contestaCuestionario/multimedia.dart';
+import 'package:siap/views/surveys/surveys.dart';
 import 'package:siap/views/verCuestionario/verCuestionario.dart';
 import 'package:siap/views/verCuestionario/cuestionario.dart';
 
@@ -19,17 +21,20 @@ class Fotografias extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<VerCuestionarioState> keyCuestionario;
+  GlobalKey<SurveysState> keySurvey;
 
   Fotografias(
       {this.chk,
       this.keyBloques,
       this.keyAreas,
       this.keyPreguntas,
-      this.keyCuestionario});
+      this.keyCuestionario,
+      this.keySurvey});
 
   @override
   FotografiasState createState() => FotografiasState(
         chk: chk,
+        keySurvey: keySurvey,
       );
 }
 
@@ -39,6 +44,7 @@ class FotografiasState extends State<Fotografias> {
   String justif;
   Viable viable;
   GlobalKey<ViableState> keyViable = GlobalKey();
+  GlobalKey<SurveysState> keySurvey = GlobalKey();
 
   File image;
   Future tomarFoto() async {
@@ -104,6 +110,7 @@ class FotografiasState extends State<Fotografias> {
 
   FotografiasState({
     this.chk,
+    this.keySurvey,
   }) {
     viable = Viable();
   }
@@ -137,11 +144,13 @@ class FotografiasState extends State<Fotografias> {
           children: <Widget>[
             FloatingActionButton(
               mini: true,
+              heroTag: "btn1",
               child: Icon(Icons.photo_library),
               onPressed: usarFoto,
             ),
             FloatingActionButton(
               mini: true,
+              heroTag: "btn2",
               child: Icon(Icons.camera_enhance),
               onPressed: tomarFoto,
             ),
@@ -205,6 +214,7 @@ class FotografiasState extends State<Fotografias> {
       widget.keyBloques.currentState.updBloqueActivo(bloque);
       widget.keyAreas.currentState.actualizaAreas(areas);
       widget.keyAreas.currentState.updAreaActivo(areaAct);
+      widget.keySurvey.currentState.finishSurvey();
 
       widget.keyPreguntas.currentState.cambiaPagina('instalacion');
     } else {
@@ -369,7 +379,6 @@ class FotografiasState extends State<Fotografias> {
               onPressed: () {
                 var viableInst = viable.viable;
                 var justifViable = viable.justif;
-
                 if (chkDatos['etapa'] == 'visita') {
                   if (viableInst == 1) {
                     print('finaliza');
@@ -393,10 +402,15 @@ class FotografiasState extends State<Fotografias> {
   }
 
   finVis({bool viable = true, String justifViable = ''}) async {
-    await chk.finalizaVisita(viable: viable, justifViable: justifViable);
+    print(keySurvey);
+    await chk.finalizaVisita(
+        viable: viable, justifViable: justifViable, key: keySurvey);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
+    print(widget.keySurvey);
     Navigator.of(context).setState(() {});
+    print(widget.keySurvey.currentState);
+    widget.keySurvey.currentState.finishSurvey();
   }
 }
 

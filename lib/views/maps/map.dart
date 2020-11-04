@@ -420,8 +420,8 @@ class MapWidgetState extends State<MapWidget> {
         actividad: actividad,
         iconoUndo: Icon(
           Icons.cancel,
-          color: Colors.grey,
-          size: 30,
+          color: Colors.red,
+          size: 35,
         ),
         undo: () {
           actividad = null;

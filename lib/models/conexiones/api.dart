@@ -14,7 +14,7 @@ import 'package:siap/models/translations.dart';
 import 'package:latlong/latlong.dart';
 
 //String urlHtml = 'http://paraguaytest.collabmap.in';
-String urlHtml = 'http://chacarita.collabmap.in';
+String urlHtml = 'http://tacumbu.collabmap.in';
 String SERVER = '$urlHtml/api/public/siapApp/';
 
 Future getDatos(
@@ -686,13 +686,10 @@ getAllData() async {
       opt: 'getAll/user/${userId}', varNom: null, imprime: false);
 
   for (var i in r.keys) {
-//    if(i == 'Problems'){
-//      for(int j = 0; r['Problems'].length; j++){
-//
-//      }
-////      print('ConsultationsChecklist: ${r[i]}');
-//    }else{
-//    }
+    if (i == 'ConsultationsAudiencesCache') {
+      //for (int j = 0; r['Problems'].length; j++) {}
+      print('ATENCION: ${r[i]}');
+    } else {}
     print('$i: ${r[i].runtimeType}');
     db.insertaLista(i, r[i], true, false);
   }

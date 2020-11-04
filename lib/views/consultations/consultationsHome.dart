@@ -11,15 +11,12 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:strings/strings.dart';
 import 'consultationInfo.dart';
 
-
 class ConsultationsHome extends StatefulWidget {
-
   @override
   ConsultationsHomeState createState() => ConsultationsHomeState();
 }
 
 class ConsultationsHomeState extends State<ConsultationsHome> {
-
   var filterPhase;
   var filterCode;
   var filterKeyword;
@@ -31,19 +28,18 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
   Widget build(BuildContext context) {
     return Pagina(
       textoVacio: Translations.of(context).text('empty'),
-      future: (){},
+      future: () {},
       nombrePagina: null,
       drawer: false,
       esLista: false,
       slider: false,
-      sliderHeight: MediaQuery.of(context).size.height*.27,
+      sliderHeight: MediaQuery.of(context).size.height * .27,
       elemento: elemento(),
       botonBack: false,
     );
   }
 
-  Future<List> getData({String periodo = '1',bool actual = true}) async {
-
+  Future<List> getData({String periodo = '1', bool actual = true}) async {
     DB db = DB.instance;
 
     SharedPreferences userData = await SharedPreferences.getInstance();
@@ -77,50 +73,55 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 			GROUP BY c.id
 		''';
 
-//    print('SQL: $sql');
-
+    //print('SQL: $sqlNow');
 
     List now = await db.query(sqlNow);
     now ??= [];
-//    print('NOW: $now');
+    //print('NOW: $now');
 //    print('All: $all');
-
+    for (int i = 0; i < now.length; i++) {
+      print(now[i]['id']);
+    }
 //    var aaa = await db.query("SELECT * FROM Consultations");
 //    print("AAA: $aaa");
 
     List datos = [];
 
-
-
 //    print('LENGTH: ${datos.length}');
 
-    for(int i = 0; i<all.length;i++){
-
+    for (int i = 0; i < all.length; i++) {
       Map consulta = Map.from(all[i]);
 
       datos.add(consulta);
     }
 
-//    print('DATOS: $datos');
+    for (int i = 0; i < now.length; i++) {
+      Map consulta = Map.from(now[i]);
+
+      datos.add(consulta);
+    }
+
+    print('DATOS: $datos');
     return datos;
   }
-
 
   slider({
     String nombre,
     String periodo,
     bool actual = true,
     Color color,
-  }){
+  }) {
     return Container(
-      padding: EdgeInsets.only(top:15),
+      padding: EdgeInsets.only(top: 15),
       child: Stack(
         children: <Widget>[
           Container(
-            padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * .018,),
+            padding: EdgeInsets.only(
+              top: MediaQuery.of(context).size.height * .018,
+            ),
             child: Container(
               width: double.infinity,
-              height: MediaQuery.of(context).size.height*.32,
+              height: MediaQuery.of(context).size.height * .32,
               decoration: BoxDecoration(
                 color: color.withAlpha(41),
                 border: Border(
@@ -135,7 +136,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                 ),
               ),
               child: Container(
-                padding: EdgeInsets.only(top:20),
+                padding: EdgeInsets.only(top: 20),
                 child: SliderPagina(
                   actual: actual,
                   future: getData(
@@ -144,7 +145,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                   ),
                   elemento: consultation,
                   color: color,
-                  height: MediaQuery.of(context).size.height*.26,
+                  height: MediaQuery.of(context).size.height * .26,
                   textoVacio: Translations.of(context).text('empty'),
                 ),
               ),
@@ -158,7 +159,8 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                 height: MediaQuery.of(context).size.height * .04,
               ),
               Container(
-                padding: EdgeInsets.only(top:MediaQuery.of(context).size.height * .006),
+                padding: EdgeInsets.only(
+                    top: MediaQuery.of(context).size.height * .006),
                 child: Row(
                   children: <Widget>[
                     Container(
@@ -182,7 +184,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
     );
   }
 
-  elemento(){
+  elemento() {
     DateTime now = DateTime.now();
     String fechaHoy = '${DateFormat("yyyy-MM-dd").format(now)}';
 
@@ -192,7 +194,8 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
           children: <Widget>[
             botonFiltros(),
             slider(
-              nombre: '${Translations.of(context).text('ongoingConsultations').toUpperCase()}',
+              nombre:
+                  '${Translations.of(context).text('ongoingConsultations').toUpperCase()}',
 //              periodo: "(start_date <= '$fechaHoy' AND finish_date >= '$fechaHoy' )",
 //              actual: true,
               color: Color(0xFF2568D8),
@@ -215,7 +218,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
     );
   }
 
-  consultation({var datos,Color color, bool actual = true}){
+  consultation({var datos, Color color, bool actual = true}) {
 //    print('Datos $datos');
 
     // ToDo: Esperar a que nos manden el ícono y ponerlo en la lina de abajo
@@ -227,10 +230,12 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 //    print(iconNom);
 
     var icon = Container(
-      padding: EdgeInsets.only(left: MediaQuery.of(context).size.width*.044,top: MediaQuery.of(context).size.width*.035),
+      padding: EdgeInsets.only(
+          left: MediaQuery.of(context).size.width * .044,
+          top: MediaQuery.of(context).size.width * .035),
       child: Icon(
         FA.icono[iconNom],
-        size: MediaQuery.of(context).size.width*.10,
+        size: MediaQuery.of(context).size.width * .10,
         color: color,
       ),
     );
@@ -240,26 +245,29 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
       child: FlatButton(
         padding: EdgeInsets.all(0),
 //        color: Color(0xFFd9e4f7),
-        onPressed: (){
-          Navigator.push(context,
-              new MaterialPageRoute(builder: (context)=>
-                  ConsultationInfo(
-                    datos: datos,
-                    color: color,
-                    actual: actual,
-                  )
-              )
-          );
+        onPressed: () {
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => ConsultationInfo(
+                        datos: datos,
+                        color: color,
+                        actual: actual,
+                      )));
         },
-        child: TarjetaConsultation(datos: datos,color: color,icon: icon,),
+        child: TarjetaConsultation(
+          datos: datos,
+          color: color,
+          icon: icon,
+        ),
       ),
     );
   }
 
-  botonFiltros(){
+  botonFiltros() {
     return Container(
       child: SizedBox(
-        width: MediaQuery.of(context).size.width *.40,
+        width: MediaQuery.of(context).size.width * .40,
         child: ButtonTheme(
           minWidth: 150.0,
           height: 40.0,
@@ -267,9 +275,9 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
           child: RaisedButton(
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(10),
-              side: BorderSide(color:Color(0xFF818181)),
+              side: BorderSide(color: Color(0xFF818181)),
             ),
-            onPressed: (){
+            onPressed: () {
               filtros(context: context);
             },
             child: Container(
@@ -306,8 +314,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
     );
   }
 
-  Future<void> filtros({BuildContext context,String texto}) async {
-
+  Future<void> filtros({BuildContext context, String texto}) async {
     DB db = DB.instance;
 
 //    List phases = await db.query("SELECT * FROM phases");
@@ -315,15 +322,15 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
     var code = filterCode;
     var keyword = filterKeyword;
 
-    varSel(var valor){
+    varSel(var valor) {
 //      phaseSel = valor;
     }
 
-    varCode(var valor){
+    varCode(var valor) {
       code = valor;
     }
 
-    varKeyword(var valor){
+    varKeyword(var valor) {
       keyword = valor;
     }
 
@@ -341,11 +348,11 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                     Translations.of(context).text('filters').toUpperCase(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      color: Color(0xFF818181)
-                    ),
+                        fontWeight: FontWeight.bold, color: Color(0xFF818181)),
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
 //                  Text(
 //                    Translations.of(context).text('phase').toUpperCase(),
 //                    textAlign: TextAlign.center,
@@ -364,30 +371,27 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                     Translations.of(context).text('code').toUpperCase(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFA27AE4)
-                    ),
+                        fontWeight: FontWeight.bold, color: Color(0xFFA27AE4)),
                   ),
                   CampoTexto(
                     value: code,
                     fncCambio: varCode,
                     controller: controllerCode,
                   ),
-                  SizedBox(height: 10,),
+                  SizedBox(
+                    height: 10,
+                  ),
                   Text(
                     Translations.of(context).text('keyword').toUpperCase(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold,
-                        color: Color(0xFFA27AE4)
-                    ),
+                        fontWeight: FontWeight.bold, color: Color(0xFFA27AE4)),
                   ),
                   CampoTexto(
                     value: code,
                     fncCambio: varKeyword,
                     controller: controllerKeyword,
                   ),
-
                 ],
               ),
             ),
@@ -417,9 +421,6 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
       },
     );
   }
-
-
-
 }
 
 class DropPhases extends StatefulWidget {
@@ -427,33 +428,29 @@ class DropPhases extends StatefulWidget {
   var selected;
   var cambiaSel;
 
-  DropPhases({this.phases,this.selected = null, this.cambiaSel});
+  DropPhases({this.phases, this.selected = null, this.cambiaSel});
 
   @override
   DropPhasesState createState() => DropPhasesState(selected: selected);
 }
 
 class DropPhasesState extends State<DropPhases> {
-
   var selected;
   DropPhasesState({this.selected = null});
   @override
-
   Widget build(BuildContext context) {
     List phases = widget.phases;
     List items = new List<DropdownMenuItem>();
 
-    items.add(
-      DropdownMenuItem(
-        child: Text(
-          Translations.of(context).text('none'),
-          style: TextStyle(fontSize: 14),
-        ),
-        value: null,
-      )
-    );
+    items.add(DropdownMenuItem(
+      child: Text(
+        Translations.of(context).text('none'),
+        style: TextStyle(fontSize: 14),
+      ),
+      value: null,
+    ));
 
-    for(int i = 0;i<phases.length;i++){
+    for (int i = 0; i < phases.length; i++) {
       var phase = phases[i];
       var item = DropdownMenuItem(
         child: Text(
@@ -471,23 +468,22 @@ class DropPhasesState extends State<DropPhases> {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 00, 20.0, 0),
           border: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 10),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 10),
             borderRadius: new BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 2),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 2),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           filled: true,
-          fillColor: Colors.white
-      ),
+          fillColor: Colors.white),
       value: selected,
       hint: Text(Translations.of(context).text('select')),
-      onChanged: (value){
+      onChanged: (value) {
         setState(() {
           selected = value;
         });
@@ -495,17 +491,14 @@ class DropPhasesState extends State<DropPhases> {
       },
     );
   }
-
 }
 
 class CampoTexto extends StatelessWidget {
-
   String value;
   var fncCambio;
   TextEditingController controller;
 
-  CampoTexto({this.value,this.fncCambio,this.controller});
-
+  CampoTexto({this.value, this.fncCambio, this.controller});
 
   @override
   Widget build(BuildContext context) {
@@ -515,28 +508,25 @@ class CampoTexto extends StatelessWidget {
       textInputAction: TextInputAction.done,
       obscureText: false,
       controller: controller,
-      onChanged: (value){
+      onChanged: (value) {
         fncCambio(value);
       },
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
           border: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 10),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 10),
             borderRadius: new BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 2),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8),width: 2),
+            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           filled: true,
-          fillColor: Colors.white
-      ),
+          fillColor: Colors.white),
     );
   }
 }
-
-

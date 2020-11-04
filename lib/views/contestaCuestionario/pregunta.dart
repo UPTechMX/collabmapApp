@@ -3,6 +3,7 @@ import 'package:siap/models/cuestionario/checklist.dart';
 import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
 import 'package:siap/views/contestaCuestionario/bloques.dart';
 import 'package:siap/views/contestaCuestionario/areas.dart';
+import 'package:siap/views/surveys/surveys.dart';
 import 'spatial.dart';
 
 import 'package:siap/views/maps/map.dart';
@@ -13,6 +14,7 @@ class Pregunta extends StatefulWidget {
 
   Checklist chk;
   GlobalKey<PreguntasContState> KeyPreguntas;
+  GlobalKey<SurveysState> keySurvey;
 
   String bId;
   String aId;
@@ -24,6 +26,7 @@ class Pregunta extends StatefulWidget {
       this.KeyPreguntas,
       this.keyAreas,
       this.keyBloques,
+      this.keySurvey,
       this.bId,
       this.aId,
       this.pId})
@@ -540,6 +543,7 @@ class PreguntaState extends State<Pregunta> {
       widget.keyBloques.currentState.updBloqueActivo(bloque);
       widget.keyAreas.currentState.actualizaAreas(areas);
       widget.keyAreas.currentState.updAreaActivo(areaAct);
+      widget.keySurvey.currentState.finishSurvey();
     }
   }
 

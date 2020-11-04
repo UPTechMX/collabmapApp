@@ -1,7 +1,9 @@
+import 'package:flutter/material.dart';
 import 'package:siap/models/conexiones/DB.dart';
 import 'dart:convert';
 import 'package:html/parser.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siap/views/surveys/surveys.dart';
 
 class Checklist {
   int vId; //visita id
@@ -14,6 +16,7 @@ class Checklist {
   Map datosVis; // Datos generales de la visita
   Map datosChecklist;
   Map fotosInst = Map();
+  GlobalKey<SurveysState> keySurvey;
 
   DB db = DB.instance;
 
@@ -1826,7 +1829,10 @@ class Checklist {
     return identificador;
   }
 
-  finalizaVisita({bool viable = true, String justifViable}) async {
+  finalizaVisita(
+      {bool viable = true,
+      String justifViable,
+      GlobalKey<SurveysState> key}) async {
     var datChk = await datosChk(false);
     var datVisDB =
         await db.query("SELECT * FROM Visitas WHERE id = ${this.vId}");

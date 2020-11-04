@@ -5,10 +5,9 @@ import 'package:siap/views/contestaCuestionario/bloques.dart';
 import 'package:siap/views/contestaCuestionario/areas.dart';
 import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
 import 'package:siap/views/contestaCuestionario/pregunta.dart';
+import 'package:siap/views/surveys/surveys.dart';
 
-
-class ContestaCuestionario extends StatelessWidget{
-
+class ContestaCuestionario extends StatelessWidget {
   int vId;
 //  String etapa;
   Checklist chk;
@@ -20,7 +19,7 @@ class ContestaCuestionario extends StatelessWidget{
   GlobalKey<AreasState> KeyAreas;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
-
+  GlobalKey<SurveysState> KeySurvey;
 
   ContestaCuestionario({
     this.vId,
@@ -29,7 +28,8 @@ class ContestaCuestionario extends StatelessWidget{
     this.KeyAreas,
     this.KeyPreguntas,
     this.KeyPregunta,
-  }){
+    this.KeySurvey,
+  }) {
 //    this._vId = vId;
 //    this._etapa = etapa;
     this.chk = new Checklist(this.vId);
@@ -38,12 +38,10 @@ class ContestaCuestionario extends StatelessWidget{
     areas['_datGral_']['nombre'] = 'Datos generales';
     this.bloquesAct['__general__'] = 1;
     this.areasAct['_datGral_'] = 1;
-
   }
 
   @override
   Widget build(BuildContext context) {
-    
 //    print('bb');
     return SafeArea(
       child: Scaffold(
@@ -56,34 +54,35 @@ class ContestaCuestionario extends StatelessWidget{
               Container(
                 height: 60.0,
                 child: BloquesBtn(
-                    chk:chk,
-                    key:KeyBloques,
-                    KeyAreas:KeyAreas,
-                    KeyPreguntas:KeyPreguntas,
+                    chk: chk,
+                    key: KeyBloques,
+                    KeyAreas: KeyAreas,
+                    KeyPreguntas: KeyPreguntas,
                     KeyPregunta: KeyPregunta,
-                    bloquesAct:bloquesAct,
-                    activo:'__general__'
-                ),
+                    KeySurvey: KeySurvey,
+                    bloquesAct: bloquesAct,
+                    activo: '__general__'),
               ),
               Container(
                 height: 60,
                 child: Areas(
-                    chk:chk,
-                    key:KeyAreas,
-                    KeyBloques:KeyBloques,
-                    KeyPreguntas:KeyPreguntas,
-                    KeyPregunta:KeyPregunta,
-                    areas:areas,
-                    areasAct:areasAct,
-                    activo:'_datGral_'
-                ),
+                    chk: chk,
+                    key: KeyAreas,
+                    KeyBloques: KeyBloques,
+                    KeyPreguntas: KeyPreguntas,
+                    KeyPregunta: KeyPregunta,
+                    KeySurvey: KeySurvey,
+                    areas: areas,
+                    areasAct: areasAct,
+                    activo: '_datGral_'),
               ),
               Container(
                 child: PreguntasCont(
-                  key:KeyPreguntas,
+                  key: KeyPreguntas,
                   keyAreas: KeyAreas,
                   keyBloques: KeyBloques,
                   keyPregunta: KeyPregunta,
+                  keySurvey: KeySurvey,
                   pagina: 'preguntas',
                   bId: 'bId',
                   aId: 'aId',
@@ -98,6 +97,3 @@ class ContestaCuestionario extends StatelessWidget{
     );
   }
 }
-
-
-

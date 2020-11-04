@@ -7,10 +7,9 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'models/translations.dart';
 
-
 void main() => runApp(MyApp());
 
-class MyApp extends StatefulWidget{
+class MyApp extends StatefulWidget {
   static void setLocale(BuildContext context, Locale locale) {
     _MyApp state = context.findAncestorStateOfType<_MyApp>();
     state.setLocale(locale);
@@ -20,7 +19,7 @@ class MyApp extends StatefulWidget{
   _MyApp createState() => _MyApp();
 }
 
-class _MyApp extends State<MyApp>{
+class _MyApp extends State<MyApp> {
   Locale _locale;
 
   void setLocale(Locale locale) {
@@ -28,16 +27,16 @@ class _MyApp extends State<MyApp>{
       _locale = locale;
     });
   }
+
   @override
   void initState() {
     super.initState();
   }
 
-
-  final routes = <String,WidgetBuilder>{
+  final routes = <String, WidgetBuilder>{
     'login': (context) => Login(),
-    'home' : (context) => Home(),
-    'priv' : (context) => Privacidad(),
+    'home': (context) => Home(),
+    'priv': (context) => Privacidad(),
   };
 
   bool _logueado = false;
@@ -51,35 +50,36 @@ class _MyApp extends State<MyApp>{
     bool logueado;
     bool aceptaPriv;
     int nivel;
-    if(userData.getBool('login') != null){
-
+    if (userData.getBool('login') != null) {
       logueado = userData.getBool('login');
       nivel = userData.getInt('nivel');
-      firstSync = userData.getBool('firstSync') == null?false:userData.getBool('firstSync');
-      aceptaPriv = userData.getBool('aceptaPriv') == null?false:userData.getBool('aceptaPriv');
-    }else{
+      firstSync = userData.getBool('firstSync') == null
+          ? false
+          : userData.getBool('firstSync');
+      aceptaPriv = userData.getBool('aceptaPriv') == null
+          ? false
+          : userData.getBool('aceptaPriv');
+    } else {
       logueado = false;
     }
 
-    if(logueado){
+    if (logueado) {
       _aceptaPriv = aceptaPriv;
-      if(!_logueado){
+      if (!_logueado) {
 //        print('bbb');
         setState(() {
           _logueado = true;
           _nivel = nivel;
           _firstSync = firstSync;
-
         });
       }
-    }else{
+    } else {
 //      print('NO LOGUEADO');
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     SystemChrome.setPreferredOrientations([
       DeviceOrientation.portraitUp,
       DeviceOrientation.portraitDown,
@@ -87,10 +87,10 @@ class _MyApp extends State<MyApp>{
 
     recuperaDatos();
 
-    const List locales = ['en','es'];
+    const List locales = ['en', 'es'];
     List<Locale> supportedLocales = [];
-    for(int i = 0; i<locales.length;i++){
-      supportedLocales.add(Locale(locales[i],''));
+    for (int i = 0; i < locales.length; i++) {
+      supportedLocales.add(Locale(locales[i], ''));
     }
 
     return MaterialApp(
@@ -102,10 +102,14 @@ class _MyApp extends State<MyApp>{
         GlobalWidgetsLocalizations.delegate,
       ],
       supportedLocales: supportedLocales,
-      home: _logueado?Home(firstSync: _firstSync,aceptaPriv: _aceptaPriv,):Login(),
-      routes:routes,
+      home: _logueado
+          ? Home(
+              firstSync: _firstSync,
+              aceptaPriv: _aceptaPriv,
+            )
+          : Login(),
+      routes: routes,
       locale: _locale,
     );
   }
-
 }

@@ -10,21 +10,36 @@ import 'package:siap/views/consultations/chkAction.dart';
 class Surveys extends StatefulWidget {
   var consultationId;
   String consultationName;
-  Surveys({this.consultationId,this.consultationName});
+  var surveysKey = GlobalKey<SurveysState>();
+  Surveys(
+      {this.consultationId, this.consultationName, Key key, this.surveysKey})
+      : super(key: key);
 
   @override
-  SurveysState createState() => SurveysState();
+  SurveysState createState() => SurveysState(surveysKey: surveysKey);
 }
 
 class SurveysState extends State<Surveys> {
+  var surveysKey = GlobalKey<SurveysState>();
 
+  SurveysState({this.surveysKey});
+
+  finishSurvey() {
+    setState(() {});
+  }
+
+  /* @override
+  initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => finishSurvey());
+  } */
 
   @override
   Widget build(BuildContext context) {
-
+    //final child = KeyedSubtree(child: widget.child, key: _key);
     return FutureBuilder(
       future: getData(),
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         List<Widget> rows = [];
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -33,11 +48,11 @@ class SurveysState extends State<Surveys> {
           case ConnectionState.waiting:
             return Text(Translations.of(context).text('waiting'));
           case ConnectionState.done:
-            if (snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
             List elementos = snapshot.data;
-            if(elementos.length == 0){
+            if (elementos.length == 0) {
               return Container(
                 height: 100,
                 child: Center(
@@ -45,10 +60,15 @@ class SurveysState extends State<Surveys> {
                 ),
               );
             }
-            rows.add(DownloadMap(consultationId: widget.consultationId,));
-            for(int i = 0; i < elementos.length; i++){
+            rows.add(DownloadMap(
+              consultationId: widget.consultationId,
+            ));
+            for (int i = 0; i < elementos.length; i++) {
 //              print(elementos[i]);
-              rows.add(elemento(datos: elementos[i],));
+              rows.add(elemento(
+                datos: elementos[i],
+                surveysKey: surveysKey,
+              ));
             }
             return Container(
               padding: EdgeInsets.all(15),
@@ -59,14 +79,12 @@ class SurveysState extends State<Surveys> {
           default:
             return Column();
         }
-
       },
     );
   }
 
   Future<List> getData() async {
     DB db = DB.instance;
-
 
     List datos = await db.query('''
         SELECT c.* 
@@ -81,14 +99,11 @@ class SurveysState extends State<Surveys> {
 //    print('DATOS: $datos');
 
     List datosExt = [];
-    for(int i = 0;i<datos.length;i++){
+    for (int i = 0; i < datos.length; i++) {
 //      print('I: $i');
 
       Map dato = Map.from(datos[i]);
       datosExt.add(dato);
-
-
-
     }
 
 //    var vis = await db.query("SELECT * FROM Visitas WHERE type = 'cons'");
@@ -98,36 +113,33 @@ class SurveysState extends State<Surveys> {
     return datosExt;
   }
 
-  elemento({var datos}){
+  elemento({var datos, var surveysKey}) {
 //    print('Datos: $datos');
     return Container(
       decoration: BoxDecoration(
-        border: Border(
-          bottom: BorderSide(
-            color: Colors.grey[300]
-          ),
-          top: BorderSide(
-            color: Colors.grey[300]
-          ),
-        )
-      ),
+          border: Border(
+        bottom: BorderSide(color: Colors.grey[300]),
+        top: BorderSide(color: Colors.grey[300]),
+      )),
       child: Boton(
         texto: datos['name'],
-        onClick: (){
-          if(datos['avanceDouble'] >= 100){
+        onClick: () {
+          if (datos['avanceDouble'] >= 100) {
             //ToDo: Descomentar el return;
 //            return;
           }
-          Navigator.push(context,
-              new MaterialPageRoute(builder: (context)=>
-                  Survey(
-                    id: datos['id'],
-                    datos:datos,
-                  )
-              )
-          );
+          Navigator.push(
+              context,
+              new MaterialPageRoute(
+                  builder: (context) => Survey(
+                        id: datos['id'],
+                        datos: datos,
+                      )));
         },
-        icono: Icon(Icons.add,color: Colors.white,),
+        icono: Icon(
+          Icons.add,
+          color: Colors.white,
+        ),
         color: Colors.white,
         widget: true,
         elemento: Column(
@@ -143,20 +155,22 @@ class SurveysState extends State<Surveys> {
                       datos['nombre'],
                       textAlign: TextAlign.left,
                       style: TextStyle(
-                          color: Colors.black,
-                          fontWeight: FontWeight.bold
-                      ),
+                          color: Colors.black, fontWeight: FontWeight.bold),
                     ),
                   ),
                   Expanded(
-                    flex: 1,
-                    child: ChkAction(datChk: datos,consultationId: widget.consultationId,)
+                      flex: 1,
+                      child: ChkAction(
+                        datChk: datos,
+                        consultationId: widget.consultationId,
+                        KeySurvey: surveysKey,
+                      )
 //                    child: Text(
 //                      'continuar',
 //                      textAlign: TextAlign.right,
 //                      style: TextStyle(color: Colors.black),
 //                    ),
-                  ),
+                      ),
                 ],
               ),
             ),
@@ -176,6 +190,4 @@ class SurveysState extends State<Surveys> {
       ),
     );
   }
-
 }
-
