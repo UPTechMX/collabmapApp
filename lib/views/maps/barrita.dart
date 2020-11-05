@@ -1,13 +1,12 @@
 import 'package:flutter/material.dart';
 
 class Barrita extends StatefulWidget {
-
   String actividad;
   var undo;
   var aceptar;
   var iconoUndo;
 
-  Barrita({this.actividad,this.undo,this.aceptar,this.iconoUndo});
+  Barrita({this.actividad, this.undo, this.aceptar, this.iconoUndo});
 
   @override
   BarritaState createState() => BarritaState();
@@ -16,11 +15,10 @@ class Barrita extends StatefulWidget {
 class BarritaState extends State<Barrita> {
   @override
   Widget build(BuildContext context) {
-
     widget.iconoUndo ??= Icon(
       Icons.undo,
       color: Colors.grey,
-      size: 30,
+      size: 40,
     );
 
     return Container(
@@ -38,7 +36,7 @@ class BarritaState extends State<Barrita> {
             flex: 3,
             child: IconButton(
               icon: widget.iconoUndo,
-              onPressed: (){
+              onPressed: () {
                 widget.undo();
               },
             ),
@@ -47,12 +45,12 @@ class BarritaState extends State<Barrita> {
             flex: 3,
             child: IconButton(
               icon: Icon(
-                Icons.check_circle ,
-                color: Colors.grey,
-                size: 30,
+                Icons.check_circle,
+                color: Colors.green,
+                size: 40,
               ),
-              onPressed: (){
-                widget.aceptar(context:context);
+              onPressed: () {
+                widget.aceptar(context: context);
               },
             ),
           ),
@@ -61,5 +59,3 @@ class BarritaState extends State<Barrita> {
     );
   }
 }
-
-

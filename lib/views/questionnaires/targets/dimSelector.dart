@@ -23,19 +23,29 @@ class DimSelector extends StatefulWidget {
 
   @override
   DimSelectorState createState() => DimSelectorState(
-      dimensionesId: dimensionesId, dimNom: dimNom, padre: padre);
+        dimensionesId: dimensionesId,
+        dimNom: dimNom,
+        padre: padre,
+        keyDimSel: keyDimSel,
+      );
 }
 
 class DimSelectorState extends State<DimSelector> {
   int dimensionesId;
   int padre;
   String dimNom;
+  var keyDimSel = GlobalKey<DimSelectorState>();
 
   var chNextPadre;
   var selected;
 
-  DimSelectorState(
-      {this.dimensionesId, this.padre = null, this.dimNom, this.chNextPadre});
+  DimSelectorState({
+    this.dimensionesId,
+    this.padre = null,
+    this.dimNom,
+    this.chNextPadre,
+    this.keyDimSel,
+  });
 
   @override
   Widget build(BuildContext context) {

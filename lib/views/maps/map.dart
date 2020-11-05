@@ -18,9 +18,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:connectivity/connectivity.dart';
 import 'package:siap_monitoring/models/conexiones/api.dart';
 
-
 class MapWidget extends StatefulWidget {
-
   Map datos;
   File tiles;
   List problems = [];
@@ -38,14 +36,13 @@ class MapWidget extends StatefulWidget {
     this.spatial = true,
     this.question,
     this.vId,
-  }):super(key:key);
+  }) : super(key: key);
 
   @override
   MapWidgetState createState() => MapWidgetState();
 }
 
 class MapWidgetState extends State<MapWidget> {
-
   GlobalKey<BarritaEdtProblemaState> keyBarraEdtProblema = GlobalKey();
   GlobalKey<BotonesBarraState> keyBotones = GlobalKey();
 
@@ -77,7 +74,6 @@ class MapWidgetState extends State<MapWidget> {
   bool centerEdt = true;
   var markerEdt;
 
-
   MapController _mapctl = MapController();
 
   TextEditingController inputController = TextEditingController();
@@ -94,9 +90,7 @@ class MapWidgetState extends State<MapWidget> {
 
   @override
   Widget build(BuildContext context) {
-
-
-    if(recentrar){
+    if (recentrar) {
       center = newCentro;
       recentrar = false;
     }
@@ -112,34 +106,34 @@ class MapWidgetState extends State<MapWidget> {
 //    print("POLIGONOS: $poligonos");
     List<Poly.Point> puntosPoligono = [];
     List polygons = <Polygon>[];
-    for(int j = 0; j<poligonos.length; j++){
+    for (int j = 0; j < poligonos.length; j++) {
       var geometry = jsonDecode(poligonos[j]['geometry']);
       var poligono = geometry['coordinates'];
 //      print('POLIGONO: $poligono');
-      for(int k = 0;k<poligono.length;k++){
+      for (int k = 0; k < poligono.length; k++) {
         List subPoligono = poligono[k];
         List subPolygonPoints = <LatLng>[];
 
-        for(int i = 0;i<subPoligono.length;i++){
-          n = max(n,subPoligono[i][1]);
-          s = min(s,subPoligono[i][1]);
-          e = max(e,subPoligono[i][0]);
-          w = min(w,subPoligono[i][0]);
+        for (int i = 0; i < subPoligono.length; i++) {
+          n = max(n, subPoligono[i][1]);
+          s = min(s, subPoligono[i][1]);
+          e = max(e, subPoligono[i][0]);
+          w = min(w, subPoligono[i][0]);
           subPolygonPoints.add(LatLng(subPoligono[i][1], subPoligono[i][0]));
-          Poly.Point punto = Poly.Point(subPoligono[i][1],subPoligono[i][0]);
+          Poly.Point punto = Poly.Point(subPoligono[i][1], subPoligono[i][0]);
           puntosPoligono.add(punto);
         }
 
         Polygon polygon = Polygon(
           points: subPolygonPoints,
-          color: Color.fromARGB(110 , 125, 124, 128),
+          color: Color.fromARGB(110, 125, 124, 128),
         );
         polygons.add(polygon);
       }
     }
 
-    var latC = (n+s)/2;
-    var lngC = (w+e)/2;
+    var latC = (n + s) / 2;
+    var lngC = (w + e) / 2;
 //    print([latC,lngC]);
 
     center ??= LatLng(
@@ -147,94 +141,85 @@ class MapWidgetState extends State<MapWidget> {
       lngC,
     );
 
-
 //    print([n,s,w,e]);
 
     poly = Poly.Polygon(puntosPoligono);
-
 
     List markersProblems = <Marker>[];
     List polylinesProblems = <Polyline>[];
     List polygonProblems = <Polygon>[];
 
-    for(int j = 0; j<widget.problems.length;j++){
+    for (int j = 0; j < widget.problems.length; j++) {
       Map problem = widget.problems[j];
       List points = <LatLng>[];
-      for(int k = 0; k<widget.problems[j]['points'].length;k++){
+      for (int k = 0; k < widget.problems[j]['points'].length; k++) {
         points.add(widget.problems[j]['points'][k]['latLng']);
       }
 
-      if(points.length == 0){
+      if (points.length == 0) {
         var geometry = jsonDecode(problem['geometry']);
-        switch(geometry['type']){
+        switch (geometry['type']) {
           case 'Polygon':
             List pointsGeom = geometry['coordinates'][0];
-            for(int h = 0;h<pointsGeom.length;h++){
+            for (int h = 0; h < pointsGeom.length; h++) {
               var coords = pointsGeom[h];
-              points.add(LatLng(coords[1],coords[0]));
+              points.add(LatLng(coords[1], coords[0]));
             }
             break;
           case 'LineString':
             List pointsGeom = geometry['coordinates'];
-            for(int h = 0;h<pointsGeom.length;h++){
+            for (int h = 0; h < pointsGeom.length; h++) {
               var coords = pointsGeom[h];
-              points.add(LatLng(coords[1],coords[0]));
+              points.add(LatLng(coords[1], coords[0]));
             }
             break;
           case 'Point':
             List pointsGeom = geometry['coordinates'];
-            points.add(LatLng(pointsGeom[1],pointsGeom[0]));
+            points.add(LatLng(pointsGeom[1], pointsGeom[0]));
             break;
         }
       }
 
-      if(points.length == 0){
+      if (points.length == 0) {
         continue;
       }
-      switch(problem['type']){
+      switch (problem['type']) {
         case 'Marker':
 //          print('AAAA');
-          markersProblems.add(
-              Marker(
-                width: 40.0,
-                height: 40.0,
-                point: points[0],
-                anchorPos: AnchorPos.align(AnchorAlign.top),
-                builder: (ctx) => Container(
-                    child:GestureDetector(
-                      child: Icon(
-                        Icons.location_on,
-                        size: 40,
-                        color: Colors.purple,
-                      ),
-                    )
-                ),
-              )
-          );
+          markersProblems.add(Marker(
+            width: 40.0,
+            height: 40.0,
+            point: points[0],
+            anchorPos: AnchorPos.align(AnchorAlign.top),
+            builder: (ctx) => Container(
+                child: GestureDetector(
+              child: Icon(
+                Icons.location_on,
+                size: 40,
+                color: Colors.purple,
+              ),
+            )),
+          ));
 //          print('POINTSSS: $points');
           break;
         case 'Polyline':
-          if(points != null){
+          if (points != null) {
 //            print('points');
 //            print(points);
-            polylinesProblems.add(
-                Polyline(
-                  points: points,
-                  strokeWidth: 4.0,
-                  color: Colors.purple.withOpacity(.8),
-                )
-            );
+            polylinesProblems.add(Polyline(
+              points: points,
+              strokeWidth: 4.0,
+              color: Colors.purple.withOpacity(.8),
+            ));
           }
           break;
         case 'Polygon':
-          if(points != null){
+          if (points != null) {
 //            print(prbPoints);
-            polygonProblems.add(
-                Polygon(
-                  points: points,
-                  color: Colors.purple.withOpacity(.7),
-                )
-            );
+            polygonProblems.add(Polygon(
+              points: points,
+              color: Colors.purple.withOpacity(.7),
+            ));
           }
           break;
       }
@@ -247,16 +232,16 @@ class MapWidgetState extends State<MapWidget> {
     );
 
     List marcadoresEdt = <Marker>[];
-    if(edtGral){
-      for(int i = 0;i<widget.problems.length;i++){
+    if (edtGral) {
+      for (int i = 0; i < widget.problems.length; i++) {
         var problem = widget.problems[i];
 //        print('problemId: ${problem['id']}, problemEdtId: $problemEdtId');
-        if(problem['id'] != problemEdtId){
+        if (problem['id'] != problemEdtId) {
           continue;
         }
         List points = problem['points'];
-        if(points != null){
-          for(int j = 0;j<points.length;j++){
+        if (points != null) {
+          for (int j = 0; j < points.length; j++) {
             Marcador marcador = Marcador(
               keyMapa: widget.key,
               latlng: points[j]['latLng'],
@@ -265,11 +250,17 @@ class MapWidgetState extends State<MapWidget> {
               fatherId: problem['id'],
               index: j,
               id: points[j]['id'],
-              icono: typeEdt != 'Marker'?Icono(svgName: 'circulo',):null,
-              color : typeEdt != 'Marker'?Colors.red:null,
-              pos : typeEdt != 'Marker'?AnchorPos.align(AnchorAlign.center):null,
-              width : typeEdt != 'Marker'?25:null,
-              height : typeEdt != 'Marker'?25:null,
+              icono: typeEdt != 'Marker'
+                  ? Icono(
+                      svgName: 'circulo',
+                    )
+                  : null,
+              color: typeEdt != 'Marker' ? Colors.red : null,
+              pos: typeEdt != 'Marker'
+                  ? AnchorPos.align(AnchorAlign.center)
+                  : null,
+              width: typeEdt != 'Marker' ? 25 : null,
+              height: typeEdt != 'Marker' ? 25 : null,
             );
             marcadoresEdt.add(marcador.marker);
           }
@@ -283,21 +274,23 @@ class MapWidgetState extends State<MapWidget> {
 
     Marcador marcador;
     MarkerLayerOptions layerMarcadorEditando;
-    if(marcadorEditando.length > 0){
+    if (marcadorEditando.length > 0) {
       marcador = Marcador(
         keyMapa: widget.key,
         latlng: marcadorEditando[0],
-        icono: Icono(svgName: 'circulo',color: Colors.red,),
-        color : Colors.red,
-        pos : AnchorPos.align(AnchorAlign.center),
-        width : 25,
-        height : 25,
+        icono: Icono(
+          svgName: 'circulo',
+          color: Colors.red,
+        ),
+        color: Colors.red,
+        pos: AnchorPos.align(AnchorAlign.center),
+        width: 25,
+        height: 25,
       );
       layerMarcadorEditando = MarkerLayerOptions(markers: [marcador.marker]);
-    }else{
+    } else {
       layerMarcadorEditando = MarkerLayerOptions(markers: []);
     }
-
 
     int numPoints = 0;
     var markers = tappedPoints.map((latlng) {
@@ -307,7 +300,7 @@ class MapWidgetState extends State<MapWidget> {
       double width;
       double height;
 //      print('ACTIVIDAD: $actividad');
-      switch(actividad){
+      switch (actividad) {
         case 'addMarker':
           color = Colors.purple;
           icono = null;
@@ -317,7 +310,9 @@ class MapWidgetState extends State<MapWidget> {
 
           break;
         default:
-          icono = Icono(svgName: 'circulo',);
+          icono = Icono(
+            svgName: 'circulo',
+          );
           color = Colors.white;
           pos = AnchorPos.align(AnchorAlign.center);
           width = 15;
@@ -347,14 +342,16 @@ class MapWidgetState extends State<MapWidget> {
         point: latlng,
         anchorPos: AnchorPos.align(AnchorAlign.center),
         builder: (ctx) => Container(
-            child:GestureDetector(
-              child: Icono(svgName: 'punto',color: Color(0xFF222e99),),
-            )
-        ),
+            child: GestureDetector(
+          child: Icono(
+            svgName: 'punto',
+            color: Color(0xFF222e99),
+          ),
+        )),
       );
     }).toList();
 
-    List<LatLng> PlPoints = tappedPlPoints.map((latlng){
+    List<LatLng> PlPoints = tappedPlPoints.map((latlng) {
       return latlng;
     }).toList();
     var polyline = PolylineLayerOptions(
@@ -367,7 +364,7 @@ class MapWidgetState extends State<MapWidget> {
       ],
     );
 
-    List<LatLng> PgPointsL = tappedPgPointsL.map((latlng){
+    List<LatLng> PgPointsL = tappedPgPointsL.map((latlng) {
       return latlng;
     }).toList();
     var polygonL = PolylineLayerOptions(
@@ -382,11 +379,11 @@ class MapWidgetState extends State<MapWidget> {
     );
 
     PolylineLayerOptions polygonLC = PolylineLayerOptions();
-    if(PgPointsL.length != 0){
+    if (PgPointsL.length != 0) {
       polygonLC = PolylineLayerOptions(
         polylines: [
           Polyline(
-            points: [PgPointsL[0],PgPointsL.last],
+            points: [PgPointsL[0], PgPointsL.last],
             strokeWidth: 4.0,
             isDotted: true,
             color: Colors.lightBlue.withOpacity(.8),
@@ -395,7 +392,7 @@ class MapWidgetState extends State<MapWidget> {
       );
     }
 
-    List<LatLng> PgPoints = tappedPgPoints.map((latlng){
+    List<LatLng> PgPoints = tappedPgPoints.map((latlng) {
       return latlng;
     }).toList();
     var polygon = PolygonLayerOptions(
@@ -406,30 +403,36 @@ class MapWidgetState extends State<MapWidget> {
         ),
       ],
     );
-    Widget barrita = Container(width: 0,height: 0,);
+    Widget barrita = Container(
+      width: 0,
+      height: 0,
+    );
 //    print('ACTIVIDAD!!!! : $actividad, edtGral: $edtGral, type: $typeEdt');
-    if(actividad != null && (tappedPlPoints.length > 0 || tappedPgPoints.length > 0) ){
-
+    if (actividad != null &&
+        (tappedPlPoints.length > 0 || tappedPgPoints.length > 0)) {
       barrita = Barrita(
         undo: undo,
         actividad: actividad,
         aceptar: addProblem,
       );
-    }else if(actividad == 'addMarker'){
+    } else if (actividad == 'addMarker') {
       barrita = Barrita(
         actividad: actividad,
         iconoUndo: Icon(
           Icons.cancel,
-          color: Colors.grey,
-          size: 30,
+          color: Colors.red,
+          size: 40,
         ),
-        undo: (){
+        undo: () {
           actividad = null;
           delPuntos();
         },
         aceptar: addProblem,
       );
-    }else if(edtGral && (actividad == null || actividad == 'delMarker' || actividad == 'addMarkerPrb')){
+    } else if (edtGral &&
+        (actividad == null ||
+            actividad == 'delMarker' ||
+            actividad == 'addMarkerPrb')) {
       barrita = BarritaEdtProblema(
         key: keyBarraEdtProblema,
         aceptar: finalizarEdt,
@@ -437,12 +440,12 @@ class MapWidgetState extends State<MapWidget> {
         delPunto: setActividad,
         type: typeEdt,
       );
-    }else if(actividad == 'edtMarker'){
+    } else if (actividad == 'edtMarker') {
 //      print('o este');
       barrita = BarritaEdtProblema(
         key: keyBarraEdtProblema,
         aceptar: okEdtMarker,
-        cancelar: (){
+        cancelar: () {
           undoEdtMarker(eGral: true);
         },
         addPunto: setActividad,
@@ -451,9 +454,8 @@ class MapWidgetState extends State<MapWidget> {
       );
     }
 
-
     return Center(
-      child:Padding(
+      child: Padding(
         padding: EdgeInsets.all(8.0),
         child: Column(
           children: [
@@ -471,36 +473,39 @@ class MapWidgetState extends State<MapWidget> {
                   zoom: 12,
 //                  swPanBoundary: LatLng(s, w),
 //                  nePanBoundary: LatLng(n, e),
-                  onTap: (latlng){
-                    actividadFncTap(latlng: latlng,context: context);
+                  onTap: (latlng) {
+                    actividadFncTap(latlng: latlng, context: context);
                   },
-                  onPositionChanged: (pos,a){
-                    if(a){
+                  onPositionChanged: (pos, a) {
+                    if (a) {
                       center = pos.center;
                     }
 
                     LatLng latlng = center;
-                    actividadFncDrag(latlng: latlng,context: context);
+                    actividadFncDrag(latlng: latlng, context: context);
 
                     north = pos.bounds.north;
                     south = pos.bounds.south;
                     east = pos.bounds.east;
                     west = pos.bounds.west;
-
                   },
                 ),
                 layers: [
-
-                  widget.tiles == null?
-                  TileLayerOptions(
-                      urlTemplate:
-                      'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                      subdomains: ['a', 'b', 'c']):
-                  TileLayerOptions(
-                      tileProvider: MBTilesImageProvider.fromFile(widget.tiles),
-                      maxZoom: 17.0,
-                      backgroundColor: Colors.white,
-                      tms: true),
+                  widget.tiles == null
+                      ? TileLayerOptions(
+                          urlTemplate:
+                              'https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+                          subdomains: [
+                              'a',
+                              'b',
+                              'c'
+                            ])
+                      : TileLayerOptions(
+                          tileProvider:
+                              MBTilesImageProvider.fromFile(widget.tiles),
+                          maxZoom: 17.0,
+                          backgroundColor: Colors.white,
+                          tms: true),
                   PolygonLayerOptions(
                     polygons: polygons,
                   ),
@@ -529,11 +534,9 @@ class MapWidgetState extends State<MapWidget> {
               color: Colors.grey[400],
               child: Text(
                 Translations.of(context).text('finish_map').toUpperCase(),
-                style: TextStyle(
-                    color: Colors.white
-                ),
+                style: TextStyle(color: Colors.white),
               ),
-              onPressed: (){
+              onPressed: () {
                 Navigator.of(context).pop();
               },
             ),
@@ -551,18 +554,17 @@ class MapWidgetState extends State<MapWidget> {
 //              },
 //            ):
 //            Container(),
-
           ],
         ),
       ),
     );
   }
 
-  delPuntos({bool finEdt = true}){
-    if(latlngOld != null){
+  delPuntos({bool finEdt = true}) {
+    if (latlngOld != null) {
       undoEdtMarker(eGral: false);
     }
-    if(finEdt){
+    if (finEdt) {
       finalizarEdt(delActividad: false);
     }
     setState(() {
@@ -575,7 +577,7 @@ class MapWidgetState extends State<MapWidget> {
     keyBotones.currentState.actualizaEstado();
   }
 
-  setActividad(String act){
+  setActividad(String act) {
     setState(() {
       actividad = act;
     });
@@ -583,27 +585,27 @@ class MapWidgetState extends State<MapWidget> {
     photo = null;
   }
 
-  void actividadFncDrag({LatLng latlng, BuildContext context}){
-
+  void actividadFncDrag({LatLng latlng, BuildContext context}) {
     actVentana = actividad;
     latlng ??= center;
-    Poly.Point punto = Poly.Point(latlng.latitude,latlng.longitude);
+    Poly.Point punto = Poly.Point(latlng.latitude, latlng.longitude);
     bool inside = poly.isPointInside(punto);
 
 //    print('QUITAR el true de abajo y cambiar este chequeo a otro lugar');
 //    if(inside || true){
-    switch(actividad){
+    switch (actividad) {
       case 'addMarker':
         setState(() {
           tappedPoints = [center];
         });
         break;
       case 'edtMarker':
-        widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] = latlng;
-        setState((){
+        widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] =
+            latlng;
+        setState(() {
           actividad = 'edtMarker';
 //            print('typeEdt: $typeEdt');
-          if(typeEdt != 'Marker'){
+          if (typeEdt != 'Marker') {
             marcadorEditando = [latlng];
           }
         });
@@ -614,15 +616,14 @@ class MapWidgetState extends State<MapWidget> {
 //    }
   }
 
-  void actividadFncTap({LatLng latlng, BuildContext context}){
-
+  void actividadFncTap({LatLng latlng, BuildContext context}) {
     actVentana = actividad;
     latlng ??= center;
-    Poly.Point punto = Poly.Point(latlng.latitude,latlng.longitude);
+    Poly.Point punto = Poly.Point(latlng.latitude, latlng.longitude);
     bool inside = poly.isPointInside(punto);
 
-    if(inside){
-      switch(actividad){
+    if (inside) {
+      switch (actividad) {
         case 'addMarker':
           setState(() {
             tappedPoints = [center];
@@ -635,15 +636,18 @@ class MapWidgetState extends State<MapWidget> {
           });
           break;
         case 'addPolygon':
-          bool intersect = revisaIntersect(polygon: tappedPgPoints,latlng: latlng);
-          if(!intersect){
+          bool intersect =
+              revisaIntersect(polygon: tappedPgPoints, latlng: latlng);
+          if (!intersect) {
             setState(() {
               tappedPgPoints.add(latlng);
               tappedPgPointsL.add(latlng);
               tappedPoints.add(latlng);
             });
-          }else{
-            Alert(context: context,texto: Translations.of(context).text('polygon_intersects'));
+          } else {
+            Alert(
+                context: context,
+                texto: Translations.of(context).text('polygon_intersects'));
           }
           break;
 //        case 'edtMarker':
@@ -656,43 +660,48 @@ class MapWidgetState extends State<MapWidget> {
           addMarkerPrb(latlng);
           break;
       }
-    }else{
-      if(actividad != null){
-        Alert(context: context,texto: Translations.of(context).text('outside_the_polygon'));
-
+    } else {
+      if (actividad != null) {
+        Alert(
+            context: context,
+            texto: Translations.of(context).text('outside_the_polygon'));
       }
     }
   }
 
-  revisaIntersect({List polygon,var latlng = null}){
+  revisaIntersect({List polygon, var latlng = null}) {
     List<LatLng> nPolygon = [];
-    for(int i = 0;i<polygon.length;i++){
+    for (int i = 0; i < polygon.length; i++) {
       nPolygon.add(polygon[i]);
     }
-    if(latlng != null){
+    if (latlng != null) {
       nPolygon.add(latlng);
     }
 
-    if(nPolygon.length <4){
+    if (nPolygon.length < 4) {
       return false;
     }
 
     List<List<Vector>> segmentos = [];
-    for(int i = 1; i<nPolygon.length; i++){
-      Vector vf = Vector(<num>[nPolygon[i].latitude,nPolygon[i].longitude]);
-      Vector vi = Vector(<num>[nPolygon[i-1].latitude,nPolygon[i-1].longitude]);
-      segmentos.add([vf,vi]);
+    for (int i = 1; i < nPolygon.length; i++) {
+      Vector vf = Vector(<num>[nPolygon[i].latitude, nPolygon[i].longitude]);
+      Vector vi =
+          Vector(<num>[nPolygon[i - 1].latitude, nPolygon[i - 1].longitude]);
+      segmentos.add([vf, vi]);
     }
 
-    segmentos.add([Vector(<num>[nPolygon.last.latitude,nPolygon.last.longitude]),Vector(<num>[nPolygon[0].latitude,nPolygon[0].longitude])]);
+    segmentos.add([
+      Vector(<num>[nPolygon.last.latitude, nPolygon.last.longitude]),
+      Vector(<num>[nPolygon[0].latitude, nPolygon[0].longitude])
+    ]);
 
-    for(int i = segmentos.length-1;i>0;i--){
+    for (int i = segmentos.length - 1; i > 0; i--) {
       var s1 = segmentos[i];
-      for(int j = i-1;j>=0;j--){
+      for (int j = i - 1; j >= 0; j--) {
         var s2 = segmentos[j];
 //        print('i: $i, j:$j');
         bool intersect = lineSegmentsIntersect(s1[0], s1[1], s2[0], s2[1]);
-        if(intersect){
+        if (intersect) {
           return true;
         }
       }
@@ -701,94 +710,104 @@ class MapWidgetState extends State<MapWidget> {
   }
 
   double determinant(Vector vector1, Vector vector2) {
-    double det = vector1.itemAt(1) * vector2.itemAt(2) - vector1.itemAt(2) * vector2.itemAt(1);
+    double det = vector1.itemAt(1) * vector2.itemAt(2) -
+        vector1.itemAt(2) * vector2.itemAt(1);
     return det;
   }
 
-  bool lineSegmentsIntersect(Vector segment1_Start, Vector segment1_End, Vector segment2_Start, Vector segment2_End) {
-    double det = determinant(segment1_End - segment1_Start, segment2_Start - segment2_End);
-    double t = determinant(segment2_Start - segment1_Start, segment2_Start - segment2_End) / det;
-    double u = determinant(segment1_End - segment1_Start, segment2_Start - segment1_Start) / det;
+  bool lineSegmentsIntersect(Vector segment1_Start, Vector segment1_End,
+      Vector segment2_Start, Vector segment2_End) {
+    double det = determinant(
+        segment1_End - segment1_Start, segment2_Start - segment2_End);
+    double t = determinant(
+            segment2_Start - segment1_Start, segment2_Start - segment2_End) /
+        det;
+    double u = determinant(
+            segment1_End - segment1_Start, segment2_Start - segment1_Start) /
+        det;
 //    print('t:$t, u:$u');
     return (t > 0) && (u > 0) && (t < 1) && (u < 1);
   }
 
   addMarkerPrb(LatLng latlng) async {
     DB db = DB.instance;
-    Map datPunto = Map<String,dynamic>();
+    Map datPunto = Map<String, dynamic>();
     datPunto['lat'] = latlng.latitude;
     datPunto['lng'] = latlng.longitude;
     datPunto['problemsId'] = problemEdtId;
-    int id = await db.insert('points', datPunto,false);
+    int id = await db.insert('points', datPunto, false);
 
-    Map pTmp = Map<String,dynamic>();
+    Map pTmp = Map<String, dynamic>();
     pTmp['id'] = id;
     pTmp['latLng'] = latlng;
     widget.problems[problemEdtIndex]['points'].add(pTmp);
-    setState(()=>actividad = null);
+    setState(() => actividad = null);
     keyBarraEdtProblema.currentState.setAct(null);
   }
 
-  updMarker({LatLng latlang}){
+  updMarker({LatLng latlang}) {
     DB db = DB.instance;
     var lat = latlang.latitude;
     var lng = latlang.longitude;
 
-    db.query('UPDATE points SET lat = $lat, lng = $lng WHERE id = $markerEdtId');
-
+    db.query(
+        'UPDATE points SET lat = $lat, lng = $lng WHERE id = $markerEdtId');
   }
 
-  centrar({var lat, var lng, bool ubic = true, bool makeZoom = true}){
+  centrar({var lat, var lng, bool ubic = true, bool makeZoom = true}) {
     print('centrar - lat:$lat,lng:$lng, ubic: $ubic, makeZoom: $makeZoom ');
-    LatLng centro = LatLng(lat,lng);
+    LatLng centro = LatLng(lat, lng);
     double zoom;
-    if(makeZoom){
+    if (makeZoom) {
       zoom = 17;
-    }else{
+    } else {
       zoom = _mapctl.zoom;
     }
     _mapctl.move(centro, zoom);
     setState(() {
-      if(ubic){
+      if (ubic) {
         puntoUbicArr = [];
         puntoUbicArr.add(centro);
 //        print(puntoUbicArr);
       }
     });
-
   }
 
-  Future<void> addProblem({BuildContext context, bool edit = false,Map problem,bool editable = true,bool fix = false}) async {
-
-    inputController = TextEditingController(text:null);
-    nameController = TextEditingController(text:null);
+  Future<void> addProblem(
+      {BuildContext context,
+      bool edit = false,
+      Map problem,
+      bool editable = true,
+      bool fix = false}) async {
+    inputController = TextEditingController(text: null);
+    nameController = TextEditingController(text: null);
     bool ya = false;
 
     bool apareceDraft;
 //    if(widget.datos['edit_inputs']){
-    if(false){
+    if (false) {
       apareceDraft = false;
-    }else{
+    } else {
       apareceDraft = true;
     }
 
-    if(actividad == 'addMarker'){
+    if (actividad == 'addMarker') {
       LatLng latlng = center;
-      Poly.Point punto = Poly.Point(latlng.latitude,latlng.longitude);
+      Poly.Point punto = Poly.Point(latlng.latitude, latlng.longitude);
       bool inside = poly.isPointInside(punto);
 
-      if(!inside){
-        Alert(context: context,texto: Translations.of(context).text('outside_the_polygon'));
+      if (!inside) {
+        Alert(
+            context: context,
+            texto: Translations.of(context).text('outside_the_polygon'));
         return '';
       }
     }
 
-
-
-    if(edit && !ya){
+    if (edit && !ya) {
       ya = true;
-      inputController = TextEditingController(text:problem['description']);
-      nameController = TextEditingController(text:problem['name']);
+      inputController = TextEditingController(text: problem['description']);
+      nameController = TextEditingController(text: problem['name']);
       catId = problem['categoriesId'];
       photo = problem['photo'];
       print('CATID: $catId');
@@ -807,10 +826,11 @@ class MapWidgetState extends State<MapWidget> {
 //    print('CATS $cats');
     var ansId;
 
-    var ans = await db.query("SELECT * FROM RespuestasVisita WHERE visitasId = ${widget.vId} AND preguntasId = ${widget.question['id']}");
+    var ans = await db.query(
+        "SELECT * FROM RespuestasVisita WHERE visitasId = ${widget.vId} AND preguntasId = ${widget.question['id']}");
 //    print('------ ANS $ans ---------');
-    if(ans == null){
-      Map<String,dynamic> dAns = Map();
+    if (ans == null) {
+      Map<String, dynamic> dAns = Map();
       dAns['visitasId'] = widget.vId;
       dAns['preguntasId'] = widget.question['id'];
       dAns['respuesta'] = 'spatial';
@@ -819,17 +839,20 @@ class MapWidgetState extends State<MapWidget> {
       ansId = await db.insert('RespuestasVisita', dAns, true);
 //      print('-=-=-=-=-=-=-=-=-=-=-=-=-=-=ANS CREADO $ansId');
 
-    }else{
+    } else {
       ansId = ans[0]['id'];
     }
 
     print('ANSID: $ansId');
 
 //    if(!widget.spatial){
-    if(widget.question['tipo'] == 'cm'){
-      if(nameController.text == ''){
-        var cuantos = await db.query('SELECT COUNT(*) as cuantos FROM problems WHERE respuestasVisitaId = ${ansId}');
-        nameController = TextEditingController(text: '${Translations.of(context).text('problem')}_${cuantos[0]['cuantos'] + 1}');
+    if (widget.question['tipo'] == 'cm') {
+      if (nameController.text == '') {
+        var cuantos = await db.query(
+            'SELECT COUNT(*) as cuantos FROM problems WHERE respuestasVisitaId = ${ansId}');
+        nameController = TextEditingController(
+            text:
+                '${Translations.of(context).text('problem')}_${cuantos[0]['cuantos'] + 1}');
       }
 
       return showDialog<void>(
@@ -841,85 +864,79 @@ class MapWidgetState extends State<MapWidget> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
-                  editable?
-                  Container(width: 0,height: 0,):
-                  Text(
-                    Translations.of(context).text('not_editable'),
-                    style:TextStyle(color: Colors.grey),
-                  ),
+                  editable
+                      ? Container(
+                          width: 0,
+                          height: 0,
+                        )
+                      : Text(
+                          Translations.of(context).text('not_editable'),
+                          style: TextStyle(color: Colors.grey),
+                        ),
                   Text(
                     Translations.of(context).text('name').toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 17
-                    ),
+                    style: TextStyle(color: Colors.grey, fontSize: 17),
                   ),
-                  !fix?
-                  TextField(
-                    maxLines: 1,
-                    decoration: InputDecoration(
-                        isDense: true,
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xFF2568D8),
-                                width: 1
-                            )
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: Translations.of(context).text("describe"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                  !fix
+                      ? TextField(
+                          maxLines: 1,
+                          decoration: InputDecoration(
+                              isDense: true,
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2568D8), width: 1)),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText:
+                                  Translations.of(context).text("describe"),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )),
+                          controller: nameController,
+                          onChanged: (text) {
+                            inputChange = text;
+                          },
                         )
-                    ),
-                    controller: nameController,
-                    onChanged: (text){
-                      inputChange = text;
-                    },
-                  ):
-                  Text(nameController.text),
-                  SizedBox(height: 20,),
+                      : Text(nameController.text),
+                  SizedBox(
+                    height: 20,
+                  ),
                   Text(
-                    Translations.of(context).text('describeproblem').toUpperCase(),
+                    Translations.of(context)
+                        .text('describeproblem')
+                        .toUpperCase(),
                     textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.grey,
-                        fontSize: 17
-                    ),
+                    style: TextStyle(color: Colors.grey, fontSize: 17),
                   ),
-                  !fix?
-                  TextField(
-                    maxLines: 5,
-                    decoration: InputDecoration(
-                        enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                                color: Color(0xFF2568D8),
-                                width: 1
-                            )
-                        ),
-                        filled: true,
-                        fillColor: Colors.white,
-                        hintText: Translations.of(context).text("describe"),
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(5.0),
+                  !fix
+                      ? TextField(
+                          maxLines: 5,
+                          decoration: InputDecoration(
+                              enabledBorder: OutlineInputBorder(
+                                  borderSide: BorderSide(
+                                      color: Color(0xFF2568D8), width: 1)),
+                              filled: true,
+                              fillColor: Colors.white,
+                              hintText:
+                                  Translations.of(context).text("describe"),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(5.0),
+                              )),
+                          controller: inputController,
+                          onChanged: (text) {
+                            inputChange = text;
+                          },
                         )
-                    ),
-                    controller: inputController,
-                    onChanged: (text){
-                      inputChange = text;
-                    },
-                  ):
-                  Text(inputController.text),
-                  Container(height: 20,),
+                      : Text(inputController.text),
+                  Container(
+                    height: 20,
+                  ),
                   Container(
                     width: double.infinity,
                     decoration: BoxDecoration(
-                        border: Border.all(
-                            color: Colors.transparent,
-                            width: 1
-                        )
-                    ),
+                        border:
+                            Border.all(color: Colors.transparent, width: 1)),
                     child: Text(
                       Translations.of(context).text('category').toUpperCase(),
                       textAlign: TextAlign.center,
@@ -932,14 +949,16 @@ class MapWidgetState extends State<MapWidget> {
                   CatSel(
                     cats: cats,
                     setCat: setCat,
-                    edit:edit,
-                    catId: problem == null?0:problem['categoriesId'],
+                    edit: edit,
+                    catId: problem == null ? 0 : problem['categoriesId'],
                     fix: fix,
                   ),
-                  Container(height: 30,),
+                  Container(
+                    height: 30,
+                  ),
                   BtnPhotos(
-                    photo:photo,
-                    setPhoto:setPhoto,
+                    photo: photo,
+                    setPhoto: setPhoto,
                     editable: editable,
                     fix: fix,
                   ),
@@ -949,7 +968,7 @@ class MapWidgetState extends State<MapWidget> {
             actions: <Widget>[
               FlatButton(
                 child: Text(
-                  Translations.of(context).text(!fix?'cancel':'close'),
+                  Translations.of(context).text(!fix ? 'cancel' : 'close'),
                 ),
                 onPressed: () {
 //                print(actVentana);
@@ -984,47 +1003,75 @@ class MapWidgetState extends State<MapWidget> {
 //                },
 //              ):
 //              Container(width: 0,height: 0,),
-              editable && !fix?FlatButton(
-                child: Text(Translations.of(context).text('send')),
-                onPressed: () {
+              editable && !fix
+                  ? FlatButton(
+                      child: Text(Translations.of(context).text('send')),
+                      onPressed: () {
 //                print(actVentana);
-                  String input = inputController.text;
-                  bool allOk = true;
+                        String input = inputController.text;
+                        bool allOk = true;
 
-                  if(input.length < 3){
-                    allOk = false;
-                    Alert(context: context,texto: Translations.of(context).text('string_size'));
-                  }
-                  if(catId == null && allOk){
-                    allOk = false;
-                    Alert(context: context,texto: Translations.of(context).text('cat_not_null'));
-                  }
+                        if (input.length < 3) {
+                          allOk = false;
+                          Alert(
+                              context: context,
+                              texto:
+                                  Translations.of(context).text('string_size'));
+                        }
+                        if (catId == null && allOk) {
+                          allOk = false;
+                          Alert(
+                              context: context,
+                              texto: Translations.of(context)
+                                  .text('cat_not_null'));
+                        }
 
-                  if(allOk){
-                    Navigator.of(context).pop();
-                    if(edit && problem != null && problem['draft'] == 1){
+                        if (allOk) {
+                          Navigator.of(context).pop();
+                          if (edit &&
+                              problem != null &&
+                              problem['draft'] == 1) {
 //                    print('aaaaaa $allOk');
 //                    problem['draft'] = null;
-                    }
-                    print('(actVentana:$actVentana,edit:$edit,id:${problem == null?0:problem['id']},draft: ${false},question: ${widget.question},answer_id: $ansId)');
-                    print('bbb');
-                    fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: false,question: widget.question,answer_id: ansId);
-                  }
-
-                },
-              ):Container(width:0,height:0),
+                          }
+                          print(
+                              '(actVentana:$actVentana,edit:$edit,id:${problem == null ? 0 : problem['id']},draft: ${false},question: ${widget.question},answer_id: $ansId)');
+                          print('bbb');
+                          fncSend(
+                              actVentana: actVentana,
+                              edit: edit,
+                              id: problem == null ? 0 : problem['id'],
+                              draft: false,
+                              question: widget.question,
+                              answer_id: ansId);
+                        }
+                      },
+                    )
+                  : Container(width: 0, height: 0),
             ],
           );
         },
       );
-    }else{
-
-      Map aaa = {'actVentana':actVentana,'edit':edit,'id':problem == null?0:problem['id'],'draft': false,'question': widget.question,'answer_id': ansId};
+    } else {
+      Map aaa = {
+        'actVentana': actVentana,
+        'edit': edit,
+        'id': problem == null ? 0 : problem['id'],
+        'draft': false,
+        'question': widget.question,
+        'answer_id': ansId
+      };
       print(aaa);
       print('ccc');
-      fncSend(actVentana:actVentana,edit:edit,id:problem == null?0:problem['id'],draft: false,question: widget.question,answer_id: ansId);
+      fncSend(
+          actVentana: actVentana,
+          edit: edit,
+          id: problem == null ? 0 : problem['id'],
+          draft: false,
+          question: widget.question,
+          answer_id: ansId);
 
-        // TODO: ESTO ESTÁ GENERANDO PROBLEMAS CON EL WIDGET
+      // TODO: ESTO ESTÁ GENERANDO PROBLEMAS CON EL WIDGET
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -1050,17 +1097,18 @@ class MapWidgetState extends State<MapWidget> {
 //                  fncCancel(actVentana);
                 },
               ),
-              Container(width: 0,height: 0,),
+              Container(
+                width: 0,
+                height: 0,
+              ),
             ],
           );
         },
       );
-
     }
-
   }
 
-  Future<void> Alert({BuildContext context,String texto}) async {
+  Future<void> Alert({BuildContext context, String texto}) async {
     return showDialog<void>(
       context: context,
       barrierDismissible: false, // user must tap button!
@@ -1085,7 +1133,7 @@ class MapWidgetState extends State<MapWidget> {
     );
   }
 
-  void fncCancel(String actVentana){
+  void fncCancel(String actVentana) {
     String input = inputController.text;
     delPuntos();
     setState(() {
@@ -1094,7 +1142,13 @@ class MapWidgetState extends State<MapWidget> {
     catId = null;
   }
 
-  void fncSend({String actVentana,bool edit = false,int id,bool draft = true,Map question,int answer_id}) async {
+  void fncSend(
+      {String actVentana,
+      bool edit = false,
+      int id,
+      bool draft = true,
+      Map question,
+      int answer_id}) async {
     DB db = DB.instance;
     print('EDIT $edit');
 
@@ -1104,7 +1158,6 @@ class MapWidgetState extends State<MapWidget> {
     SharedPreferences userData = await SharedPreferences.getInstance();
     String sendProblemsSettings = userData.getString('sendProblems');
 
-
 //    print('actVentana: $actVentana, edit: $edit, id: $id, draft:$draft');
 
     String input = inputController.text;
@@ -1113,8 +1166,7 @@ class MapWidgetState extends State<MapWidget> {
 
     print('AnswerId: $answer_id');
 
-    Map problemDat = Map<String,dynamic>();
-
+    Map problemDat = Map<String, dynamic>();
 
     problemDat['categoriesId'] = catId;
     problemDat['description'] = input;
@@ -1125,13 +1177,12 @@ class MapWidgetState extends State<MapWidget> {
 //    problemDat['draft'] = draft?1:null;
     problemDat['edit'] = edit;
 
-
 //    print(problemDat);
 //    print(question);
 //    print("- - - - - - - - - - -ACAAAAAA- - - - - - - - - - - - -");
 
 //    print(problemDat);
-    switch(actVentana){
+    switch (actVentana) {
       case 'addMarker':
         problemDat['type'] = 'Marker';
         break;
@@ -1144,29 +1195,30 @@ class MapWidgetState extends State<MapWidget> {
     }
 
 //    print('EDIT : $edit');
-    if(edit){
+    if (edit) {
       print('edit');
       problemDat['id'] = id;
-      String draftDB = !draft?', draft = NULL':'';
+      String draftDB = !draft ? ', draft = NULL' : '';
 
       String sql = '''
         UPDATE problems 
         SET categoriesId = '${problemDat['categoriesId']}', description= '${problemDat['description']}',name = '${problemDat['name']}',
-        respuestasVisitaId = '${answer_id}', photo = ${problemDat['photo']==null?'NULL':"'${problemDat['photo']}'"},
-        edit = ${problemDat['edit']?1:'NULL'} $draftDB
+        respuestasVisitaId = '${answer_id}', photo = ${problemDat['photo'] == null ? 'NULL' : "'${problemDat['photo']}'"},
+        edit = ${problemDat['edit'] ? 1 : 'NULL'} $draftDB
         WHERE id = ${problemDat['id']}   
         ''';
 
 //      print('SQL : $sql');
       await db.query(sql);
 //      await db.replace('problems', problemDat);
-    }else{
+    } else {
 //      print('NVO: ${question}');
-      if(question['tipo'] == 'spatial' || question['tipo'] == 'op'){
-        await db.query('DELETE FROM problems WHERE respuestasVisitaId = $answer_id');
+      if (question['tipo'] == 'spatial' || question['tipo'] == 'op') {
+        await db.query(
+            'DELETE FROM problems WHERE respuestasVisitaId = $answer_id');
       }
       print('problemDat: $problemDat');
-      id = await db.insert('problems', problemDat,true);
+      id = await db.insert('problems', problemDat, true);
       print('ID: $id');
     }
 
@@ -1174,19 +1226,19 @@ class MapWidgetState extends State<MapWidget> {
 //    print('Problems:${problems}');
 
     Map prb = Map();
-    Map pointsDat = Map<String,dynamic>();
+    Map pointsDat = Map<String, dynamic>();
     pointsDat['problemsId'] = id;
-    switch(actVentana){
+    switch (actVentana) {
       case 'addMarker':
         prb['type'] = 'Marker';
-        Map tmp = Map<String,dynamic>();
+        Map tmp = Map<String, dynamic>();
         prb['points'] = [];
-        if(tappedPoints.length>0){
+        if (tappedPoints.length > 0) {
           pointsDat['lat'] = tappedPoints[0].latitude;
           pointsDat['lng'] = tappedPoints[0].longitude;
           print('pointsDat: $pointsDat');
 
-          int id = await db.insert('points', pointsDat,false);
+          int id = await db.insert('points', pointsDat, false);
           tmp['latLng'] = tappedPoints[0];
           tmp['id'] = id;
           prb['points'].add(tmp);
@@ -1196,26 +1248,25 @@ class MapWidgetState extends State<MapWidget> {
       case 'addPolyline':
         prb['type'] = 'Polyline';
         prb['points'] = [];
-        for(int i = 0; i<tappedPlPoints.length;i++){
+        for (int i = 0; i < tappedPlPoints.length; i++) {
           pointsDat['lat'] = tappedPlPoints[i].latitude;
           pointsDat['lng'] = tappedPlPoints[i].longitude;
-          int id = await db.insert('points', pointsDat,false);
-          Map tmp = Map<String,dynamic>();
+          int id = await db.insert('points', pointsDat, false);
+          Map tmp = Map<String, dynamic>();
           tmp['id'] = id;
           tmp['latLng'] = tappedPlPoints[i];
           prb['points'].add(tmp);
-
         }
 //        print(tappedPlPoints);
         break;
       case 'addPolygon':
         prb['type'] = 'Polygon';
         prb['points'] = [];
-        for(int i = 0; i<tappedPgPoints.length;i++){
+        for (int i = 0; i < tappedPgPoints.length; i++) {
           pointsDat['lat'] = tappedPgPoints[i].latitude;
           pointsDat['lng'] = tappedPgPoints[i].longitude;
-          int id = await db.insert('points', pointsDat,false);
-          Map tmp = Map<String,dynamic>();
+          int id = await db.insert('points', pointsDat, false);
+          Map tmp = Map<String, dynamic>();
           tmp['id'] = id;
           tmp['latLng'] = tappedPgPoints[i];
           prb['points'].add(tmp);
@@ -1224,7 +1275,7 @@ class MapWidgetState extends State<MapWidget> {
         break;
     }
     setState(() {});
-    if(cType == sendProblemsSettings){
+    if (cType == sendProblemsSettings) {
 //      print('ENVIANDO....');
       var problemDB = await db.query("SELECT * FROM problems WHERE id = $id");
       var problemToAPI = await problemDBtoAPI(problemDB: problemDB[0]);
@@ -1235,15 +1286,15 @@ class MapWidgetState extends State<MapWidget> {
       await db.query("UPDATE problems SET idServer = $idServer WHERE id = $id");
     }
 
-    if(!edit){
+    if (!edit) {
       prb['id'] = id;
       prb['catId'] = catId;
       //ToDo: echarle un ojo a esto
 //      prb['consultationsId'] = widget.datos['id'];
       prb['photo'] = photo;
-      if(question['tipo'] == 'spatial'){
+      if (question['tipo'] == 'spatial') {
         widget.problems = [prb];
-      }else{
+      } else {
         widget.problems.add(prb);
       }
     }
@@ -1256,17 +1307,16 @@ class MapWidgetState extends State<MapWidget> {
     catId = null;
   }
 
-  void setCat(catSel){
+  void setCat(catSel) {
     catId = catSel;
   }
 
-  setPhoto(photoName){
+  setPhoto(photoName) {
     photo = photoName;
   }
 
-  void undo(){
-
-    switch(actividad){
+  void undo() {
+    switch (actividad) {
       case 'addPolyline':
         setState(() {
           tappedPlPoints.removeLast();
@@ -1282,20 +1332,18 @@ class MapWidgetState extends State<MapWidget> {
     tappedPoints.removeLast();
   }
 
-  setEdtProblem({int problemId, int problemIndex, String type}){
-
-    if(type == 'Marker'){
+  setEdtProblem({int problemId, int problemIndex, String type}) {
+    if (type == 'Marker') {
 //      print('ENTRANDO!!');
-      if(centerEdt){
+      if (centerEdt) {
         centerEdt = false;
         centrar(
-          lat:widget.problems[problemIndex]['points'][0]['latLng'].latitude,
-          lng:widget.problems[problemIndex]['points'][0]['latLng'].longitude,
+          lat: widget.problems[problemIndex]['points'][0]['latLng'].latitude,
+          lng: widget.problems[problemIndex]['points'][0]['latLng'].longitude,
           ubic: false,
-          makeZoom:true,
+          makeZoom: true,
         );
       }
-
 
       latlngOld = widget.problems[problemIndex]['points'][0]['latLng'];
       markerEdt = widget.problems[problemIndex]['points'][0];
@@ -1304,11 +1352,11 @@ class MapWidgetState extends State<MapWidget> {
 
       problemEdtIndex = problemIndex;
       markerEdtIndex = 0;
-      markerEdtId = markerEdt = widget.problems[problemIndex]['points'][0]['id'];
+      markerEdtId =
+          markerEdt = widget.problems[problemIndex]['points'][0]['id'];
 
       actividad = 'edtMarker';
     }
-
 
     setState(() {
 //      print('aaaa: $type');
@@ -1316,14 +1364,12 @@ class MapWidgetState extends State<MapWidget> {
       typeEdt = type;
       problemEdtId = problemId;
       problemEdtIndex = problemIndex;
-
     });
 
 //    print('TypeEDT : $type');
-
   }
 
-  setEdtMarker({int markerId, int markerIndex, String act}){
+  setEdtMarker({int markerId, int markerIndex, String act}) {
     setState(() {
       actividad = act;
       markerEdtId = markerId;
@@ -1331,7 +1377,7 @@ class MapWidgetState extends State<MapWidget> {
     });
   }
 
-  delMarker({int markerId, int markerIndex}){
+  delMarker({int markerId, int markerIndex}) {
     DB db = DB.instance;
 
     keyBarraEdtProblema.currentState.setAct(null);
@@ -1340,16 +1386,15 @@ class MapWidgetState extends State<MapWidget> {
     setState(() {
       actividad = null;
     });
-
   }
 
-  finalizarEdt({bool delActividad = true}){
+  finalizarEdt({bool delActividad = true}) {
     DB db = DB.instance;
 //    print('edt Pol: $problemEdtId');
 //    db.query('UPDATE problems SET edit = 1 WHERE id = $problemEdtId');
 
     setState(() {
-      if(delActividad){
+      if (delActividad) {
         actividad = null;
       }
       edtGral = false;
@@ -1357,11 +1402,10 @@ class MapWidgetState extends State<MapWidget> {
       problemEdtId = null;
       markerEdtId = null;
       markerEdtIndex = null;
-
     });
   }
 
-  delProblem({Map problem,int index}) async {
+  delProblem({Map problem, int index}) async {
     DB db = DB.instance;
 //    print('delProblem');
     widget.problems.removeAt(index);
@@ -1372,17 +1416,23 @@ class MapWidgetState extends State<MapWidget> {
     });
   }
 
-  undoEdtMarker({bool eGral}){
+  undoEdtMarker({bool eGral}) {
 //    print('UNDO ACA');
 //    print(latlngOld);
-    centrar(lat:latlngOld.latitude,lng:latlngOld.longitude, ubic: false,makeZoom: false,);
+    centrar(
+      lat: latlngOld.latitude,
+      lng: latlngOld.longitude,
+      ubic: false,
+      makeZoom: false,
+    );
 //    print('latLngOldUndo: $latlngOld');
-    if(typeEdt == 'Marker'){
+    if (typeEdt == 'Marker') {
 //      print('aaa');
       edtGral = false;
     }
 
-    widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] = latlngOld;
+    widget.problems[problemEdtIndex]['points'][markerEdtIndex]['latLng'] =
+        latlngOld;
 
     centerEdt = true;
 
@@ -1391,10 +1441,10 @@ class MapWidgetState extends State<MapWidget> {
     latlngOld = null;
     markerEdt = null;
     marcadorEditando = [];
-    setState(()=>actividad = null);
+    setState(() => actividad = null);
   }
 
-  okEdtMarker(){
+  okEdtMarker() {
     DB db = DB.instance;
     db.query('UPDATE problems SET edit = 1 WHERE id = $problemEdtId');
 //    print('edtMarker: $problemEdtId');
@@ -1406,23 +1456,21 @@ class MapWidgetState extends State<MapWidget> {
     markerEdt = null;
     centerEdt = true;
 
-    if(typeEdt == 'Marker'){
+    if (typeEdt == 'Marker') {
       edtGral = false;
     }
     marcadorEditando = [];
-    setState(()=>actividad = null);
+    setState(() => actividad = null);
   }
 
-  setMarcadorEditando({LatLng latlng}){
+  setMarcadorEditando({LatLng latlng}) {
     setState(() {
       marcadorEditando = [latlng];
     });
   }
-
 }
 
-class Marcador{
-
+class Marcador {
   GlobalKey<MapWidgetState> keyMapa = GlobalKey();
   int index;
   Marker marker;
@@ -1437,7 +1485,6 @@ class Marcador{
   double width;
   double height;
 
-
   Marcador({
     this.keyMapa,
     this.index,
@@ -1451,8 +1498,7 @@ class Marcador{
     this.pos,
     this.width,
     this.height,
-  }){
-
+  }) {
     pos ??= AnchorPos.align(AnchorAlign.top);
     color ??= Colors.red[500];
 
@@ -1471,44 +1517,42 @@ class Marcador{
       point: latlng,
       anchorPos: pos,
       builder: (ctx) => Container(
-          child:GestureDetector(
-            onTap: () {
+          child: GestureDetector(
+        onTap: () {
 //              print('index: $index, type: $type, fatherIndex: $fatherIndex, id: $id');
-              if(keyMapa.currentState.actividad == 'delMarker'){
-                keyMapa.currentState.delMarker(markerId: id,markerIndex: index);
-              }else{
-                bool makeZoom = true;
-                if(keyMapa.currentState.actividad == 'edtMarker'){
-                  keyMapa.currentState.okEdtMarker();
-                  makeZoom = false;
-                }
+          if (keyMapa.currentState.actividad == 'delMarker') {
+            keyMapa.currentState.delMarker(markerId: id, markerIndex: index);
+          } else {
+            bool makeZoom = true;
+            if (keyMapa.currentState.actividad == 'edtMarker') {
+              keyMapa.currentState.okEdtMarker();
+              makeZoom = false;
+            }
 
-
-                keyMapa.currentState.latlngOld = latlng;
+            keyMapa.currentState.latlngOld = latlng;
 //                print('latLngOldMarker: ${keyMapa.currentState.latlngOld}');
-                keyMapa.currentState.markerEdt = keyMapa.currentState.widget.problems[fatherIndex]['points'][index];
-                if(keyMapa.currentState.centerEdt){
-                  keyMapa.currentState.centerEdt = false;
-                  keyMapa.currentState.centrar(
-                      lat:latlng.latitude,
-                      lng:latlng.longitude,
-                      ubic: false,
-                      makeZoom: makeZoom
-                  );
-                }
+            keyMapa.currentState.markerEdt = keyMapa
+                .currentState.widget.problems[fatherIndex]['points'][index];
+            if (keyMapa.currentState.centerEdt) {
+              keyMapa.currentState.centerEdt = false;
+              keyMapa.currentState.centrar(
+                  lat: latlng.latitude,
+                  lng: latlng.longitude,
+                  ubic: false,
+                  makeZoom: makeZoom);
+            }
 
-                keyMapa.currentState.setEdtMarker(act: 'edtMarker',markerId: id,markerIndex: index);
-                if(type == 'Polygon' || type == 'Polyline'){
-                  keyMapa.currentState.setMarcadorEditando(
-                    latlng: latlng,
-                  );
-                }
-
-              }
-            },
-            child: icono,
-          )
-      ),
+            keyMapa.currentState.setEdtMarker(
+                act: 'edtMarker', markerId: id, markerIndex: index);
+            if (type == 'Polygon' || type == 'Polyline') {
+              keyMapa.currentState.setMarcadorEditando(
+                latlng: latlng,
+              );
+            }
+          }
+        },
+        child: icono,
+      )),
     );
   }
 }
