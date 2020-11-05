@@ -198,13 +198,13 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                   '${Translations.of(context).text('ongoingConsultations').toUpperCase()}',
 //              periodo: "(start_date <= '$fechaHoy' AND finish_date >= '$fechaHoy' )",
 //              actual: true,
-              color: Color(0xFF2568D8),
+              color: Color(0xFFF8B621),
             ),
 //            slider(
 //              nombre: '  ${Translations.of(context).text('futureConsultations').toUpperCase()}',
 //              periodo: "(start_date >= '$fechaHoy')",
 //              actual: false,
-//              color: Color(0xFFA27AE4),
+//              color: Color(0xFFF8B621 ),
 //            ),
 //            slider(
 //              nombre: '  ${Translations.of(context).text('pastConsultations').toUpperCase()}',
@@ -224,10 +224,10 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
     // ToDo: Esperar a que nos manden el ícono y ponerlo en la lina de abajo
     String iconNom = datos['icon'];
     iconNom = iconNom.replaceAll('fa-', '');
-//    iconNom = camelize(iconNom);
-//    iconNom = iconNom.replaceAll(' ', '');
-//    iconNom = '${iconNom[0].toLowerCase()}${iconNom.substring(1)}';
-//    print(iconNom);
+    iconNom = camelize(iconNom);
+    iconNom = iconNom.replaceAll('-', '');
+    iconNom = '${iconNom[0].toLowerCase()}${iconNom.substring(1)}';
+    //print(iconNom);
 
     var icon = Container(
       padding: EdgeInsets.only(
@@ -358,7 +358,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
 //                    textAlign: TextAlign.center,
 //                    style: TextStyle(
 //                        fontWeight: FontWeight.bold,
-//                        color: Color(0xFFA27AE4)
+//                        color: Color(0xFFF8B621 )
 //                    ),
 //                  ),
 //                  DropPhases(
@@ -371,7 +371,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                     Translations.of(context).text('code').toUpperCase(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Color(0xFFA27AE4)),
+                        fontWeight: FontWeight.bold, color: Color(0xFFF8B621)),
                   ),
                   CampoTexto(
                     value: code,
@@ -385,7 +385,7 @@ class ConsultationsHomeState extends State<ConsultationsHome> {
                     Translations.of(context).text('keyword').toUpperCase(),
                     textAlign: TextAlign.center,
                     style: TextStyle(
-                        fontWeight: FontWeight.bold, color: Color(0xFFA27AE4)),
+                        fontWeight: FontWeight.bold, color: Color(0xFFF8B621)),
                   ),
                   CampoTexto(
                     value: code,
@@ -468,15 +468,15 @@ class DropPhasesState extends State<DropPhases> {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 00, 20.0, 0),
           border: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 10),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 10),
             borderRadius: new BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           filled: true,
@@ -514,15 +514,15 @@ class CampoTexto extends StatelessWidget {
       decoration: InputDecoration(
           contentPadding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
           border: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 10),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 10),
             borderRadius: new BorderRadius.circular(10),
           ),
           enabledBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           focusedBorder: OutlineInputBorder(
-            borderSide: new BorderSide(color: Color(0xFF2568D8), width: 2),
+            borderSide: new BorderSide(color: Color(0xFFF8B621), width: 2),
             borderRadius: new BorderRadius.circular(10),
           ),
           filled: true,

@@ -80,7 +80,7 @@ class Instalacion extends StatelessWidget {
             Container(
               padding: EdgeInsets.all(15.0),
               decoration: BoxDecoration(
-                color: Colors.blue,
+                color: Colors.amber,
               ),
               child: Center(
                   child: Text(
@@ -154,7 +154,7 @@ class Encabezado extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.all(15.0),
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: Colors.amber,
                           ),
                           child: Center(
                               child: Text(
@@ -239,7 +239,7 @@ class Encabezado extends StatelessWidget {
                         Container(
                           padding: EdgeInsets.all(15.0),
                           decoration: BoxDecoration(
-                            color: Colors.blue,
+                            color: Colors.amber,
                           ),
                           child: Center(
                               child: Text(
@@ -332,7 +332,7 @@ class Bloque extends StatelessWidget {
           Container(
             padding: EdgeInsets.all(15.0),
             decoration: BoxDecoration(
-              color: Colors.blue,
+              color: Colors.amber,
             ),
             child: Center(
                 child: Text(

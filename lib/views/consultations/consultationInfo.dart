@@ -4,6 +4,7 @@ import 'package:siap/models/componentes/iconos.dart';
 import 'package:siap/models/translations.dart';
 import 'consultation.dart';
 import 'package:flutter_html/flutter_html.dart';
+import 'package:strings/strings.dart';
 
 class ConsultationInfo extends StatelessWidget {
 
@@ -18,7 +19,9 @@ class ConsultationInfo extends StatelessWidget {
 //    print('datos: $datos');
     String iconNom = datos['icon'];
     iconNom = iconNom.replaceAll('fa-', '');
-
+    iconNom = camelize(iconNom);
+    iconNom = iconNom.replaceAll('-', '');
+    iconNom = '${iconNom[0].toLowerCase()}${iconNom.substring(1)}';
 
     double tamanoIcono = MediaQuery.of(context).size.width*.25;
     var icon = Container(

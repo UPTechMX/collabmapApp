@@ -182,7 +182,7 @@ class SurveysState extends State<Surveys> {
 //                lineHeight: 7,
 //                percent: datos['avanceDouble']/100,
 //                backgroundColor: Colors.grey[300],
-//                progressColor: Colors.blue,
+//                progressColor: Colors.amber,
 //              ),
 //            )
           ],

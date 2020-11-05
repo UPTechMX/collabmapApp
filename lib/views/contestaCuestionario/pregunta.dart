@@ -432,7 +432,7 @@ class PreguntaState extends State<Pregunta> {
           Expanded(
             flex: 5,
             child: RaisedButton(
-              color: Colors.blue,
+              color: Colors.amber,
               child: Text(
                 'Regresar',
               ),
@@ -448,7 +448,7 @@ class PreguntaState extends State<Pregunta> {
           Expanded(
             flex: 5,
             child: RaisedButton(
-              color: Colors.blue,
+              color: Colors.amber,
               child: Text(
                 'Continuar',
               ),

@@ -53,7 +53,7 @@ class Privacidad extends StatelessWidget {
                                 fontWeight: FontWeight.bold,
                                 fontSize:
                                     MediaQuery.of(context).size.height * .03,
-                                color: Color(0xFF2568D8),
+                                color: Color(0xFFF8B621),
                               ),
                             ),
                             SizedBox(
@@ -136,14 +136,14 @@ class _PrivCheckState extends State<PrivCheck> {
                     .text('noticeofprivacyAgree')
                     .toUpperCase(),
                 style: TextStyle(
-                  color: Color(0xFF2568D8),
+                  color: Color(0xFFF8B621),
                 ),
               ),
             )
           ],
         ),
         RaisedButton(
-          color: Color(0xFF2568D8),
+          color: Color(0xFFF8B621),
           child: Text(
             Translations.of(context).text('send').toUpperCase(),
             style: TextStyle(color: Colors.white),

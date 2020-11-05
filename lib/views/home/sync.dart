@@ -11,22 +11,23 @@ class Sync extends StatefulWidget {
   bool ventana;
   bool firstSync;
   bool barraSinBoton;
-  Sync({this.ventana = false,this.firstSync = false, this.barraSinBoton = false});
+  Sync(
+      {this.ventana = false,
+      this.firstSync = false,
+      this.barraSinBoton = false});
 
   @override
-  SyncState createState() => SyncState(ventana: ventana,firstSync: firstSync);
+  SyncState createState() => SyncState(ventana: ventana, firstSync: firstSync);
 }
 
 class SyncState extends State<Sync> {
-
   bool loading = false;
   String etapa = '';
   String proceso = '';
   bool ventana;
   bool firstSync;
 
-
-  SyncState({this.ventana = false,this.firstSync = false});
+  SyncState({this.ventana = false, this.firstSync = false});
 
   @override
   Widget build(BuildContext context) {
@@ -39,42 +40,40 @@ class SyncState extends State<Sync> {
         children: <Widget>[
           Container(
             padding: EdgeInsets.only(top: 15),
-            child: firstSync?
-            Container():
-            Text(
-              Translations.of(context).text('sync_rquired'),
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
+            child: firstSync
+                ? Container()
+                : Text(
+                    Translations.of(context).text('sync_rquired'),
+                    style: TextStyle(
+                      fontSize: 20,
+                    ),
+                  ),
           ),
           Container(
-            padding: EdgeInsets.only(top:40),
-            child: loading ? ColorLoader3(
-              radius: 50,
-              dotRadius: 15,
-            ) :
-            FlatButton(
-              onPressed: sync,
-              child: Container(
-                padding: EdgeInsets.all(10),
-                width: 70,
-                height: 70,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(35),
-                  border: Border.all(
-                    color: Colors.grey
+            padding: EdgeInsets.only(top: 40),
+            child: loading
+                ? ColorLoader3(
+                    radius: 50,
+                    dotRadius: 15,
                   )
-                ),
-                child: Icono(
-                  svgName: 'sync',
-                  color: Colors.grey,
-                ),
-              ),
-            ),
+                : FlatButton(
+                    onPressed: sync,
+                    child: Container(
+                      padding: EdgeInsets.all(10),
+                      width: 70,
+                      height: 70,
+                      decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(35),
+                          border: Border.all(color: Colors.grey)),
+                      child: Icono(
+                        svgName: 'sync',
+                        color: Colors.grey,
+                      ),
+                    ),
+                  ),
           ),
           Container(
-            padding: EdgeInsets.only(top:20),
+            padding: EdgeInsets.only(top: 20),
             child: Text(
               etapa,
               style: TextStyle(
@@ -115,16 +114,17 @@ class SyncState extends State<Sync> {
     });
 //
     List<Widget> actions = [];
-      actions.add(
-          FlatButton(
-            child: Text(Translations.of(context).text('ok')),
-            onPressed: () {
-              Route route = MaterialPageRoute(builder: (context) => Home(firstSync: true,aceptaPriv: true,));
-              Navigator.pushReplacement(context, route);
-            },
-          )
-      );
-    
+    actions.add(FlatButton(
+      child: Text(Translations.of(context).text('ok')),
+      onPressed: () {
+        Route route = MaterialPageRoute(
+            builder: (context) => Home(
+                  firstSync: true,
+                  aceptaPriv: true,
+                ));
+        Navigator.pushReplacement(context, route);
+      },
+    ));
 
     emergente(
       context: context,
@@ -133,23 +133,20 @@ class SyncState extends State<Sync> {
         children: <Widget>[
           Icono(
             svgName: 'finish',
-            color: Color(0xFF2568D8),
+            color: Color(0xFFF8B621),
             width: MediaQuery.of(context).size.height * .18,
           ),
-          SizedBox(height: 15,),
+          SizedBox(
+            height: 15,
+          ),
           Text(
             Translations.of(context).text('syncsuccessful').toUpperCase(),
             textAlign: TextAlign.center,
             style: TextStyle(
-                color: Color(0xFF2568D8),
-                fontWeight: FontWeight.bold
-            ),
+                color: Color(0xFFF8B621), fontWeight: FontWeight.bold),
           )
         ],
       ),
     );
-
   }
-
-
 }

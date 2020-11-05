@@ -18,7 +18,7 @@ class BarritaState extends State<Barrita> {
     widget.iconoUndo ??= Icon(
       Icons.undo,
       color: Colors.grey,
-      size: 30,
+      size: 40,
     );
 
     return Container(
@@ -47,7 +47,7 @@ class BarritaState extends State<Barrita> {
               icon: Icon(
                 Icons.check_circle,
                 color: Colors.green,
-                size: 35,
+                size: 40,
               ),
               onPressed: () {
                 widget.aceptar(context: context);

@@ -128,7 +128,7 @@ class OpcionesState extends State<Opciones> {
       child: ButtonTheme(
 //          minWidth: 150.0,
 //          height: MediaQuery.of(context).size.height * .117,
-        buttonColor: Colors.blue,
+        buttonColor: Colors.amber,
         child: FlatButton(
           padding: EdgeInsets.all(0),
           onPressed: () {

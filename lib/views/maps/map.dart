@@ -421,7 +421,7 @@ class MapWidgetState extends State<MapWidget> {
         iconoUndo: Icon(
           Icons.cancel,
           color: Colors.red,
-          size: 35,
+          size: 40,
         ),
         undo: () {
           actividad = null;
@@ -885,7 +885,7 @@ class MapWidgetState extends State<MapWidget> {
                               isDense: true,
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2568D8), width: 1)),
+                                      color: Color(0xFFF8B621), width: 1)),
                               filled: true,
                               fillColor: Colors.white,
                               hintText:
@@ -915,7 +915,7 @@ class MapWidgetState extends State<MapWidget> {
                           decoration: InputDecoration(
                               enabledBorder: OutlineInputBorder(
                                   borderSide: BorderSide(
-                                      color: Color(0xFF2568D8), width: 1)),
+                                      color: Color(0xFFF8B621), width: 1)),
                               filled: true,
                               fillColor: Colors.white,
                               hintText:
@@ -942,7 +942,7 @@ class MapWidgetState extends State<MapWidget> {
                       textAlign: TextAlign.center,
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
-                        color: Color(0xFF2568D8),
+                        color: Color(0xFFF8B621),
                       ),
                     ),
                   ),

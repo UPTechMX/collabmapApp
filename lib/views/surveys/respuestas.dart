@@ -8,13 +8,10 @@ import 'package:siap/views/maps/consultation.dart';
 import 'package:siap/models/conexiones/api.dart';
 import 'dart:convert';
 
-
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 
-
 class CampoRespuesta extends StatelessWidget {
-
   var question;
   var value;
   var setValue;
@@ -35,57 +32,55 @@ class CampoRespuesta extends StatelessWidget {
 //          Text('type: ${question['type']}'),
 //        Text('AAA: $value : $question : '),
           SizedBox(height: 15.0),
-          question['type'] == 'option'?
-            Opt(
-              value: value,
-              question: question,
-              setValue: setValue,
-            ):
-            Container(),
-          question['type'] == 'numeric'?
-            Abierta(
-              value: value,
-              question: question,
-              setValue: setValue,
-            ):
-            Container(),
-          question['type'] == 'text'?
-            Abierta(
-              value: value,
-              question: question,
-              setValue: setValue,
-            ):
-            Container(),
-          question['type'] == 'bool'?
-            Booleana(
-              value: value,
-              question: question,
-              setValue: setValue,
-            ):
-            Container(),
-          question['type'] == 'spatial'?
-            Spatial(
-              spatial:true,
-              value: value,
-              question: question,
-              setValue: setValue,
-            ):
-            Container(),
-          question['type'] == 'cm'?
-            (
-                question['spatial_data'] == '[]'?
-                Container(
-                  child: Text(Translations.of(context).text('underconstruction')),
-                ):
-                Spatial(
-                  spatial:false,
+          question['type'] == 'option'
+              ? Opt(
                   value: value,
                   question: question,
                   setValue: setValue,
                 )
-            ):
-            Container(),
-
+              : Container(),
+          question['type'] == 'numeric'
+              ? Abierta(
+                  value: value,
+                  question: question,
+                  setValue: setValue,
+                )
+              : Container(),
+          question['type'] == 'text'
+              ? Abierta(
+                  value: value,
+                  question: question,
+                  setValue: setValue,
+                )
+              : Container(),
+          question['type'] == 'bool'
+              ? Booleana(
+                  value: value,
+                  question: question,
+                  setValue: setValue,
+                )
+              : Container(),
+          question['type'] == 'spatial'
+              ? Spatial(
+                  spatial: true,
+                  value: value,
+                  question: question,
+                  setValue: setValue,
+                )
+              : Container(),
+          question['type'] == 'cm'
+              ? (question['spatial_data'] == '[]'
+                  ? Container(
+                      child: Text(
+                          Translations.of(context).text('underconstruction')),
+                    )
+                  : Spatial(
+                      spatial: false,
+                      value: value,
+                      question: question,
+                      setValue: setValue,
+                    ))
+              : Container(),
         ],
       ),
     );
@@ -103,22 +98,20 @@ class Opt extends StatefulWidget {
   });
   @override
   OptState createState() => OptState(value: value);
-
 }
 
 class OptState extends State<Opt> {
   var selected;
   var value;
-  OptState({this.value}){
-   selected = value;
+  OptState({this.value}) {
+    selected = value;
   }
 
   @override
   Widget build(BuildContext context) {
-
     List items = new List<DropdownMenuItem>();
     var cats = jsonDecode(widget.question['options']);
-    for(int i = 0;i<cats.length;i++){
+    for (int i = 0; i < cats.length; i++) {
       var cat = cats[i];
       var item = DropdownMenuItem(
         child: Text(
@@ -133,20 +126,14 @@ class OptState extends State<Opt> {
       items: items,
       decoration: InputDecoration(
         enabledBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-                color: Color(0xFF2568D8),
-                width: 2
-            )
-        ),
+            borderSide: BorderSide(color: Color(0xFFF8B621), width: 2)),
         contentPadding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0)
-        ),
+        border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0)),
         isDense: true,
       ),
       value: selected,
       hint: Text(Translations.of(context).text('select')),
-      onChanged: (valor){
+      onChanged: (valor) {
         widget.setValue(valor);
         setState(() {
           selected = valor;
@@ -157,7 +144,6 @@ class OptState extends State<Opt> {
 }
 
 class Abierta extends StatelessWidget {
-
   var value;
   var question;
   var setValue;
@@ -165,48 +151,41 @@ class Abierta extends StatelessWidget {
     this.value,
     this.question,
     this.setValue,
-  }){
-    resp = TextEditingController(text:value == null?null:'$value');
+  }) {
+    resp = TextEditingController(text: value == null ? null : '$value');
   }
 
   TextEditingController resp = TextEditingController();
 
   @override
-
   Widget build(BuildContext context) {
-
     return TextField(
       textAlignVertical: TextAlignVertical.top,
-      maxLines: question['type'] == 'numeric'?1:15,
+      maxLines: question['type'] == 'numeric' ? 1 : 15,
       textAlign: TextAlign.justify,
       controller: resp,
-      onChanged: (text){
+      onChanged: (text) {
         setValue(text);
       },
-      keyboardType: question['type'] == 'numeric'?TextInputType.number:TextInputType.text,
+      keyboardType: question['type'] == 'numeric'
+          ? TextInputType.number
+          : TextInputType.text,
       decoration: InputDecoration(
-        isDense: true,
-        enabledBorder: OutlineInputBorder(
-          borderSide: BorderSide(
-            color: Color(0xFF2568D8),
-            width: 2
-          )
-        ),
-        filled: true,
-        fillColor: Colors.white,
-        hintText: Translations.of(context).text("answer"),
+          isDense: true,
+          enabledBorder: OutlineInputBorder(
+              borderSide: BorderSide(color: Color(0xFFF8B621), width: 2)),
+          filled: true,
+          fillColor: Colors.white,
+          hintText: Translations.of(context).text("answer"),
 //        contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 5),
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(5.0),
-        )
-      ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(5.0),
+          )),
     );
-
   }
 }
 
 class Booleana extends StatefulWidget {
-
   var value;
   var question;
   var setValue;
@@ -221,16 +200,14 @@ class Booleana extends StatefulWidget {
 }
 
 class BooleanaState extends State<Booleana> {
-
   var checked;
   var value;
-  BooleanaState({this.value}){
-
+  BooleanaState({this.value}) {
     print('VALUE: $value : ${value.runtimeType}');
-    if(value == null){
+    if (value == null) {
       checked = false;
-    }else{
-      switch(value){
+    } else {
+      switch (value) {
         case '1':
         case 'true':
           checked = true;
@@ -247,7 +224,6 @@ class BooleanaState extends State<Booleana> {
 
   @override
   Widget build(BuildContext context) {
-
     widget.setValue(checked);
 //    print('CHECKED: $checked');
     return Checkbox(
@@ -264,7 +240,6 @@ class BooleanaState extends State<Booleana> {
 }
 
 class Spatial extends StatelessWidget {
-
   var value;
   var question;
   var setValue;
@@ -278,10 +253,8 @@ class Spatial extends StatelessWidget {
     this.spatial = false,
   });
 
-
   @override
   Widget build(BuildContext context) {
-
     List sdl = jsonDecode(question['spatial_data']);
     Map sd = sdl[0];
 
@@ -297,7 +270,7 @@ class Spatial extends StatelessWidget {
 
     return FutureBuilder(
       future: getProblems(question: question),
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         setValue('${question['type']}');
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -306,34 +279,37 @@ class Spatial extends StatelessWidget {
           case ConnectionState.waiting:
             return Text(Translations.of(context).text('waiting'));
           case ConnectionState.done:
-            if (snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
 //            print('SNAPSHOT: ${snapshot.data}');
 //            print('FILE: ${snapshot.data['mapFile']}');
-            return question['type'] == 'cm'?RaisedButton(
-              onPressed: (){
-                Navigator.push(context,
-                    new MaterialPageRoute(builder: (context)=>Consultation(
-                        datos:acomodado,
-                        tiles: snapshot.data['mapFile'],
-                        problems:snapshot.data['problems'],
-                        question: question,
-                    )));
-              },
-              child: Text('ir al mapa'),
-            ):Container(
-                height: MediaQuery.of(context).size.height*.55,
-                width: double.infinity,
-                child: MapWidget(
-
-                  tiles: snapshot.data['mapFile'],
-                  datos: acomodado,
-                  problems: snapshot.data['problems'],
-                  question: question,
-                  spatial: true,
-                ),
-              );
+            return question['type'] == 'cm'
+                ? RaisedButton(
+                    onPressed: () {
+                      Navigator.push(
+                          context,
+                          new MaterialPageRoute(
+                              builder: (context) => Consultation(
+                                    datos: acomodado,
+                                    tiles: snapshot.data['mapFile'],
+                                    problems: snapshot.data['problems'],
+                                    question: question,
+                                  )));
+                    },
+                    child: Text('ir al mapa'),
+                  )
+                : Container(
+                    height: MediaQuery.of(context).size.height * .55,
+                    width: double.infinity,
+                    child: MapWidget(
+                      tiles: snapshot.data['mapFile'],
+                      datos: acomodado,
+                      problems: snapshot.data['problems'],
+                      question: question,
+                      spatial: true,
+                    ),
+                  );
         }
         return Column();
       },
@@ -341,16 +317,15 @@ class Spatial extends StatelessWidget {
 
     return Container();
   }
-
 }
 
 Future<Map> getProblems({Map question}) async {
   DB db = DB.instance;
 
-  var ans = await db.query("SELECT * FROM answers WHERE survey_id = ${question['survey_id']} AND question_id = ${question['id']}");
+  var ans = await db.query(
+      "SELECT * FROM answers WHERE survey_id = ${question['survey_id']} AND question_id = ${question['id']}");
 
-  var ansId = ans == null?null:ans[0]['id'];
-
+  var ansId = ans == null ? null : ans[0]['id'];
 
 //  await db.query('''DELETE
 //      FROM problems
@@ -369,20 +344,22 @@ Future<Map> getProblems({Map question}) async {
 
 //  print('problemsDB: $problemsDB');
   List problems = [];
-  if(problemsDB != null){
-    for(int i = 0; i<problemsDB.length; i++){
+  if (problemsDB != null) {
+    for (int i = 0; i < problemsDB.length; i++) {
       Map<String, dynamic> problem = Map<String, dynamic>.from(problemsDB[i]);
 
 //      await db.query('DELETE FROM points WHERE problemsId = ${problemsDB[i]['id']}');
 
-      List problemPoints = await db.query("SELECT * FROM points WHERE problemsId = ${problemsDB[i]['id']}");
+      List problemPoints = await db.query(
+          "SELECT * FROM points WHERE problemsId = ${problemsDB[i]['id']}");
 //      print('problemPoints: $problemPoints');
       List puntos = [];
-      if(problemPoints!=null){
-        for(int i = 0;i<problemPoints.length;i++){
-          Map<String,dynamic> ptTmp = Map();
+      if (problemPoints != null) {
+        for (int i = 0; i < problemPoints.length; i++) {
+          Map<String, dynamic> ptTmp = Map();
 //          print('aaaaa ${problemPoints[i]['lat']},${problemPoints[i]['lng']}');
-          ptTmp['latLng'] = LatLng(problemPoints[i]['lat'],problemPoints[i]['lng']);
+          ptTmp['latLng'] =
+              LatLng(problemPoints[i]['lat'], problemPoints[i]['lng']);
           ptTmp['id'] = problemPoints[i]['id'];
           puntos.add(ptTmp);
         }
@@ -395,15 +372,15 @@ Future<Map> getProblems({Map question}) async {
   String dir = (await getApplicationDocumentsDirectory()).path;
 
   Directory mapsDir = await Directory('${dir}/maps');
-  if(!(await mapsDir.exists())){
+  if (!(await mapsDir.exists())) {
     mapsDir.create(recursive: true);
   }
   String path = '${dir}/maps';
   File file;
   File mapa = await File('${path}/${question['mapFile']}');
-  if( (await mapa.exists()) ){
+  if ((await mapa.exists())) {
     file = mapa;
-  }else{
+  } else {
     file = null;
   }
 
@@ -413,14 +390,4 @@ Future<Map> getProblems({Map question}) async {
 
 //  print(problems);
   return r;
-
 }
-
-
-
-
-
-
-
-
-

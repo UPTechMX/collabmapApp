@@ -13,7 +13,7 @@ class Poll extends StatefulWidget {
   var poll;
   var datos;
 
-  Poll({this.poll,this.datos});
+  Poll({this.poll, this.datos});
 
   @override
   PollState createState() => PollState();
@@ -24,14 +24,13 @@ class PollState extends State<Poll> {
 
   @override
   Widget build(BuildContext context) {
-
     var palomita = Container(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width*.012),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width * .012),
       child: Align(
         alignment: Alignment.topRight,
         child: Icon(
           Icons.check_circle,
-          color: Color(0xFF2A6CD5),
+          color: Color(0xFFF8B621),
         ),
       ),
     );
@@ -70,7 +69,6 @@ class PollState extends State<Poll> {
 
     return Column(
       children: <Widget>[
-
 //        conHealth?Container(
 //          child: Column(
 //            children: <Widget>[
@@ -86,118 +84,126 @@ class PollState extends State<Poll> {
 //          )
 //        ):Container(),
 
-        conQuick?Container(
-          width: double.infinity,
-          padding: EdgeInsets.all(10),
-          decoration: BoxDecoration(
-              color: Colors.white.withAlpha(170),
-              border: Border.all(
-                color: Colors.transparent,
-              ),
-              borderRadius: BorderRadius.circular(15)
-          ),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: <Widget>[
-              Text(
-                widget.poll.toUpperCase(),
-                style: TextStyle(
-                    color: Colors.grey
+        conQuick
+            ? Container(
+                width: double.infinity,
+                padding: EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                    color: Colors.white.withAlpha(170),
+                    border: Border.all(
+                      color: Colors.transparent,
+                    ),
+                    borderRadius: BorderRadius.circular(15)),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Text(
+                      widget.poll.toUpperCase(),
+                      style: TextStyle(color: Colors.grey),
+                    ),
+                    SizedBox(
+                      height: 5,
+                    ),
+                    Text(
+                      '$textoPregunta',
+                      style: TextStyle(
+                          color: Colors.grey[600], fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: <Widget>[
+                              Center(
+                                child: IconButton(
+                                  iconSize:
+                                      MediaQuery.of(context).size.width * .2,
+                                  icon: Image.asset(
+                                    'images/caritaTriste.png',
+                                    color:
+                                        value == 0 ? Color(0xFFF8B621) : null,
+                                  ),
+                                  onPressed: () {
+                                    sync();
+                                    saveValue(value: 0, idPregunta: idPregunta);
+                                    setState(() {
+                                      value = 0;
+                                    });
+                                  },
+                                ),
+                              ),
+                              value == 0 ? palomita : Container(),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: <Widget>[
+                              Center(
+                                child: IconButton(
+                                  iconSize:
+                                      MediaQuery.of(context).size.width * .2,
+                                  icon: Image.asset(
+                                    'images/caritaNeutra.png',
+                                    color:
+                                        value == 5 ? Color(0xFFF8B621) : null,
+                                  ),
+                                  onPressed: () {
+                                    sync();
+                                    saveValue(value: 5, idPregunta: idPregunta);
+                                    setState(() {
+                                      value = 5;
+                                    });
+                                  },
+                                ),
+                              ),
+                              value == 5 ? palomita : Container(),
+                            ],
+                          ),
+                        ),
+                        Expanded(
+                          flex: 1,
+                          child: Stack(
+                            children: <Widget>[
+                              Center(
+                                child: IconButton(
+                                  iconSize:
+                                      MediaQuery.of(context).size.width * .2,
+                                  icon: Image.asset(
+                                    'images/caritaFeliz.png',
+                                    color:
+                                        value == 10 ? Color(0xFFF8B621) : null,
+                                  ),
+                                  onPressed: () {
+                                    sync();
+                                    saveValue(
+                                        value: 10, idPregunta: idPregunta);
+                                    setState(() {
+                                      value = 10;
+                                    });
+                                  },
+                                ),
+                              ),
+                              value == 10 ? palomita : Container(),
+                            ],
+                          ),
+                        ),
+                      ],
+                    )
+                  ],
                 ),
-              ),
-              SizedBox(height: 5,),
-              Text(
-                '$textoPregunta',
-                style: TextStyle(
-                    color: Colors.grey[600],
-                    fontWeight: FontWeight.bold
-                ),
-              ),
-              SizedBox(height: 10,),
-              Row(
-                children: <Widget>[
-                  Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: IconButton(
-                            iconSize: MediaQuery.of(context).size.width*.2,
-                            icon: Image.asset(
-                              'images/caritaTriste.png',
-                              color: value == 0?Color(0xFF2A6CD5):null,
-                            ),
-                            onPressed: (){
-                              sync();
-                              saveValue(value: 0,idPregunta: idPregunta);
-                              setState(() {
-                                value = 0;
-                              });
-                            },
-                          ),
-                        ),
-                        value == 0?palomita:Container(),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: IconButton(
-                            iconSize: MediaQuery.of(context).size.width*.2,
-                            icon: Image.asset(
-                              'images/caritaNeutra.png',
-                              color: value == 5?Color(0xFF2A6CD5):null,
-                            ),
-                            onPressed: (){
-                              sync();
-                              saveValue(value: 5,idPregunta: idPregunta);
-                              setState(() {
-                                value = 5;
-                              });
-                            },
-                          ),
-                        ),
-                        value == 5?palomita:Container(),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    flex: 1,
-                    child: Stack(
-                      children: <Widget>[
-                        Center(
-                          child: IconButton(
-                            iconSize: MediaQuery.of(context).size.width*.2,
-                            icon: Image.asset(
-                              'images/caritaFeliz.png',
-                              color: value == 10?Color(0xFF2A6CD5):null,
-                            ),
-                            onPressed: (){
-                              sync();
-                              saveValue(value: 10,idPregunta: idPregunta);
-                              setState(() {
-                                value = 10;
-                              });
-                            },
-                          ),
-                        ),
-                        value == 10?palomita:Container(),
-                      ],
-                    ),
-                  ),
-                ],
               )
-            ],
-          ),
-        ):Container(),
+            : Container(),
       ],
     );
   }
 
-  saveValue({int value,int idPregunta}) async {
+  saveValue({int value, int idPregunta}) async {
     DB db = DB.instance;
 
     SharedPreferences userData = await SharedPreferences.getInstance();
@@ -207,8 +213,7 @@ class PollState extends State<Poll> {
     String formattedDate = DateFormat('yyyy-MM-dd H:m:s').format(now);
 //    print(formattedDate);
 
-
-    Map<String,dynamic> datos = Map();
+    Map<String, dynamic> datos = Map();
     datos['usersId'] = userId;
     datos['timestamp'] = formattedDate;
     datos['consultationsId'] = widget.datos['id'];
@@ -219,7 +224,7 @@ class PollState extends State<Poll> {
 //    print(r);
   }
 
-  sync(){
+  sync() {
     return emergente(
       context: context,
       actions: [
@@ -235,26 +240,25 @@ class PollState extends State<Poll> {
           children: <Widget>[
             Icono(
               svgName: 'finish',
-              color: Color(0xFF2568D8),
+              color: Color(0xFFF8B621),
               width: MediaQuery.of(context).size.height * .18,
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Text(
               Translations.of(context).text('syncrecomendation').toUpperCase(),
               textAlign: TextAlign.center,
               style: TextStyle(
-                  color: Color(0xFF2568D8),
-                  fontWeight: FontWeight.bold
-              ),
+                  color: Color(0xFFF8B621), fontWeight: FontWeight.bold),
             ),
-            SizedBox(height: 15,),
+            SizedBox(
+              height: 15,
+            ),
             Text(
               Translations.of(context).text('syncreason').toUpperCase(),
               textAlign: TextAlign.center,
-              style: TextStyle(
-                  color: Colors.grey,
-                  fontWeight: FontWeight.bold
-              ),
+              style: TextStyle(color: Colors.grey, fontWeight: FontWeight.bold),
             ),
           ],
         ),

@@ -81,12 +81,12 @@ class ConsultationState extends State<Consultation> {
             ),
 //            DownloadMap(consultationId: widget.datos['id'],),
             Accion(
-              color: Color(0xFF4068B2),
+              color: Color(0xFF94C122),
               height: MediaQuery.of(context).size.height * .1,
               texto: Translations.of(context)
                   .text('accmapandsurveys')
                   .toUpperCase(),
-              icono: 'accCuestionarios',
+              icono: 'surveys',
               elemento: Surveys(
                 key: surveysKey,
                 surveysKey: surveysKey,
@@ -98,11 +98,11 @@ class ConsultationState extends State<Consultation> {
               height: MediaQuery.of(context).size.height * .02,
             ),
             Accion(
-              color: Color(0xFF947BB8),
+              color: Color(0xFFF8B621),
               height: MediaQuery.of(context).size.height * .1,
               texto:
                   Translations.of(context).text('participate2').toUpperCase(),
-              icono: 'accDocs',
+              icono: 'webpage',
               elemento: null,
               accion: envConsult,
             ),

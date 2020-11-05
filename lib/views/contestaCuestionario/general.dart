@@ -247,7 +247,7 @@ class GeneralState extends State<General> {
           Expanded(
             flex: 5,
             child: RaisedButton(
-              color: Colors.blue,
+              color: Colors.amber,
               child: Text(
                 'Continuar',
               ),

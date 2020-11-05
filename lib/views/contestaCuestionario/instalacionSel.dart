@@ -133,7 +133,7 @@ class InstalacionSelState extends State<InstalacionSel> {
           Expanded(
             flex: 5,
             child: RaisedButton(
-              color: Colors.blue,
+              color: Colors.amber,
               child: Text(
                 'Regresar',
               ),
@@ -147,7 +147,7 @@ class InstalacionSelState extends State<InstalacionSel> {
           Expanded(
               flex: 5,
               child: RaisedButton(
-                color: Colors.blue,
+                color: Colors.amber,
                 child: Text(
                   'Siguiente',
                 ),

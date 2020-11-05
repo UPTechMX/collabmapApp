@@ -76,7 +76,7 @@ class BloquesBtnState extends State<BloquesBtn> {
                             bloque['nombre'],
                             style: TextStyle(
                               color: bloquesAct[bloque['identificador']] == 1
-                                  ? Colors.blue
+                                  ? Colors.amber
                                   : Colors.grey,
                             ),
                           ),
@@ -86,7 +86,7 @@ class BloquesBtnState extends State<BloquesBtn> {
                           width: 40,
                           decoration: BoxDecoration(
                             color: this.activo == bloque['identificador']
-                                ? Colors.blue
+                                ? Colors.amber
                                 : Colors.transparent,
                           ),
                         )

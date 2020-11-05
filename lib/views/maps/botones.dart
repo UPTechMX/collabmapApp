@@ -37,7 +37,7 @@ class _FancyFabState extends State<FancyFab>
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _buttonColor = ColorTween(
-      begin: Colors.blue,
+      begin: Colors.amber,
       end: Colors.red,
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -261,7 +261,7 @@ class BotonesBarraState extends State<BotonesBarra> {
         child: FloatingActionButton(
           heroTag: "btn1",
           backgroundColor: widget.keyMapa.currentState.actividad == 'addMarker'
-              ? Color(0xFF2568D8)
+              ? Color(0xFFF8B621)
               : Colors.white,
           onPressed: () {
             widget.keyMapa.currentState.setActividad('addMarker');
@@ -288,7 +288,7 @@ class BotonesBarraState extends State<BotonesBarra> {
           heroTag: "btn2",
           backgroundColor:
               widget.keyMapa.currentState.actividad == 'addPolyline'
-                  ? Color(0xFF2568D8)
+                  ? Color(0xFFF8B621)
                   : Colors.white,
           onPressed: () {
             widget.keyMapa.currentState.setActividad('addPolyline');
@@ -313,7 +313,7 @@ class BotonesBarraState extends State<BotonesBarra> {
         child: FloatingActionButton(
           heroTag: "btn3",
           backgroundColor: widget.keyMapa.currentState.actividad == 'addPolygon'
-              ? Color(0xFF2568D8)
+              ? Color(0xFFF8B621)
               : Colors.white,
           onPressed: () {
             widget.keyMapa.currentState.setActividad('addPolygon');
