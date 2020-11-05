@@ -5,16 +5,19 @@ import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.da
 import 'targetsElemsAdd.dart';
 
 class UserTarget extends StatefulWidget {
-
   Map datos;
-  UserTarget({this.datos});
+  GlobalKey<UserTargetState> keyUser;
+  UserTarget({
+    this.datos,
+    Key key,
+    this.keyUser,
+  }) : super(key: key);
 
   @override
   UserTargetState createState() => UserTargetState();
 }
 
 class UserTargetState extends State<UserTarget> {
-
   GlobalKey<TargetsElemsListState> KeyList = GlobalKey();
 
   @override
@@ -29,10 +32,9 @@ class UserTargetState extends State<UserTarget> {
               child: Text(
                 widget.datos['name'],
                 style: TextStyle(
-                  fontSize: 15,
-                  fontWeight: FontWeight.bold,
-                  color: colores.fontColorBar
-                ),
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                    color: colores.fontColorBar),
               ),
             ),
             color: colores.colorBar,
@@ -45,13 +47,17 @@ class UserTargetState extends State<UserTarget> {
             addStructure: widget.datos['addStructure'],
             KeyList: KeyList,
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
           TargetsElemsList(
-            key:KeyList,
+            key: KeyList,
             targetsId: widget.datos['id'],
             usersTargetsId: widget.datos['utId'],
           ),
-          SizedBox(height: 10,),
+          SizedBox(
+            height: 10,
+          ),
         ],
       ),
     );

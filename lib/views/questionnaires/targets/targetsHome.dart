@@ -1,3 +1,4 @@
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/models/componentes/iconos.dart';
 import 'package:flutter/material.dart';
 import 'package:siap_monitoring/models/layout/paginaList.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'userTarget.dart';
 
 class TargetsHome extends StatelessWidget {
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Pagina(
@@ -56,6 +58,8 @@ class TargetsHome extends StatelessWidget {
   elemento({var datos}) {
     return UserTarget(
       datos: datos,
+      key: keyUser,
+      keyUser: keyUser,
     );
   }
 }
