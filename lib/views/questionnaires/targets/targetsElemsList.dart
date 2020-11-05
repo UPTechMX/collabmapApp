@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:siap_monitoring/models/translations.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/chkAction.dart';
@@ -7,9 +8,13 @@ import 'package:siap_monitoring/views/questionnaires/targets/chkAction.dart';
 class TargetsElemsList extends StatefulWidget {
   int targetsId;
   int usersTargetsId;
-
-  TargetsElemsList({Key key, this.targetsId, this.usersTargetsId})
-      : super(key: key);
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
+  TargetsElemsList({
+    Key key,
+    this.targetsId,
+    this.usersTargetsId,
+    this.keyUser,
+  }) : super(key: key);
 
   @override
   TargetsElemsListState createState() => TargetsElemsListState();
@@ -86,6 +91,7 @@ class TargetsElemsListState extends State<TargetsElemsList> {
                   child: ChkAction(
                     datTE: tes[j],
                     datChk: chks[i],
+                    keyUser: widget.keyUser,
                   ),
                 ));
               }

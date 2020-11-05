@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:siap_monitoring/models/conexiones/api.dart';
 import 'package:siap_monitoring/models/translations.dart';
@@ -9,13 +10,13 @@ import 'targetsElemsList.dart';
 import 'dimensionesElemAdd.dart';
 
 class TargetsElemsAdd extends StatelessWidget {
-
   int targetsId;
   int userTargetsId;
-  int lastDimElem ;
+  int lastDimElem;
   int addStructure = 0;
 
   GlobalKey<TargetsElemsListState> KeyList = GlobalKey();
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
 
   Map<int, GlobalKey<DimSelectorState>> triggers = {};
   List dims = List();
@@ -25,7 +26,8 @@ class TargetsElemsAdd extends StatelessWidget {
     this.userTargetsId,
     this.addStructure,
     this.KeyList,
-    this.lastDimElem : null,
+    this.keyUser,
+    this.lastDimElem: null,
   });
 
   @override
@@ -33,7 +35,7 @@ class TargetsElemsAdd extends StatelessWidget {
     Colores colores = Colores();
     return FutureBuilder(
       future: getDimensiones(),
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         List<Widget> rows = [];
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -42,13 +44,13 @@ class TargetsElemsAdd extends StatelessWidget {
           case ConnectionState.waiting:
             return Text(Translations.of(context).text('waiting'));
           case ConnectionState.done:
-            if (snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
             dims = snapshot.data;
 
 //            print('DATA : ${snapshot.data}');
-            if(snapshot.data.length == 0){
+            if (snapshot.data.length == 0) {
               return Container(
                 height: 100,
                 child: Center(
@@ -59,8 +61,8 @@ class TargetsElemsAdd extends StatelessWidget {
             int numCols = 3;
             List row;
 
-            for(int i = 0; i < dims.length; i++){
-              if(i%numCols == 0){
+            for (int i = 0; i < dims.length; i++) {
+              if (i % numCols == 0) {
                 row = <Widget>[];
               }
               GlobalKey<DimSelectorState> key = GlobalKey();
@@ -68,26 +70,22 @@ class TargetsElemsAdd extends StatelessWidget {
               DimSelector dimSel = DimSelector(
                 dimensionesId: dims[i]['id'],
                 dimNom: dims[i]['nombre'],
-                padre: dims[i]['nivel'] == 1?0:null,
+                padre: dims[i]['nivel'] == 1 ? 0 : null,
                 nivel: dims[i]['nivel'],
                 chNivel: chNivel,
                 key: key,
               );
               triggers[dims[i]['nivel']] = key;
 
-              row.add(
-                Expanded(
-                  flex: 1,
-                  child: dimSel,
-                )
-              );
+              row.add(Expanded(
+                flex: 1,
+                child: dimSel,
+              ));
 
-              if(i%numCols == numCols-1 || i == dims.length -1){
-                rows.add(
-                  Row(
-                    children: row,
-                  )
-                );
+              if (i % numCols == numCols - 1 || i == dims.length - 1) {
+                rows.add(Row(
+                  children: row,
+                ));
               }
             }
 
@@ -95,14 +93,15 @@ class TargetsElemsAdd extends StatelessWidget {
             Widget useSelected = Expanded(
               flex: 4,
               child: RaisedButton(
-                onPressed: (){
-                  if(lastDimElem == null){
+                onPressed: () {
+                  if (lastDimElem == null) {
                     emergente(
                       context: context,
                       actions: <Widget>[],
-                      content: Text(Translations.of(context).text('needTarget')),
+                      content:
+                          Text(Translations.of(context).text('needTarget')),
                     );
-                  }else{
+                  } else {
                     addTargetsElems(context: context);
                   }
                 },
@@ -113,39 +112,43 @@ class TargetsElemsAdd extends StatelessWidget {
 
             Widget addNew = Expanded(
               flex: 4,
-              child: addStructure == 1?
-              RaisedButton(
-                onPressed: (){
-
-                  var dimElemAdd = DimensionesElemAdd(
-                    dims: dims,
-                  );
-
-                  List<Widget> actions = [
-                    FlatButton(
-                      child: Text(Translations.of(context).text('cancel')),
+              child: addStructure == 1
+                  ? RaisedButton(
                       onPressed: () {
-                        Navigator.of(context).pop();
-                      },
-                    ),
-                    FlatButton(
-                      child: Text(Translations.of(context).text('ok')),
-                      onPressed: () {
-                        dimElemAdd.insertDimElem(context: context,usersTargetsId: userTargetsId,reset:  KeyList.currentState.refresh());
-                      },
-                    )
-                  ];
+                        var dimElemAdd = DimensionesElemAdd(
+                          dims: dims,
+                        );
 
-                  emergente(
-                    content: dimElemAdd,
-                    actions:actions,
-                    context: context,
-                  );
+                        List<Widget> actions = [
+                          FlatButton(
+                            child:
+                                Text(Translations.of(context).text('cancel')),
+                            onPressed: () {
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                          FlatButton(
+                            child: Text(Translations.of(context).text('ok')),
+                            onPressed: () {
+                              dimElemAdd.insertDimElem(
+                                  context: context,
+                                  usersTargetsId: userTargetsId,
+                                  reset: KeyList.currentState.refresh());
+                            },
+                          )
+                        ];
+
+                        emergente(
+                          content: dimElemAdd,
+                          actions: actions,
+                          context: context,
+                        );
 //                  KeyList.currentState.refresh();
-                },
-                child: Text(Translations.of(context).text('addToList')),
-                color: colores.colorBar,
-              ):Container(),
+                      },
+                      child: Text(Translations.of(context).text('addToList')),
+                      color: colores.colorBar,
+                    )
+                  : Container(),
             );
 
             botones.add(useSelected);
@@ -168,7 +171,6 @@ class TargetsElemsAdd extends StatelessWidget {
           default:
             return Column();
         }
-
       },
     );
   }
@@ -180,17 +182,16 @@ class TargetsElemsAdd extends StatelessWidget {
     int userId = userData.getInt('userId');
 
 //    this.targetsId,this.userTargetsId,this.addStructure
-    var exists = await db.query("SELECT * FROM TargetsElems WHERE usersId = $userId AND dimensionesElemId = $lastDimElem");
+    var exists = await db.query(
+        "SELECT * FROM TargetsElems WHERE usersId = $userId AND dimensionesElemId = $lastDimElem");
 //    print('Exists: $exists');
-    if(exists != null){
+    if (exists != null) {
       emergente(
-        context: context,
-        actions: <Widget>[],
-        content: Text(Translations.of(context).text('TrgtExist'))
-      );
-    }else{
-
-      Map<String,dynamic> datos = Map();
+          context: context,
+          actions: <Widget>[],
+          content: Text(Translations.of(context).text('TrgtExist')));
+    } else {
+      Map<String, dynamic> datos = Map();
       datos['targetsId'] = targetsId;
       datos['usersId'] = userId;
       datos['usersTargetsId'] = userTargetsId;
@@ -201,24 +202,22 @@ class TargetsElemsAdd extends StatelessWidget {
       KeyList.currentState.refresh();
       print(r);
     }
-
   }
 
   Future getDimensiones() async {
     DB db = DB.instance;
-    var dimensiones = await db.query("SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${this.targetsId} ");
+    var dimensiones = await db.query(
+        "SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${this.targetsId} ");
     return dimensiones;
   }
 
-  chNivel({int nivel, int valor}){
+  chNivel({int nivel, int valor}) {
     int numDims = dims.length;
-    if(nivel<numDims){
-      triggers[nivel+1].currentState.chPadre(valor);
+    if (nivel < numDims) {
+      triggers[nivel + 1].currentState.chPadre(valor);
       lastDimElem = null;
-    }else{
+    } else {
       lastDimElem = valor;
     }
   }
-
 }
-

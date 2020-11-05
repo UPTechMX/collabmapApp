@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:siap_monitoring/models/translations.dart';
@@ -14,10 +15,12 @@ import 'package:siap_monitoring/views/verCuestionario/verCuestionario.dart';
 class ChkAction extends StatefulWidget {
   Map datTE;
   Map datChk;
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
 
   ChkAction({
     this.datTE,
     this.datChk,
+    this.keyUser,
   });
 
   @override

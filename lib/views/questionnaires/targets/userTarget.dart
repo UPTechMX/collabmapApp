@@ -14,11 +14,16 @@ class UserTarget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  UserTargetState createState() => UserTargetState();
+  UserTargetState createState() => UserTargetState(keyUser: keyUser);
 }
 
 class UserTargetState extends State<UserTarget> {
   GlobalKey<TargetsElemsListState> KeyList = GlobalKey();
+  var keyUser = GlobalKey<UserTargetState>();
+
+  UserTargetState({
+    this.keyUser,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +51,14 @@ class UserTargetState extends State<UserTarget> {
             userTargetsId: widget.datos['utId'],
             addStructure: widget.datos['addStructure'],
             KeyList: KeyList,
+            keyUser: keyUser,
           ),
           SizedBox(
             height: 10,
           ),
           TargetsElemsList(
             key: KeyList,
+            keyUser: keyUser,
             targetsId: widget.datos['id'],
             usersTargetsId: widget.datos['utId'],
           ),
