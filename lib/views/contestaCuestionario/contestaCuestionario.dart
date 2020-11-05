@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/views/barra.dart';
 import 'package:siap_monitoring/models/cuestionario/checklist.dart';
@@ -19,6 +20,7 @@ class ContestaCuestionario extends StatelessWidget {
   GlobalKey<AreasState> KeyAreas;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
+  GlobalKey<UserTargetState> keyUser;
 
   ContestaCuestionario({
     this.vId,
@@ -27,6 +29,7 @@ class ContestaCuestionario extends StatelessWidget {
     this.KeyAreas,
     this.KeyPreguntas,
     this.KeyPregunta,
+    this.keyUser,
   }) {
 //    this._vId = vId;
 //    this._etapa = etapa;
@@ -58,6 +61,7 @@ class ContestaCuestionario extends StatelessWidget {
                     KeyPreguntas: KeyPreguntas,
                     KeyPregunta: KeyPregunta,
                     bloquesAct: bloquesAct,
+                    keyUser: keyUser,
                     activo: '__general__'),
               ),
               Container(
@@ -70,6 +74,7 @@ class ContestaCuestionario extends StatelessWidget {
                     KeyPregunta: KeyPregunta,
                     areas: areas,
                     areasAct: areasAct,
+                    keyUser: keyUser,
                     activo: '_datGral_'),
               ),
               Container(
@@ -78,6 +83,7 @@ class ContestaCuestionario extends StatelessWidget {
                   keyAreas: KeyAreas,
                   keyBloques: KeyBloques,
                   keyPregunta: KeyPregunta,
+                  keyUser: keyUser,
                   pagina: 'preguntas',
                   bId: 'bId',
                   aId: 'aId',

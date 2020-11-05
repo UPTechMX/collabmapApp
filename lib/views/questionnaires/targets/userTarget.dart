@@ -25,6 +25,10 @@ class UserTargetState extends State<UserTarget> {
     this.keyUser,
   });
 
+  finishSurvey() {
+    setState(() {});
+  }
+
   @override
   Widget build(BuildContext context) {
 //    print('Datos: ${widget.datos}');

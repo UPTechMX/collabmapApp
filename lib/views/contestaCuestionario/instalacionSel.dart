@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/cuestionario/checklist.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
@@ -11,12 +12,14 @@ class InstalacionSel extends StatefulWidget {
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
+  GlobalKey<UserTargetState> keyUser;
 
   InstalacionSel({
     this.chk,
     this.keyBloques,
     this.keyAreas,
     this.keyPreguntas,
+    this.keyUser,
   });
 
   @override
@@ -25,6 +28,7 @@ class InstalacionSel extends StatefulWidget {
         keyPreguntas: keyPreguntas,
         keyBloques: keyBloques,
         keyAreas: keyAreas,
+        keyUser: keyUser,
       );
 }
 
@@ -33,6 +37,7 @@ class InstalacionSelState extends State<InstalacionSel> {
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
+  GlobalKey<UserTargetState> keyUser;
 
   var chkId;
   var datosVis;
@@ -47,6 +52,7 @@ class InstalacionSelState extends State<InstalacionSel> {
     this.keyBloques,
     this.keyAreas,
     this.keyPreguntas,
+    this.keyUser,
   });
 
   @override

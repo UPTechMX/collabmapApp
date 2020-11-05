@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
@@ -14,6 +15,7 @@ class General extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<PreguntaState> keyPregunta;
+  GlobalKey<UserTargetState> keyUser;
 
   Checklist chk;
   String bId;
@@ -27,6 +29,7 @@ class General extends StatefulWidget {
       this.keyAreas,
       this.keyBloques,
       this.keyPregunta,
+      this.keyUser,
       this.bId,
       this.aId,
       this.pId})

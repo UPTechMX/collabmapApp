@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
@@ -20,6 +21,7 @@ class Fotografias extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<VerCuestionarioState> keyCuestionario;
+  GlobalKey<UserTargetState> keyUser;
 
   Fotografias({
     this.chk,
@@ -27,6 +29,7 @@ class Fotografias extends StatefulWidget {
     this.keyAreas,
     this.keyPreguntas,
     this.keyCuestionario,
+    this.keyUser,
   });
 
   @override
@@ -396,6 +399,7 @@ class FotografiasState extends State<Fotografias> {
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     Navigator.of(context).setState(() {});
+    widget.keyUser.currentState.finishSurvey();
   }
 }
 

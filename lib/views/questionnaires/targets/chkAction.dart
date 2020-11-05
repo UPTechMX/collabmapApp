@@ -250,6 +250,7 @@ class ChkActionState extends State<ChkAction> {
                   KeyAreas: KeyAreas,
                   KeyPreguntas: KeyPreguntas,
                   KeyPregunta: KeyPregunta,
+                  keyUser: widget.keyUser,
                 )));
   }
 }

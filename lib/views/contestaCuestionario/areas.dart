@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
 import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
 import 'package:siap_monitoring/models/cuestionario/checklist.dart';
 import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
@@ -12,6 +13,7 @@ class Areas extends StatefulWidget {
   GlobalKey<BloquesBtnState> KeyBloques;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
+  GlobalKey<UserTargetState> keyUser;
 
   Map areasAct = new Map();
   String activo;
@@ -24,6 +26,7 @@ class Areas extends StatefulWidget {
       this.KeyBloques,
       this.KeyPreguntas,
       this.KeyPregunta,
+      this.keyUser,
       this.areasAct,
       this.activo})
       : super(key: key);
