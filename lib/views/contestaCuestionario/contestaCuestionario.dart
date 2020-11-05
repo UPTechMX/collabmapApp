@@ -19,7 +19,6 @@ class ContestaCuestionario extends StatelessWidget {
   GlobalKey<AreasState> KeyAreas;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
-  GlobalKey<TargetsElemsListState> KeyTargElemList;
 
   ContestaCuestionario({
     this.vId,
@@ -28,7 +27,6 @@ class ContestaCuestionario extends StatelessWidget {
     this.KeyAreas,
     this.KeyPreguntas,
     this.KeyPregunta,
-    this.KeyTargElemList,
   }) {
 //    this._vId = vId;
 //    this._etapa = etapa;

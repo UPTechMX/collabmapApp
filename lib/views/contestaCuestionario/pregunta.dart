@@ -14,7 +14,6 @@ class Pregunta extends StatefulWidget {
 
   Checklist chk;
   GlobalKey<PreguntasContState> KeyPreguntas;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   String bId;
   String aId;
@@ -26,7 +25,6 @@ class Pregunta extends StatefulWidget {
       this.KeyPreguntas,
       this.keyAreas,
       this.keyBloques,
-      this.keyTargElemList,
       this.bId,
       this.aId,
       this.pId})

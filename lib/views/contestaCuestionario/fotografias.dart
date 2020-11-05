@@ -20,15 +20,14 @@ class Fotografias extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<VerCuestionarioState> keyCuestionario;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
-  Fotografias(
-      {this.chk,
-      this.keyBloques,
-      this.keyAreas,
-      this.keyPreguntas,
-      this.keyCuestionario,
-      this.keyTargElemList});
+  Fotografias({
+    this.chk,
+    this.keyBloques,
+    this.keyAreas,
+    this.keyPreguntas,
+    this.keyCuestionario,
+  });
 
   @override
   FotografiasState createState() => FotografiasState(
@@ -397,7 +396,6 @@ class FotografiasState extends State<Fotografias> {
     Navigator.of(context).pop();
     Navigator.of(context).pop();
     Navigator.of(context).setState(() {});
-    widget.keyTargElemList.currentState.finishSurvey();
   }
 }
 

@@ -14,9 +14,11 @@ import 'package:siap_monitoring/views/verCuestionario/verCuestionario.dart';
 class ChkAction extends StatefulWidget {
   Map datTE;
   Map datChk;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
-  ChkAction({this.datTE, this.datChk, this.keyTargElemList});
+  ChkAction({
+    this.datTE,
+    this.datChk,
+  });
 
   @override
   ChkActionState createState() => ChkActionState();
@@ -185,29 +187,33 @@ class ChkActionState extends State<ChkAction> {
 
   Widget answerSurvey({int elemId, int checklistId}) {
     return FlatButton(
-      key: widget.keyTargElemList,
+      //key: widget.keyTargElemList,
       child: Text(
         '${Translations.of(context).text('answerSurvey')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
       onPressed: () {
         creaVisita(
-            elemId: elemId,
-            checklistId: checklistId,
-            key: widget.keyTargElemList);
+          elemId: elemId,
+          checklistId: checklistId,
+          //key: widget.keyTargElemList
+        );
       },
     );
   }
 
   Widget cont({int vId, int checklistId}) {
     return FlatButton(
-      key: widget.keyTargElemList,
+      //key: widget.keyTargElemList,
       child: Text(
         '${Translations.of(context).text('continue')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
       onPressed: () {
-        goToSurvey(vId: vId, key: widget.keyTargElemList);
+        goToSurvey(
+          vId: vId,
+          //key: widget.keyTargElemList,
+        );
       },
     );
   }
@@ -241,7 +247,6 @@ class ChkActionState extends State<ChkAction> {
                   KeyAreas: KeyAreas,
                   KeyPreguntas: KeyPreguntas,
                   KeyPregunta: KeyPregunta,
-                  KeyTargElemList: key,
                 )));
   }
 }

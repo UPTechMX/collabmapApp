@@ -7,7 +7,6 @@ import 'package:siap_monitoring/views/questionnaires/targets/chkAction.dart';
 class TargetsElemsList extends StatefulWidget {
   int targetsId;
   int usersTargetsId;
-  //GlobalKey<TargetsElemsListState> keyTargElemList;
 
   TargetsElemsList({Key key, this.targetsId, this.usersTargetsId})
       : super(key: key);
@@ -87,7 +86,6 @@ class TargetsElemsListState extends State<TargetsElemsList> {
                   child: ChkAction(
                     datTE: tes[j],
                     datChk: chks[i],
-                    keyTargElemList: widget.key,
                   ),
                 ));
               }

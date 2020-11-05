@@ -11,22 +11,21 @@ class InstalacionSel extends StatefulWidget {
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
-  InstalacionSel(
-      {this.chk,
-      this.keyBloques,
-      this.keyAreas,
-      this.keyPreguntas,
-      this.keyTargElemList});
+  InstalacionSel({
+    this.chk,
+    this.keyBloques,
+    this.keyAreas,
+    this.keyPreguntas,
+  });
 
   @override
   InstalacionSelState createState() => InstalacionSelState(
-      chk: chk,
-      keyPreguntas: keyPreguntas,
-      keyBloques: keyBloques,
-      keyAreas: keyAreas,
-      keyTargElemList: keyTargElemList);
+        chk: chk,
+        keyPreguntas: keyPreguntas,
+        keyBloques: keyBloques,
+        keyAreas: keyAreas,
+      );
 }
 
 class InstalacionSelState extends State<InstalacionSel> {
@@ -34,7 +33,6 @@ class InstalacionSelState extends State<InstalacionSel> {
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   var chkId;
   var datosVis;
@@ -44,12 +42,12 @@ class InstalacionSelState extends State<InstalacionSel> {
 
   var db = DB.instance;
 
-  InstalacionSelState(
-      {this.chk,
-      this.keyBloques,
-      this.keyAreas,
-      this.keyPreguntas,
-      this.keyTargElemList});
+  InstalacionSelState({
+    this.chk,
+    this.keyBloques,
+    this.keyAreas,
+    this.keyPreguntas,
+  });
 
   @override
   Widget build(BuildContext context) {

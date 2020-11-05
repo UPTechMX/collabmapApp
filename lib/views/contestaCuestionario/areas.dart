@@ -12,7 +12,6 @@ class Areas extends StatefulWidget {
   GlobalKey<BloquesBtnState> KeyBloques;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
-  GlobalKey<TargetsElemsListState> KeyTargElemList;
 
   Map areasAct = new Map();
   String activo;
@@ -25,7 +24,6 @@ class Areas extends StatefulWidget {
       this.KeyBloques,
       this.KeyPreguntas,
       this.KeyPregunta,
-      this.KeyTargElemList,
       this.areasAct,
       this.activo})
       : super(key: key);

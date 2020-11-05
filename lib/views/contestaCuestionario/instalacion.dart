@@ -6,13 +6,11 @@ class Instalacion extends StatelessWidget {
   Checklist chk;
   int instId;
   String nombre;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   Instalacion({
     this.instId,
     this.chk,
     this.nombre,
-    this.keyTargElemList,
   });
 
   @override

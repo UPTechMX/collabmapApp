@@ -10,7 +10,6 @@ class BloquesBtn extends StatefulWidget {
   GlobalKey<AreasState> KeyAreas;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
-  GlobalKey<TargetsElemsListState> KeyTargElemList;
   Map bloquesAct;
   String activo;
 
@@ -20,7 +19,6 @@ class BloquesBtn extends StatefulWidget {
     this.KeyAreas,
     this.KeyPreguntas,
     this.KeyPregunta,
-    this.KeyTargElemList,
     this.bloquesAct,
     this.activo,
   }) : super(key: key);

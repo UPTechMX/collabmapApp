@@ -14,7 +14,6 @@ class InstalacionesList extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> keyPreguntas;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   InstalacionesList({
     this.chk,
@@ -22,7 +21,6 @@ class InstalacionesList extends StatefulWidget {
     this.keyAreas,
     this.keyPreguntas,
     this.keyPregunta,
-    this.keyTargElemList,
   });
 
   @override
@@ -41,20 +39,19 @@ class InstalacionesListState extends State<InstalacionesList> {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> keyPreguntas;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   var db = DB.instance;
 
   var datosChk;
   int chkId;
 
-  InstalacionesListState(
-      {this.chk,
-      this.keyBloques,
-      this.keyAreas,
-      this.keyPreguntas,
-      this.keyPregunta,
-      this.keyTargElemList});
+  InstalacionesListState({
+    this.chk,
+    this.keyBloques,
+    this.keyAreas,
+    this.keyPreguntas,
+    this.keyPregunta,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +66,6 @@ class InstalacionesListState extends State<InstalacionesList> {
 //            print(inst);
             return Instalacion(
               chk: chk,
-              keyTargElemList: keyTargElemList,
               instId: inst['id'],
               nombre: inst['nombre'],
             );

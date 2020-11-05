@@ -13,7 +13,6 @@ class PreguntasCont extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> llave;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   Checklist chk;
   String bId;
@@ -21,18 +20,17 @@ class PreguntasCont extends StatefulWidget {
   String pId;
   String pagina;
 
-  PreguntasCont(
-      {Key key,
-      this.chk,
-      this.bId,
-      this.aId,
-      this.pId,
-      this.pagina,
-      this.keyAreas,
-      this.keyBloques,
-      this.keyPregunta,
-      this.keyTargElemList})
-      : super(key: key);
+  PreguntasCont({
+    Key key,
+    this.chk,
+    this.bId,
+    this.aId,
+    this.pId,
+    this.pagina,
+    this.keyAreas,
+    this.keyBloques,
+    this.keyPregunta,
+  }) : super(key: key);
 
   @override
   PreguntasContState createState() => PreguntasContState(
@@ -68,7 +66,6 @@ class PreguntasContState extends State<PreguntasCont> {
             KeyPreguntas: widget.key,
             keyAreas: widget.keyAreas,
             keyBloques: widget.keyBloques,
-            keyTargElemList: widget.keyTargElemList,
           ),
         );
       case 'general':
@@ -78,7 +75,6 @@ class PreguntasContState extends State<PreguntasCont> {
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
           keyPregunta: widget.keyPregunta,
-          keyTargElemList: widget.keyTargElemList,
         );
       case 'instalacion':
         return Instalaciones(
@@ -86,7 +82,6 @@ class PreguntasContState extends State<PreguntasCont> {
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
           keyPreguntas: widget.key,
-          keyTargElemList: widget.keyTargElemList,
         );
       case 'fotografias':
         return Fotografias(
@@ -94,7 +89,6 @@ class PreguntasContState extends State<PreguntasCont> {
           keyPreguntas: widget.key,
           keyAreas: widget.keyAreas,
           keyBloques: widget.keyBloques,
-          keyTargElemList: widget.keyTargElemList,
         );
     }
   }

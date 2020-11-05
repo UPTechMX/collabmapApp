@@ -14,7 +14,6 @@ class General extends StatefulWidget {
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<PreguntaState> keyPregunta;
-  GlobalKey<TargetsElemsListState> keyTargElemList;
 
   Checklist chk;
   String bId;
@@ -28,7 +27,6 @@ class General extends StatefulWidget {
       this.keyAreas,
       this.keyBloques,
       this.keyPregunta,
-      this.keyTargElemList,
       this.bId,
       this.aId,
       this.pId})
