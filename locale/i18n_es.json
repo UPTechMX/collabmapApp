@@ -53,7 +53,7 @@
     "male": "Hombre",
     "female": "Mujer",
     "no_consultations": "No existen consultas abiertas en este momento",
-    "empty": "No se encontraron resultados.",
+    "empty": "Hacé click en las flechas de la esquina derecha para poder contestar cuestionarios.",
     "consultations": "Consultas",
     "describe": "Describe",
     "finalize": "Finalizar",
