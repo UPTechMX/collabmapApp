@@ -95,7 +95,7 @@ class MapWidgetState extends State<MapWidget> {
       recentrar = false;
     }
 
-    double zoom = 13;
+    double zoom = 15;
 
     List poligonos = widget.spatialData['studyareas'];
     double n = -360;
@@ -126,7 +126,7 @@ class MapWidgetState extends State<MapWidget> {
 
         Polygon polygon = Polygon(
           points: subPolygonPoints,
-          color: Color.fromARGB(110, 125, 124, 128),
+          color: Color.fromARGB(110, 255, 215, 0),
         );
         polygons.add(polygon);
       }
@@ -469,8 +469,8 @@ class MapWidgetState extends State<MapWidget> {
                 options: MapOptions(
                   center: center,
                   minZoom: 10,
-                  maxZoom: 17.0,
-                  zoom: 12,
+                  maxZoom: 20.0,
+                  zoom: 15,
 //                  swPanBoundary: LatLng(s, w),
 //                  nePanBoundary: LatLng(n, e),
                   onTap: (latlng) {
