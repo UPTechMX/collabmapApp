@@ -228,9 +228,10 @@ class ChkActionState extends State<ChkAction> {
 
   Widget answerSurvey({int elemId, int checklistId}) {
     return FlatButton(
+      color: Color(0xFF94C122),
       child: Text(
         '${Translations.of(context).text('answerSurvey')}',
-        style: TextStyle(color: Colors.grey[600]),
+        style: TextStyle(color: Colors.grey[50]),
       ),
       onPressed: () {
         creaVisita(elemId: elemId, checklistId: checklistId);
@@ -240,9 +241,11 @@ class ChkActionState extends State<ChkAction> {
 
   Widget cont({int vId, int checklistId}) {
     return FlatButton(
+      color: Color(0xFF94C122),
+      padding: EdgeInsets.all(0.5),
       child: Text(
         '${Translations.of(context).text('continue')}',
-        style: TextStyle(color: Colors.grey[600]),
+        style: TextStyle(color: Colors.grey[50]),
       ),
       onPressed: () {
         goToSurvey(vId: vId);
