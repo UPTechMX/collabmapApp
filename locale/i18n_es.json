@@ -43,7 +43,7 @@
     "draft": "Guardar",
     "not_editable": "Esta consulta no permite ediciones",
     "save_draft": "Guardar",
-    "sending_data": "Enviando datos",
+    "sending_data": "Sincronización en curso",
     "receiving_data": "Recibiendo datos",
     "close": "Cerrar",
     "edit": "Editar",
@@ -53,12 +53,12 @@
     "male": "Hombre",
     "female": "Mujer",
     "no_consultations": "No existen consultas abiertas en este momento",
-    "empty": "Hacé click en las flechas de la esquina derecha para poder contestar cuestionarios.",
+    "empty": "Hacé click en las flechas de la esquina derecha para descargar y contestar los cuestionarios activos. \n\nDebes tener conexión a internet para sincronizar los datos.",
     "consultations": "Consultas",
     "describe": "Describe",
     "finalize": "Finalizar",
     "data_saved": "Los datos fueron guardados correctamente. Para editar la figura (punto, línea, polígono), simplemente genere una nueva.",
-    "sync_rquired": "Sincronización requerida",
+    "sync_rquired": "Sincroniza el dispositivo",
     "finish_map": "Finalizar y regresar al cuestionario",
     "filters": "Filtrar para mejorar la búsqueda",
     "filter": "Filtrar",
@@ -73,7 +73,8 @@
     "ongoing": "En curso",
     "none": "Ninguno",
     "participate": "Quiero participar",
-    "accmapandsurveys": "Mapas y cuestionarios",
+    "participate2": "Participar",
+    "accmapandsurveys": "Cuestionarios",
     "acccomplaints": "Quejas y reclamos",
     "accdocuments": "Documentos de consulta",
     "geometries": "Geographic information",
@@ -301,7 +302,9 @@
     "noAccess": "Sin acceso al sistema",
     "administratior": "Aministrador",
     "superuser": "Superusuario",
-    "level": "Nivel"
+    "level": "Nivel",
 
-
+    "resp_spatial": "Ubicación registrada",
+    "resp_cm": "Problema reportado",
+    "resp_op": "Punto registrado"
 }

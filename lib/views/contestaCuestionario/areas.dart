@@ -92,7 +92,7 @@ class AreasState extends State<Areas> {
                               color: areasAct[area['identificador']] == 1
                                   ? Colors.green
                                   : Colors.grey,
-                              fontSize: 12,
+                              fontSize: 13,
                             ),
                           ),
                         ),

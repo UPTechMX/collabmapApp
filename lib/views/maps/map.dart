@@ -126,7 +126,7 @@ class MapWidgetState extends State<MapWidget> {
 
         Polygon polygon = Polygon(
           points: subPolygonPoints,
-          color: Color.fromARGB(110, 125, 124, 128),
+          color: Color.fromARGB(90, 84, 255, 1),
         );
         polygons.add(polygon);
       }
@@ -469,8 +469,8 @@ class MapWidgetState extends State<MapWidget> {
                 options: MapOptions(
                   center: center,
                   minZoom: 10,
-                  maxZoom: 17.0,
-                  zoom: 12,
+                  maxZoom: 20.0,
+                  zoom: 13.5,
 //                  swPanBoundary: LatLng(s, w),
 //                  nePanBoundary: LatLng(n, e),
                   onTap: (latlng) {
