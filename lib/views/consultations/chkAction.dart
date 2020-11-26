@@ -242,7 +242,7 @@ class ChkActionState extends State<ChkAction> {
   Widget cont({int vId, int checklistId}) {
     return FlatButton(
       color: Color(0xFF94C122),
-      padding: EdgeInsets.all(0.5),
+      padding: EdgeInsets.all(8.5),
       child: Text(
         '${Translations.of(context).text('continue')}',
         style: TextStyle(color: Colors.grey[50]),

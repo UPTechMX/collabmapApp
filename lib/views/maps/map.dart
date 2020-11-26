@@ -208,7 +208,8 @@ class MapWidgetState extends State<MapWidget> {
 //            print(points);
             polylinesProblems.add(Polyline(
               points: points,
-              strokeWidth: 4.0,
+              strokeWidth: 5.0,
+              borderColor: Colors.purple.withOpacity(.8),
               color: Colors.purple.withOpacity(.8),
             ));
           }
@@ -358,7 +359,8 @@ class MapWidgetState extends State<MapWidget> {
       polylines: [
         Polyline(
           points: PlPoints,
-          strokeWidth: 4.0,
+          strokeWidth: 5.0,
+          borderColor: Colors.purple.withOpacity(.8),
           color: Colors.purple.withOpacity(.8),
         ),
       ],
@@ -371,9 +373,10 @@ class MapWidgetState extends State<MapWidget> {
       polylines: [
         Polyline(
           points: PgPointsL,
-          strokeWidth: 4.0,
+          strokeWidth: 5.0,
           isDotted: false,
           color: Colors.lightBlue.withOpacity(.8),
+          borderColor: Colors.lightBlue.withOpacity(.8),
         ),
       ],
     );
@@ -384,9 +387,10 @@ class MapWidgetState extends State<MapWidget> {
         polylines: [
           Polyline(
             points: [PgPointsL[0], PgPointsL.last],
-            strokeWidth: 4.0,
+            strokeWidth: 5.0,
             isDotted: true,
             color: Colors.lightBlue.withOpacity(.8),
+            borderColor: Colors.lightBlue.withOpacity(.8),
           ),
         ],
       );
@@ -470,7 +474,7 @@ class MapWidgetState extends State<MapWidget> {
                   center: center,
                   minZoom: 10,
                   maxZoom: 20.0,
-                  zoom: 15,
+                  zoom: 13.5,
 //                  swPanBoundary: LatLng(s, w),
 //                  nePanBoundary: LatLng(n, e),
                   onTap: (latlng) {

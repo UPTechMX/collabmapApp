@@ -78,6 +78,7 @@ class BloquesBtnState extends State<BloquesBtn> {
                               color: bloquesAct[bloque['identificador']] == 1
                                   ? Colors.amber
                                   : Colors.grey,
+                              fontSize: 15.0,
                             ),
                           ),
                         ),

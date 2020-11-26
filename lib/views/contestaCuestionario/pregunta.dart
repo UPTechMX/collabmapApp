@@ -142,7 +142,7 @@ class PreguntaState extends State<Pregunta> {
                     ),
               Text(
                 parseHtmlString(preg['pregunta']),
-                style: TextStyle(fontWeight: FontWeight.bold),
+                style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16.5),
               ),
               respuestas(preg),
               justif == 1
