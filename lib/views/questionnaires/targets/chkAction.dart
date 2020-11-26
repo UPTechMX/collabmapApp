@@ -195,6 +195,7 @@ class ChkActionState extends State<ChkAction> {
         '${Translations.of(context).text('answerSurvey')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
+      color: Color(0xFF4068B2),
       onPressed: () {
         creaVisita(
           elemId: elemId,
@@ -212,6 +213,7 @@ class ChkActionState extends State<ChkAction> {
         '${Translations.of(context).text('continue')}',
         style: TextStyle(color: Colors.grey[600]),
       ),
+      color: Color(0xFF4068B2),
       onPressed: () {
         goToSurvey(
           vId: vId,
