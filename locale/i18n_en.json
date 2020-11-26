@@ -53,7 +53,7 @@
     "male": "Male",
     "female": "Female",
     "no_consultations": "There are no open consultations at this time",
-    "empty": "Click on the arrows in the upper right corner to download and answer active surveys. <br/> To synchronize data, make sure you have internet connection.",
+    "empty": "Click on the arrows in the upper right corner to download and answer active surveys. \n\nTo synchronize data, make sure you have internet connection.",
     "consultations": "Consultations",
     "describe": "Describe",
     "finalize": "Finalize",

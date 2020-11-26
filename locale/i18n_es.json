@@ -53,7 +53,7 @@
     "male": "Hombre",
     "female": "Mujer",
     "no_consultations": "No existen consultas abiertas en este momento",
-    "empty": "Hacé click en las flechas de la esquina derecha para descargar y contestar los cuestionarios activos. <br/>Debes tener conexión a internet para sincronizar los datos.",
+    "empty": "Hacé click en las flechas de la esquina derecha para descargar y contestar los cuestionarios activos. \n\nDebes tener conexión a internet para sincronizar los datos.",
     "consultations": "Consultas",
     "describe": "Describe",
     "finalize": "Finalizar",
