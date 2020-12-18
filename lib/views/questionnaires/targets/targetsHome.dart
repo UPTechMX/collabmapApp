@@ -58,7 +58,7 @@ class TargetsHome extends StatelessWidget {
   elemento({var datos}) {
     return UserTarget(
       datos: datos,
-      key: keyUser,
+      //key: keyUser,
       keyUser: keyUser,
     );
   }
