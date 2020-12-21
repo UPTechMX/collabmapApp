@@ -13,7 +13,6 @@ class Registro extends StatefulWidget {
 }
 
 class RegistroState extends State<Registro> {
-
   TextEditingController usernameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController firstnameController = TextEditingController();
@@ -31,15 +30,14 @@ class RegistroState extends State<Registro> {
 
   @override
   Widget build(BuildContext context) {
-
     List genders = [
-      {'value':'F','name':Translations.of(context).text('female')},
-      {'value':'M','name':Translations.of(context).text('male')},
-      {'value':'X','name':Translations.of(context).text('prefer_not_answer')}
+      {'value': 'F', 'name': Translations.of(context).text('female')},
+      {'value': 'M', 'name': Translations.of(context).text('male')},
+      {'value': 'X', 'name': Translations.of(context).text('prefer_not_answer')}
     ];
     List items = new List<DropdownMenuItem>();
 
-    for(int i = 0;i<genders.length;i++){
+    for (int i = 0; i < genders.length; i++) {
       var gender = genders[i];
       var item = DropdownMenuItem(
         child: Text(
@@ -58,21 +56,18 @@ class RegistroState extends State<Registro> {
           filled: true,
           fillColor: Colors.white,
           contentPadding: EdgeInsets.fromLTRB(20.0, 0, 20.0, 0),
-        isDense: true,
-        border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(5.0)
-        )
-      ),
+          isDense: true,
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(5.0))),
       value: genderSel,
       hint: Text(Translations.of(context).text('gender')),
-      onChanged: (value){
+      onChanged: (value) {
         setState(() {
           genderSel = value;
         });
       },
     );
 
-    Future<void> Alert({BuildContext context,String texto}) async {
+    Future<void> Alert({BuildContext context, String texto}) async {
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -97,6 +92,31 @@ class RegistroState extends State<Registro> {
       );
     }
 
+    Future<void> RegistroExitoso({BuildContext context, String texto}) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+//          title: Text('Point alert'),
+            content: SingleChildScrollView(
+              child: Center(
+                child: Text(texto),
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(Translations.of(context).text('ok')),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
 
     return Pagina(
       esLista: false,
@@ -110,15 +130,14 @@ class RegistroState extends State<Registro> {
             children: <Widget>[
               Container(
                 padding: EdgeInsets.all(15),
-                color: Color(0xFF2568D8),
+                color: Color(0xFFF8B621),
                 child: Center(
                   child: Text(
                     Translations.of(context).text('new_user').toUpperCase(),
                     style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold
-                    ),
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
@@ -130,60 +149,50 @@ class RegistroState extends State<Registro> {
                     Translations.of(context).text('generaldata').toUpperCase(),
                     style: TextStyle(
 //                      fontSize: 25,
-                      fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               TextField(
                 controller: emailController,
-                onChanged: (text){
+                onChanged: (text) {
                   emailChange = text;
                 },
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-
                     hintText: Translations.of(context).text("email"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
               SizedBox(height: 20.0),
               TextField(
                 controller: firstnameController,
-                onChanged: (text){
+                onChanged: (text) {
                   firstnameChange = text;
                 },
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-
                     hintText: Translations.of(context).text("first_name"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
               SizedBox(height: 20.0),
               TextField(
                 controller: lastnameController,
-                onChanged: (text){
+                onChanged: (text) {
                   lastnameChange = text;
                 },
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-
                     hintText: Translations.of(context).text("last_name"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
               SizedBox(height: 20.0),
               genderSelector,
@@ -191,19 +200,16 @@ class RegistroState extends State<Registro> {
               TextField(
                 keyboardType: TextInputType.number,
                 controller: ageController,
-                onChanged: (text){
+                onChanged: (text) {
                   ageChange = text;
                 },
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-
                     hintText: Translations.of(context).text("age"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
               SizedBox(height: 15.0),
               Container(
@@ -213,14 +219,13 @@ class RegistroState extends State<Registro> {
                     Translations.of(context).text('userdata').toUpperCase(),
                     style: TextStyle(
 //                      fontSize: 25,
-                        fontWeight: FontWeight.bold
-                    ),
+                        fontWeight: FontWeight.bold),
                   ),
                 ),
               ),
               TextField(
                 controller: usernameController,
-                onChanged: (text){
+                onChanged: (text) {
                   usernameChange = text;
                 },
                 decoration: InputDecoration(
@@ -229,68 +234,64 @@ class RegistroState extends State<Registro> {
                     hintText: Translations.of(context).text("username"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
               SizedBox(height: 20.0),
               TextField(
                 controller: passwordController,
-                onChanged: (text){
+                onChanged: (text) {
                   passwordChange = text;
                 },
                 obscureText: true,
                 decoration: InputDecoration(
                     filled: true,
                     fillColor: Colors.white,
-
                     hintText: Translations.of(context).text("password"),
                     contentPadding: EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10),
                     border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(5.0)
-                    )
-                ),
+                        borderRadius: BorderRadius.circular(5.0))),
               ),
-
               SizedBox(height: 20.0),
-              PrivCheckReg(setPriv: setPriv,),
+              PrivCheckReg(
+                setPriv: setPriv,
+              ),
               Padding(
                 padding: EdgeInsets.symmetric(vertical: 16.0),
                 child: RaisedButton(
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(24),
                   ),
-                  onPressed: ()async{
+                  onPressed: () async {
                     bool allOk = true;
-                    if(usernameChange == null || usernameChange == ''){
+                    if (usernameChange == null || usernameChange == '') {
                       allOk = false;
                     }
-                    if(emailChange == null || emailChange == ''){
+                    if (emailChange == null || emailChange == '') {
                       allOk = false;
                     }
-                    if(firstnameChange == null || firstnameChange == ''){
+                    if (firstnameChange == null || firstnameChange == '') {
                       allOk = false;
                     }
-                    if(lastnameChange == null || lastnameChange == ''){
+                    if (lastnameChange == null || lastnameChange == '') {
                       allOk = false;
                     }
-                    if(passwordChange == null || passwordChange == ''){
+                    if (passwordChange == null || passwordChange == '') {
                       allOk = false;
                     }
-                    if(ageChange == null || ageChange == ''){
+                    if (ageChange == null || ageChange == '') {
 //                    allOk = false;
                       ageChange = '0';
                     }
-                    if(genderSel == null || genderSel == ''){
+                    if (genderSel == null || genderSel == '') {
 //                    allOk = false;
                       genderSel = 'X';
                     }
-                    if(privacidad == false){
+                    if (privacidad == false) {
                       allOk = false;
                     }
 
 //                  print('allOk : $allOk');
-                    if(allOk){
+                    if (allOk) {
                       Map datos = Map();
                       datos['username'] = usernameChange;
                       datos['email'] = emailChange;
@@ -313,20 +314,25 @@ class RegistroState extends State<Registro> {
                         imprime: true,
                       );
                       print(resp);
-                      if(resp != null && resp['ok'] == 1){
-                        Navigator.of(context).pop();
-                        Alert(texto: Translations.of(context).text('user_created'));
-                      }else
-                      if(resp != null && resp['ok'] == 2){
-                        Alert(context: context,texto: Translations.of(context).text('userExist'));
-                      }else if(resp != null){
-                        Alert(context: context,texto: resp['err']);
+                      if (resp != null && resp['ok'] == 1) {
+                        //Navigator.of(context).pop();
+                        RegistroExitoso(
+                            context: context,
+                            texto:
+                                Translations.of(context).text('user_created'));
+                      } else if (resp != null && resp['ok'] == 2) {
+                        Alert(
+                            context: context,
+                            texto: Translations.of(context).text('userExist'));
+                      } else if (resp != null) {
+                        Alert(context: context, texto: resp['err']);
                       }
                     }
                   },
                   padding: EdgeInsets.all(12),
                   color: Colors.lightBlueAccent,
-                  child: Text(Translations.of(context).text("send"), style: TextStyle(color: Colors.white)),
+                  child: Text(Translations.of(context).text("send"),
+                      style: TextStyle(color: Colors.white)),
                 ),
               )
             ],
@@ -336,15 +342,13 @@ class RegistroState extends State<Registro> {
     );
   }
 
-  setPriv(bool a){
+  setPriv(bool a) {
     print('a: $a');
     privacidad = a;
   }
-
 }
 
 class PrivCheckReg extends StatefulWidget {
-
   var setPriv;
 
   PrivCheckReg({this.setPriv});
@@ -354,53 +358,49 @@ class PrivCheckReg extends StatefulWidget {
 }
 
 class _PrivCheckRegState extends State<PrivCheckReg> {
-
   bool activo = false;
 
   @override
   Widget build(BuildContext context) {
     return Container(
         child: Column(
+      children: <Widget>[
+        Row(
           children: <Widget>[
-            Row(
-              children: <Widget>[
-                Expanded(
-                  flex: 1,
-                  child: Checkbox(
-                    value: activo,
-                    onChanged: (a){
-                      widget.setPriv(a);
-                      setState(() {
-                        activo = a;
-                      });
-                    },
+            Expanded(
+              flex: 1,
+              child: Checkbox(
+                value: activo,
+                onChanged: (a) {
+                  widget.setPriv(a);
+                  setState(() {
+                    activo = a;
+                  });
+                },
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: FlatButton(
+                child: Text(
+                  Translations.of(context)
+                      .text('noticeofprivacyAgree')
+                      .toUpperCase(),
+                  style: TextStyle(
+                    color: Color(0xFFF8B621),
                   ),
                 ),
-                Expanded(
-                  flex: 3,
-                  child: FlatButton(
-                    child: Text(
-                      Translations.of(context).text('noticeofprivacyAgree').toUpperCase(),
-                      style: TextStyle(
-                        color: Color(0xFF2568D8),
-                      ),
-                    ),
-                    onPressed: (){
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context)=>
-                              Privacidad()
-                          )
-                      );
-                    },
-                  ),
-                )
-              ],
-            ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => Privacidad()));
+                },
+              ),
+            )
           ],
-        )
-    );
+        ),
+      ],
+    ));
   }
-
-
-
 }

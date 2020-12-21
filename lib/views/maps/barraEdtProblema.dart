@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:siap/models/componentes/iconos.dart';
 
 class BarritaEdtProblema extends StatefulWidget {
-
   String actividad;
   var aceptar;
   var cancelar;
@@ -10,14 +9,20 @@ class BarritaEdtProblema extends StatefulWidget {
   var delPunto;
   String type;
 
-  BarritaEdtProblema({Key key,this.aceptar,this.addPunto,this.delPunto,this.type,this.cancelar}):super(key:key);
+  BarritaEdtProblema(
+      {Key key,
+      this.aceptar,
+      this.addPunto,
+      this.delPunto,
+      this.type,
+      this.cancelar})
+      : super(key: key);
 
   @override
   BarritaEdtProblemaState createState() => BarritaEdtProblemaState();
 }
 
 class BarritaEdtProblemaState extends State<BarritaEdtProblema> {
-
   String actividad;
 
   @override
@@ -34,55 +39,57 @@ class BarritaEdtProblemaState extends State<BarritaEdtProblema> {
         children: <Widget>[
           Expanded(
             flex: 3,
-            child: widget.type != 'Marker'?IconButton(
-              icon: Icono(
-                svgName: 'addMarker',
-                color: actividad == 'add'?Colors.blue:Colors.grey,
-                width: 50,
-              ),
-              onPressed: (){
-                if(actividad == 'add'){
-                  setAct(null);
-                  widget.addPunto('null');
-                }else{
-                  setAct('add');
-                  widget.addPunto('addMarkerPrb');
-                }
+            child: widget.type != 'Marker'
+                ? IconButton(
+                    icon: Icono(
+                      svgName: 'addMarker',
+                      color: actividad == 'add' ? Colors.amber : Colors.grey,
+                      width: 50,
+                    ),
+                    onPressed: () {
+                      if (actividad == 'add') {
+                        setAct(null);
+                        widget.addPunto('null');
+                      } else {
+                        setAct('add');
+                        widget.addPunto('addMarkerPrb');
+                      }
 //                widget.undo();
-              },
-            ):
-            IconButton(
-              icon: Icon(
-                Icons.cancel,
-                color: Colors.grey,
-                size: 30,
-              ),
-              onPressed: (){
-                widget.cancelar();
-              },
-            ),
+                    },
+                  )
+                : IconButton(
+                    icon: Icon(
+                      Icons.cancel,
+                      color: Colors.grey,
+                      size: 30,
+                    ),
+                    onPressed: () {
+                      widget.cancelar();
+                    },
+                  ),
           ),
           Expanded(
             flex: 3,
-            child: widget.type != 'Marker'?IconButton(
-              icon: Icono(
-                svgName: 'delMarker',
-                color: actividad == 'add'?Colors.blue:Colors.grey,
-                width: 50,
-              ),
-              onPressed: (){
-                if(actividad == 'del'){
-                  setAct(null);
-                  widget.delPunto(null);
-                }else{
-                  setAct('del');
-                  widget.delPunto('delMarker');
-                }
+            child: widget.type != 'Marker'
+                ? IconButton(
+                    icon: Icono(
+                      svgName: 'delMarker',
+                      color: actividad == 'add' ? Colors.amber : Colors.grey,
+                      width: 50,
+                    ),
+                    onPressed: () {
+                      if (actividad == 'del') {
+                        setAct(null);
+                        widget.delPunto(null);
+                      } else {
+                        setAct('del');
+                        widget.delPunto('delMarker');
+                      }
 
 //                widget.undo();
-              },
-            ):
-            Container(),
+                    },
+                  )
+                : Container(),
           ),
           Expanded(
             flex: 3,
@@ -92,7 +99,7 @@ class BarritaEdtProblemaState extends State<BarritaEdtProblema> {
                 color: Colors.grey,
                 size: 30,
               ),
-              onPressed: (){
+              onPressed: () {
                 widget.aceptar();
               },
             ),
@@ -102,11 +109,9 @@ class BarritaEdtProblemaState extends State<BarritaEdtProblema> {
     );
   }
 
-  setAct(String act){
+  setAct(String act) {
     setState(() {
       actividad = act;
     });
   }
 }
-
-

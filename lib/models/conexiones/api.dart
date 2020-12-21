@@ -14,36 +14,39 @@ import 'package:siap/models/translations.dart';
 import 'package:latlong/latlong.dart';
 
 //String urlHtml = 'http://paraguaytest.collabmap.in';
-String urlHtml = 'http://192.168.1.104/~juanma/collabmap';
+String urlHtml = 'http://tacumbu.collabmap.in';
 String SERVER = '$urlHtml/api/public/siapApp/';
 
-Future getDatos({String opt,String varNom = null, bool imprime,bool cache = false}) async {
+Future getDatos(
+    {String opt,
+    String varNom = null,
+    bool imprime,
+    bool cache = false}) async {
   var respuesta;
   SharedPreferences userData = await SharedPreferences.getInstance();
   String body;
-  try{
+  try {
     String url = '${SERVER}$opt';
-    if(imprime) {
+    if (imprime) {
 //      print(url);
     }
     final response = await http.get(url);
     if (response.statusCode == 200) {
       body = utf8.decode(response.bodyBytes);
-      if(imprime){
+      if (imprime) {
 //        print('Inicia respuesta del server');
 //        print(body);
 //        print('Finaliza respuesta del server');
       }
 
-      if(varNom != null){
+      if (varNom != null) {
         userData.setString(varNom, body);
       }
 
       respuesta = jsonDecode(body);
-    
     } else {
       body = utf8.decode(response.bodyBytes);
-      if(imprime){
+      if (imprime) {
         print('Inicia respuesta del serverErr');
         print(body);
         print('Finaliza respuesta del serverErr');
@@ -52,22 +55,22 @@ Future getDatos({String opt,String varNom = null, bool imprime,bool cache = fals
       throw Exception('Failed to load post');
       //    If that call was not successful, throw an error.
     }
-  }catch(e){
-
+  } catch (e) {
     print('Error 02 = $e');
-    if(cache){
+    if (cache) {
       respuesta = jsonDecode(userData.getString(varNom));
-    }else{
+    } else {
       respuesta = null;
     }
   }
   return respuesta;
 }
 
-Future<List> sendDatos({List problems, bool imprime = false, String token = null}) async {
+Future<List> sendDatos(
+    {List problems, bool imprime = false, String token = null}) async {
   DB db = DB.instance;
 
-  if(token == null){
+  if (token == null) {
     SharedPreferences userData = await SharedPreferences.getInstance();
     String username = userData.getString('username');
     String password = userData.getString('password');
@@ -76,48 +79,45 @@ Future<List> sendDatos({List problems, bool imprime = false, String token = null
   }
   String dir = (await getApplicationDocumentsDirectory()).path;
 
-  for(int i = 0; i<problems.length;i++){
+  for (int i = 0; i < problems.length; i++) {
     Map problem = problems[i];
-    try{
+    try {
       var url = '${SERVER}surveys/spatial-inputs/';
 
       Map<String, String> headersMap = {
-        'Authorization' : 'Bearer ' + token,
+        'Authorization': 'Bearer ' + token,
       };
 
       var uri = Uri.parse(url);
       http.MultipartRequest request;
 
-
 //      print(problem['del']);
-      if(problem['del'] == 1){
+      if (problem['del'] == 1) {
         print('DEEEEL!');
-        if(problem['idServer'] != null){
+        if (problem['idServer'] != null) {
 //          print('ELIM SERVER');
           uri = Uri.parse('${url}${problem['idServer']}/');
 //          print('${url}${problem['idServer']}/');
           request = new http.MultipartRequest("delete", uri);
-        }else{
+        } else {
 //          print('ELIM LOCAL');
           db.query('DELETE FROM problems WHERE id = ${problem['id']}');
-          if(problem['photo'] != null){
+          if (problem['photo'] != null) {
             File foto = File('$dir/fotos/${problem['photo']}');
             foto.delete(recursive: true);
           }
           continue;
         }
-
-      }else if(problem['edit'] == 1  && problem['idServer'] != null){
+      } else if (problem['edit'] == 1 && problem['idServer'] != null) {
         print('EDITA');
         uri = Uri.parse('${url}${problem['idServer']}/');
 //        print('${url}${problem['idServer']}/');
         request = new http.MultipartRequest("patch", uri);
-      }else{
-
-          if(problem['idServer'] == null || problem['idServer'] == ''){
-            print('NUEVO ${problem}');
-            request = new http.MultipartRequest("POST", uri);
-          }
+      } else {
+        if (problem['idServer'] == null || problem['idServer'] == '') {
+          print('NUEVO ${problem}');
+          request = new http.MultipartRequest("POST", uri);
+        }
       }
 
       print('HEADERS: $headersMap');
@@ -128,49 +128,47 @@ Future<List> sendDatos({List problems, bool imprime = false, String token = null
       request.fields['description'] = '${problem['description']}';
       request.fields['category'] = '${problem['category']}';
       request.fields['geometry'] = jsonEncode(problem['geometry']);
-      if(problem['edit'] == 1  && problem['idServer'] != null){
+      if (problem['edit'] == 1 && problem['idServer'] != null) {
 //        print('EDIT ${problem['idServer']}');
 //        request.fields['id'] = '${problem['idServer']}';
       }
 //      print('description : ${problem['description']}');
 //      print(jsonEncode(problem['geometry']));
-      try{
-        request.files.add(await http.MultipartFile.fromPath('photo', '$dir/fotos/${problem['photo']}'));
-      }catch(e){
+      try {
+        request.files.add(await http.MultipartFile.fromPath(
+            'photo', '$dir/fotos/${problem['photo']}'));
+      } catch (e) {
         print('Err cargar foto para envío');
         print(e);
       }
       var response = await request.send();
 
 //      print("MANDA DATOS ESPACIALES");
-      if(response.statusCode == 201){
+      if (response.statusCode == 201) {
         db.query('DELETE FROM problems WHERE id = ${problem['id']}');
-        if(problem['photo'] != null){
+        if (problem['photo'] != null) {
           File foto = File('$dir/fotos/${problem['photo']}');
           foto.delete(recursive: true);
         }
-        if(imprime){
+        if (imprime) {
           print('EMPIEZA');
-          print('RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
+          print(
+              'RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
           print('TERMINA');
         }
-
-      }else{
+      } else {
         print('EMPIEZA Err');
         print('RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
         print('TERMINA Err');
       }
-
-    }catch(e){
+    } catch (e) {
       print('Error 03 = $e');
     }
   }
-
 }
 
 sendOneProblem({Map problem, bool imprime = false}) async {
   DB db = DB.instance;
-
 
   SharedPreferences userData = await SharedPreferences.getInstance();
   String username = userData.getString('username');
@@ -181,10 +179,10 @@ sendOneProblem({Map problem, bool imprime = false}) async {
 
   /////////
 //  Map problem = problems[i];
-  try{
+  try {
     var url = '${SERVER}problems/';
 
-    Map campos = Map<String,dynamic>();
+    Map campos = Map<String, dynamic>();
     campos['consultation'] = '${problem['consultation']}';
     campos['description'] = '${problem['description']}';
     campos['category'] = '${problem['category']}';
@@ -192,18 +190,18 @@ sendOneProblem({Map problem, bool imprime = false}) async {
 //    print(jsonEncode(problem['geometry']));
 
     Map<String, String> headersMap = {
-      'Authorization' : 'Bearer ' + token,
+      'Authorization': 'Bearer ' + token,
     };
 
     var uri = Uri.parse(url);
     var request;
 
 //    print(problem['del']);
-    if(problem['edit'] == 1  && problem['idServer'] != null){
+    if (problem['edit'] == 1 && problem['idServer'] != null) {
       uri = Uri.parse('${url}${problem['idServer']}/');
 //      print('${url}${problem['idServer']}/');
       request = new http.MultipartRequest("patch", uri);
-    }else{
+    } else {
       request = new http.MultipartRequest("POST", uri);
     }
 
@@ -212,85 +210,83 @@ sendOneProblem({Map problem, bool imprime = false}) async {
     request.fields['description'] = '${problem['description']}';
     request.fields['category'] = '${problem['category']}';
     request.fields['geometry'] = jsonEncode(problem['geometry']);
-    if(problem['edit'] == 1  && problem['idServer'] != null){
+    if (problem['edit'] == 1 && problem['idServer'] != null) {
 //      print('EDIT ${problem['idServer']}');
 //        request.fields['id'] = '${problem['idServer']}';
     }
-    try{
-      request.files.add(await http.MultipartFile.fromPath('photo', '$dir/fotos/${problem['photo']}'));
-    }catch(e){
+    try {
+      request.files.add(await http.MultipartFile.fromPath(
+          'photo', '$dir/fotos/${problem['photo']}'));
+    } catch (e) {
       print('Err cargar foto para envío');
       print(e);
     }
     var response = await request.send();
 
-    if(response.statusCode == 201){
+    if (response.statusCode == 201) {
       return jsonDecode(await response.stream.bytesToString());
-    }else{
+    } else {
       print('EMPIEZA');
       print('RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
       print('TERMINA');
     }
-
-  }catch(e){
+  } catch (e) {
     print('Error 04 = $e');
   }
-
-
-
-
-
-
 }
 
-postDatos({Map datos, String opt, bool verif = false,String metodo, bool imprime = false,String token = null}) async {
+postDatos(
+    {Map datos,
+    String opt,
+    bool verif = false,
+    String metodo,
+    bool imprime = false,
+    String token = null}) async {
   DB db = DB.instance;
   var request;
   Map<String, String> headersMap = {};
-  if(verif){
-    if(token == null){
+  if (verif) {
+    if (token == null) {
 //      print('ENTRAAAAA');
       SharedPreferences userData = await SharedPreferences.getInstance();
       String username = userData.getString('username');
-      String password= userData.getString('password');
+      String password = userData.getString('password');
       Post getToken = await loginPost(username, password);
       token = getToken.token;
-      if(imprime){
+      if (imprime) {
         print('TOKEN: $token');
       }
     }
 //    print('TOKEN222: $token');
     headersMap = {
-      'Authorization' : 'Bearer ' + token,
+      'Authorization': 'Bearer ' + token,
     };
   }
 
-  try{
+  try {
     String url = '${SERVER}$opt';
 //    print('URL:  $url');
     var uri = Uri.parse(url);
     request = new http.MultipartRequest(metodo, uri);
     request.headers.addAll(headersMap);
-    for(var i in datos.keys){
+    for (var i in datos.keys) {
       var dato = datos[i];
-      if(dato['type'] == 'String'){
+      if (dato['type'] == 'String') {
         request.fields[dato['name']] = '${dato['value']}';
       }
     }
     var response = await request.send();
 
-
-    if(response.statusCode == 201 || response.statusCode == 200){
+    if (response.statusCode == 201 || response.statusCode == 200) {
       var resp = await response.stream.bytesToString();
-      if(imprime){
+      if (imprime) {
 //        print('- - - - - - - -- ');
         print(resp);
       }
       return jsonDecode(resp);
-    }else{
-
+    } else {
       var resp = await response.stream.bytesToString();
-      if(imprime){
+      if (imprime) {
         print('StatusCode: ${response.statusCode}');
         print('EMPIEZA');
         print('RESPUESTA DEL SERVER: ${resp}');
@@ -298,32 +294,27 @@ postDatos({Map datos, String opt, bool verif = false,String metodo, bool imprime
       }
       return jsonDecode(resp);
     }
-
-
-  }catch(e){
+  } catch (e) {
     print('Errors = $e');
     return null;
   }
-
-
 }
 
-Future getDatos2({String opt,String varNom = null, bool imprime}) async {
+Future getDatos2({String opt, String varNom = null, bool imprime}) async {
   var respuesta;
   SharedPreferences userData = await SharedPreferences.getInstance();
   String body;
 
   String token = userData.getString('token');
   token ??= '';
-  if(imprime){
+  if (imprime) {
     print('Token: $token');
   }
-  try{
+  try {
     String url = '${SERVER}$opt';
 
     Map<String, String> headersMap = {
-
-      'Authorization' : 'Bearer ' + token,
+      'Authorization': 'Bearer ' + token,
     };
 
     var uri = Uri.parse(url);
@@ -331,30 +322,27 @@ Future getDatos2({String opt,String varNom = null, bool imprime}) async {
     request.headers.addAll(headersMap);
     var response = await request.send();
 
-
-    if(response.statusCode == 200){
-      if(imprime){
+    if (response.statusCode == 200) {
+      if (imprime) {
         print('RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
       }
       respuesta = jsonDecode(await response.stream.bytesToString());
-      if(varNom != null){
+      if (varNom != null) {
         userData.setString(varNom, body);
       }
-
-    }else{
+    } else {
       print('EMPIEZA Err');
       print('RESPUESTA DEL SERVER: ${await response.stream.bytesToString()}');
       print('TERMINA Err');
     }
-
-  }catch(e){
+  } catch (e) {
     print('Error 01 = $e');
   }
 
   return respuesta;
 }
 
-Map generaDatoString({String name, var value}){
+Map generaDatoString({String name, var value}) {
   Map resp = Map();
   resp['name'] = name;
   resp['type'] = 'String';
@@ -369,17 +357,18 @@ problemDBtoAPI({Map problemDB}) async {
   String type;
   Map geometry = Map();
   List coordinates = [];
-  List points = await db.query("SELECT * FROM points WHERE problemsId = ${problemDB['id']}");
+  List points = await db
+      .query("SELECT * FROM points WHERE problemsId = ${problemDB['id']}");
   points ??= [];
 //  print('POINTS: $points');
 
 //  print('problemDB: $problemDB');
 
-  switch(problemDB['type']){
+  switch (problemDB['type']) {
     case 'Marker':
       type = 'Point';
 //          print('AAAAA ${points[0]['lng']}');
-      if(points.length>0){
+      if (points.length > 0) {
         coordinates.add(points[0]['lng']);
         coordinates.add(points[0]['lat']);
       }
@@ -389,21 +378,21 @@ problemDBtoAPI({Map problemDB}) async {
       List subPoligono = [];
       List poligono = [];
 //          print(points.length);
-      for(int j = 0;j<points.length;j++){
+      for (int j = 0; j < points.length; j++) {
         List tmp = [];
         tmp.add(points[j]['lng']);
         tmp.add(points[j]['lat']);
         poligono.add(tmp);
 //            subPoligono.add(tmp);
       }
-      if(points.length > 0){
-        poligono.add([points[0]['lng'],points[0]['lat']]);
+      if (points.length > 0) {
+        poligono.add([points[0]['lng'], points[0]['lat']]);
       }
       coordinates.add(poligono);
       break;
     case 'Polyline':
       type = 'LineString';
-      for(int j = 0;j<points.length;j++){
+      for (int j = 0; j < points.length; j++) {
         List tmp = [];
 
         tmp.add(points[j]['lng']);
@@ -430,11 +419,9 @@ problemDBtoAPI({Map problemDB}) async {
   problem['del'] = problemDB['del'];
 
   return problem;
-
 }
 
 sendData() async {
-
   DB db = DB.instance;
 
   SharedPreferences userData = await SharedPreferences.getInstance();
@@ -445,7 +432,8 @@ sendData() async {
   var datos = DatosDB();
   Map post = {};
 
-  List dimensionesElems = await datos.getDimensionesElem(creadoOffline: true,offline: true);
+  List dimensionesElems =
+      await datos.getDimensionesElem(creadoOffline: true, offline: true);
   dimensionesElems ??= [];
 //  print(dimensionesElems);
   post['dimensionesElems'] = {};
@@ -458,34 +446,32 @@ sendData() async {
       metodo: 'post',
       verif: true,
       opt: 'sendDimensionesElems/user/${userId}',
-      token: token
-  );
+      token: token);
 
-  if(respDE['ok'] != 1){
+  if (respDE['ok'] != 1) {
     return;
   }
 
-  for(int i = 0; i<dimensionesElems.length; i++){
+  for (int i = 0; i < dimensionesElems.length; i++) {
     var dimElem = dimensionesElems[i];
     await db.query("DELETE FROM DimensionesElem WHERE id = ${dimElem['id']}");
 
     var targetsElem = dimensionesElems[i]['targetsElem'];
-    for(int j = 0; j<targetsElem.length; j++){
+    for (int j = 0; j < targetsElem.length; j++) {
       var targetElem = targetsElem[j]['trgtElem'];
       await db.query("DELETE FROM TargetsElems WHERE id = ${targetElem['id']}");
 
       var visitas = targetsElem[j]['visitas'];
-      for(int k =0;k<visitas.length;k++){
+      for (int k = 0; k < visitas.length; k++) {
         var visita = visitas[k]['visita'];
         await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
-        await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+        await db.query(
+            "DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
       }
-
     }
   }
 
-
-  List targetsElems= await datos.getTargetsElem(true,true,null);
+  List targetsElems = await datos.getTargetsElem(true, true, null);
   targetsElems ??= [];
   post['targetsElems'] = {};
   post['targetsElems']['type'] = 'String';
@@ -497,33 +483,30 @@ sendData() async {
       metodo: 'post',
       verif: true,
       opt: 'sendTargetsElems/user/${userId}',
-      token: token
-  );
+      token: token);
 
-  if(respTE['ok'] != 1){
+  if (respTE['ok'] != 1) {
     return;
   }
 
-  for(int j = 0; j<targetsElems.length; j++){
+  for (int j = 0; j < targetsElems.length; j++) {
     var targetElem = targetsElems[j]['trgtElem'];
     await db.query("DELETE FROM TargetsElems WHERE id = ${targetElem['id']}");
 
     var visitas = targetsElems[j]['visitas'];
 //    print("VISITAS: $visitas");
-    for(int k =0;k<visitas.length;k++){
+    for (int k = 0; k < visitas.length; k++) {
       var visita = visitas[k]['visita'];
 //      print('vId: ${visita['id']}');
       await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
-      await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+      await db.query(
+          "DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
     }
-
   }
-
 
 //////////////
 
-
-  List uccs= await datos.getUserConsultationsChecklist(true,true);
+  List uccs = await datos.getUserConsultationsChecklist(true, true);
   uccs ??= [];
 
   print('UCCS: $uccs');
@@ -531,36 +514,42 @@ sendData() async {
   post['UsersConsultationsChecklist']['type'] = 'String';
   post['UsersConsultationsChecklist']['name'] = 'UsersConsultationsChecklist';
   post['UsersConsultationsChecklist']['value'] = jsonEncode(uccs);
+  print("----------------------------------------");
   var respUCC = await postDatos(
       datos: post,
       imprime: true,
       metodo: 'post',
       verif: true,
       opt: 'sendUCC/user/${userId}',
-      token: token
-  );
+      token: token);
+  print("----------------------------------------");
 
-  if(respUCC['ok'] != 1){
+  if (respUCC['ok'] != 1) {
     return;
   }
 
-  for(int j = 0; j<uccs.length; j++){
-    var ucc = uccs[j]['trgtElem'];
-    await db.query("DELETE FROM UserConsultationsChecklist WHERE id = ${ucc['id']}");
+  for (int j = 0; j < uccs.length; j++) {
+    var ucc = uccs[j]['id'];
+    if (ucc == null) {
+      continue;
+    }
+
+    await db.query(
+        "DELETE FROM UserConsultationsChecklist WHERE id = ${ucc['id']}");
 
     var visitas = uccs[j]['visitas'];
 //    print("VISITAS: $visitas");
-    for(int k =0;k<visitas.length;k++){
+    for (int k = 0; k < visitas.length; k++) {
       var visita = visitas[k]['visita'];
 //      print('vId: ${visita['id']}');
       await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
-      await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+      await db.query(
+          "DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
     }
-
   }
 
-
-  List visitasCreadoOffline = await datos.getVis(elemId: null, creadoOffline: true, offline: true,type: null);
+  List visitasCreadoOffline = await datos.getVis(
+      elemId: null, creadoOffline: true, offline: true, type: null);
   visitasCreadoOffline ??= [];
 
   print(visitasCreadoOffline);
@@ -575,22 +564,22 @@ sendData() async {
       metodo: 'post',
       verif: true,
       opt: 'sendVisitas/user/${userId}',
-      token: token
-  );
+      token: token);
 
-  if(respV['ok'] != 1){
+  if (respV['ok'] != 1) {
     return;
   }
 
-  for(int k =0;k<visitasCreadoOffline.length;k++){
+  for (int k = 0; k < visitasCreadoOffline.length; k++) {
     var visita = visitasCreadoOffline[k]['visita'];
 //    print('vId: ${visita['id']}');
     await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
-    await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+    await db.query(
+        "DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
   }
 
-
-  List visitasOffline = await datos.getVis(elemId: null, creadoOffline: false, offline: true,type: null);
+  List visitasOffline = await datos.getVis(
+      elemId: null, creadoOffline: false, offline: true, type: null);
   visitasOffline ??= [];
   post['visitas'] = {};
   post['visitas']['type'] = 'String';
@@ -602,20 +591,19 @@ sendData() async {
       metodo: 'post',
       verif: true,
       opt: 'sendVisitas/user/${userId}',
-      token: token
-  );
+      token: token);
 
-  if(respVO['ok'] != 1){
+  if (respVO['ok'] != 1) {
     return;
   }
 
-  for(int k =0;k<visitasOffline.length;k++){
+  for (int k = 0; k < visitasOffline.length; k++) {
     var visita = visitasOffline[k]['visita'];
 //    print('vId: ${visita['id']}');
     await db.query("DELETE FROM Visitas WHERE id = ${visita['id']}");
-    await db.query("DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
+    await db.query(
+        "DELETE FROM RespuestasVisita WHERE visitasId = ${visita['id']}");
   }
-
 
   List polls = await datos.getPolls();
   polls ??= [];
@@ -630,24 +618,19 @@ sendData() async {
       metodo: 'post',
       verif: true,
       opt: 'sendPolls/user/${userId}',
-      token: token
-  );
+      token: token);
 
-  if(respPoll['ok'] != 1){
+  if (respPoll['ok'] != 1) {
     print('respPoll: $respPoll');
     return;
   }
 
-  for(int k =0;k<polls.length;k++){
+  for (int k = 0; k < polls.length; k++) {
     var pollId = polls[k]['id'];
 //    print('vId: ${visita['id']}');
     await db.query("DELETE FROM UsersQuickPoll WHERE id = ${pollId}");
-
   }
-
-
 }
-
 
 Future downloadFile({
   String url,
@@ -656,29 +639,27 @@ Future downloadFile({
   bool chProgress = true,
   bool printAvance = false,
 }) async {
-
   Dio dio = Dio();
   String dir = (await getApplicationDocumentsDirectory()).path;
 
-  if(subdir != null){
+  if (subdir != null) {
     dir = '$dir/$subdir';
 
     var existeDir = await Directory(dir).exists();
-    if(!existeDir){
-      await Directory(dir).create(recursive: true)
-          .then((Directory directory){
+    if (!existeDir) {
+      await Directory(dir).create(recursive: true).then((Directory directory) {
 //            print(directory.path);
       });
     }
   }
 
-  try{
+  try {
 //    print(url);
-    await dio.download(url, '$dir/$filename', onReceiveProgress: (rec,total){
+    await dio.download(url, '$dir/$filename', onReceiveProgress: (rec, total) {
 //        print('rec: $rec, total: $total');
-      var porcentaje = ((rec/total)*100).toStringAsFixed(0);
-      var totStr = (total/1024/1024).toStringAsFixed(1);
-      var recStr = (rec/1024/1024).toStringAsFixed(1);
+      var porcentaje = ((rec / total) * 100).toStringAsFixed(0);
+      var totStr = (total / 1024 / 1024).toStringAsFixed(1);
+      var recStr = (rec / 1024 / 1024).toStringAsFixed(1);
 //      if(chProgress){
 //        setState(() {
 //          if(total == -1){
@@ -689,14 +670,13 @@ Future downloadFile({
 //          dlTotal = total;
 //        });
 //      }
-      if(printAvance){
+      if (printAvance) {
         print('$recStr MB / $totStr MB : $porcentaje %');
       }
     });
-  }catch(e){
+  } catch (e) {
     print(e);
   }
-
 }
 
 getAllData() async {
@@ -704,29 +684,25 @@ getAllData() async {
   SharedPreferences userData = await SharedPreferences.getInstance();
 
   int userId = userData.getInt('userId');
-  Map r = await getDatos2(opt: 'getAll/user/${userId}',varNom: null,imprime: false);
+  Map r = await getDatos2(
+      opt: 'getAll/user/${userId}', varNom: null, imprime: false);
 
-  for(var i in r.keys){
-//    if(i == 'Problems'){
-//      for(int j = 0; r['Problems'].length; j++){
-//
-//      }
-////      print('ConsultationsChecklist: ${r[i]}');
-//    }else{
-//    }
-      print('$i: ${r[i].runtimeType}');
-      db.insertaLista(i, r[i], true, false);
+  for (var i in r.keys) {
+    if (i == 'ConsultationsAudiencesCache') {
+      //for (int j = 0; r['Problems'].length; j++) {}
+      print('ATENCION: ${r[i]}');
+    } else {}
+    print('$i: ${r[i].runtimeType}');
+    db.insertaLista(i, r[i], true, false);
   }
 
   List TargetsElems = r['TargetsElems'];
-  for(int i =0; i<TargetsElems.length;i++){
+  for (int i = 0; i < TargetsElems.length; i++) {
 //    print(TargetsElems[i]);
   }
-
 }
 
 acomodaDatos({Map datos}) {
-
   DB db = DB.instance;
 
   DateTime now = DateTime.now();
@@ -738,7 +714,7 @@ acomodaDatos({Map datos}) {
   consultation['json'] = jsonEncode(datos);
   consultation['status'] = datos['status'];
   consultation['finish_date'] = datos['finish_date'];
-  consultation['edit_inputs'] = datos['edit_inputs']?1:0;
+  consultation['edit_inputs'] = datos['edit_inputs'] ? 1 : 0;
 
 //  File f = await File('$dir/${datos['id']}.mbtiles');
 //  datos['descargado'] = await f.exists();
@@ -749,16 +725,17 @@ acomodaDatos({Map datos}) {
   areaEstudio['coordinates'] = [];
   List poligonos = datos['study_area']['coordinates'];
 
-  for(int j = 0;j<poligonos.length;j++){
+  for (int j = 0; j < poligonos.length; j++) {
     List poligono = poligonos[j];
     List poligonoTmp = [];
-    for(int k = 0;k < poligono.length;k++){
+    for (int k = 0; k < poligono.length; k++) {
       List subPoligono = poligono[k];
       List subPoligonoTmp = [];
-      for(int l = 0;l<subPoligono.length;l++){
+      for (int l = 0; l < subPoligono.length; l++) {
         var lng;
         var c = subPoligono[l];
-        var coord = acomodaCoordenadas(coords:c,donde: 'acomodaDatos',invierte: false);
+        var coord = acomodaCoordenadas(
+            coords: c, donde: 'acomodaDatos', invierte: false);
         subPoligonoTmp.add(coord);
       }
       poligonoTmp.add(subPoligonoTmp);
@@ -774,12 +751,13 @@ acomodaDatos({Map datos}) {
 //        print("CENTROOOO");
 //        print(datos['code']);
 //        print(datos['center']);
-  if(datos['center']['coordinates'][0] < 0 && datos['center']['coordinates'][0] < -180){
-    lngC = 360+datos['center']['coordinates'][0];
-  }else{
+  if (datos['center']['coordinates'][0] < 0 &&
+      datos['center']['coordinates'][0] < -180) {
+    lngC = 360 + datos['center']['coordinates'][0];
+  } else {
     lngC = datos['center']['coordinates'][0];
   }
-  centro['coordinates'] = [lngC,datos['center']['coordinates'][1]];
+  centro['coordinates'] = [lngC, datos['center']['coordinates'][1]];
   datos['centro'] = centro;
 
 //  List problems = await db.query("SELECT COUNT(*) as cuenta FROM problems WHERE consultationsId = ${datos['id']}");
@@ -791,36 +769,33 @@ acomodaDatos({Map datos}) {
   return datos;
 }
 
-List acomodaCoordenadas({List coords,String donde = null, bool invierte = true}){
-
-
+List acomodaCoordenadas(
+    {List coords, String donde = null, bool invierte = true}) {
   var lng;
-  if(coords.length == 0){
+  if (coords.length == 0) {
     return [];
   }
-
 
 //  print('coords[0] ${coords[0]}');
 //  print('coords[0].runtimeType ${coords[0].runtimeType}');
 
-  if(coords[0] < 0 && coords[0] < -180){
-    lng = 360+coords[0];
-  }else{
+  if (coords[0] < 0 && coords[0] < -180) {
+    lng = 360 + coords[0];
+  } else {
     lng = coords[0];
   }
 
   List coord;
-  if(invierte){
-    coord = [coords[1],lng];
-  }else{
-    coord = [lng,coords[1]];
+  if (invierte) {
+    coord = [coords[1], lng];
+  } else {
+    coord = [lng, coords[1]];
   }
 //  print('Donde: $donde, coords: $coords, coord: $coord');
   return coord;
-
 }
 
-getProblems({var answers_id,var answer_id_local}) async {
+getProblems({var answers_id, var answer_id_local}) async {
   DB db = DB.instance;
 
 //  print('answer_id_local: $answer_id_local');
@@ -833,8 +808,9 @@ getProblems({var answers_id,var answer_id_local}) async {
     ''');
 
   problemsPorActualizar ??= [];
-  for(int i = 0;i<problemsPorActualizar.length;i++){
-    await db.query("DELETE FROM points WHERE problemsId = ${problemsPorActualizar[i]['id']}");
+  for (int i = 0; i < problemsPorActualizar.length; i++) {
+    await db.query(
+        "DELETE FROM points WHERE problemsId = ${problemsPorActualizar[i]['id']}");
   }
 
   await db.query('''DELETE FROM problems
@@ -843,24 +819,31 @@ getProblems({var answers_id,var answer_id_local}) async {
 
 //  return;
 
-
 //  var problemsServer = await getDatos(opt: "problems/?consultation=${widget.datos['id']}&owner=$userId",imprime: false);
-  Map<String,dynamic> datos = Map();
+  Map<String, dynamic> datos = Map();
   datos['answer'] = Map();
   datos['answer']['name'] = 'answer';
   datos['answer']['type'] = 'String';
   datos['answer']['value'] = '${answers_id}';
 
-  var problemsServer = await postDatos(metodo: 'get',opt: "surveys/spatial-inputs/?answer=${answers_id}",datos: datos,imprime: false,verif: true);
+  var problemsServer = await postDatos(
+      metodo: 'get',
+      opt: "surveys/spatial-inputs/?answer=${answers_id}",
+      datos: datos,
+      imprime: false,
+      verif: true);
 //  print(problemsServer);
 
-
-  for(int i = 0;i<problemsServer.length;i++){
-    Map<String,dynamic> prbDB= Map();
+  for (int i = 0; i < problemsServer.length; i++) {
+    Map<String, dynamic> prbDB = Map();
     Map problem = problemsServer[i];
 //      print(problem);
 
-    Map tipos = {'LineString':'Polyline','Polygon':'Polygon','Point':'Marker'};
+    Map tipos = {
+      'LineString': 'Polyline',
+      'Polygon': 'Polygon',
+      'Point': 'Marker'
+    };
 
     prbDB['idServer'] = problem['id'];
     prbDB['type'] = tipos[problem['geometry']['type']];
@@ -869,37 +852,42 @@ getProblems({var answers_id,var answer_id_local}) async {
     prbDB['catId'] = problem['category']['id'];
     prbDB['answers_id'] = answer_id_local;
     String photo = null;
-    if(problem['photo'] != null){
+    if (problem['photo'] != null) {
       photo = problem['photo'].split('/').last;
-      await _downloadFile(url:problem['photo'], filename: photo, subdir: 'fotos',chProgress: false,printAvance: false);
+      await _downloadFile(
+          url: problem['photo'],
+          filename: photo,
+          subdir: 'fotos',
+          chProgress: false,
+          printAvance: false);
     }
     prbDB['photo'] = photo;
-    var insR = await db.insert('problems', prbDB,false);
+    var insR = await db.insert('problems', prbDB, false);
 
     List puntos = [];
-    switch(problem['geometry']['type']){
+    switch (problem['geometry']['type']) {
       case 'Point':
         List coordenadas = problem['geometry']['coordinates'];
 //        print(coordenadas);
-        puntos.add(convierte(c:coordenadas,pId: insR));
+        puntos.add(convierte(c: coordenadas, pId: insR));
         break;
       case 'Polygon':
         List coordenadas = problem['geometry']['coordinates'][0];
-        for(int i = 0; i<coordenadas.length - 1; i++){
-          puntos.add(convierte(c:coordenadas[i],pId: insR));
+        for (int i = 0; i < coordenadas.length - 1; i++) {
+          puntos.add(convierte(c: coordenadas[i], pId: insR));
         }
 //          print('coordenadas Polygon: $coordenadas');
         break;
       case 'LineString':
         List coordenadas = problem['geometry']['coordinates'];
-        for(int i = 0; i<coordenadas.length;i++){
-          puntos.add(convierte(c:coordenadas[i],pId: insR));
+        for (int i = 0; i < coordenadas.length; i++) {
+          puntos.add(convierte(c: coordenadas[i], pId: insR));
         }
         break;
     }
 
-    for(int i = 0;i<puntos.length;i++){
-      await db.insert('points', puntos[i],false);
+    for (int i = 0; i < puntos.length; i++) {
+      await db.insert('points', puntos[i], false);
     }
   }
 }
@@ -907,7 +895,8 @@ getProblems({var answers_id,var answer_id_local}) async {
 getSpatialData({int pregId, int vId}) async {
   DB db = DB.instance;
 //  print('pregId: $pregId');
-  var studyAreas = await db.query('SELECT * FROM StudyArea WHERE preguntasId = $pregId');
+  var studyAreas =
+      await db.query('SELECT * FROM StudyArea WHERE preguntasId = $pregId');
   studyAreas ??= [];
 
 //  await db.query("DELETE FROM Problems");
@@ -922,22 +911,21 @@ getSpatialData({int pregId, int vId}) async {
   ''');
 
   List problems = [];
-  if(problemsDB != null){
-    for(int i = 0; i<problemsDB.length; i++){
-
+  if (problemsDB != null) {
+    for (int i = 0; i < problemsDB.length; i++) {
       var problem = Map.from(problemsDB[i]);
-      List pointsDB = await db.query("SELECT * FROM points WHERE problemsId = ${problem['id']}");
+      List pointsDB = await db
+          .query("SELECT * FROM points WHERE problemsId = ${problem['id']}");
 //      print('POINTSDB: $pointsDB');
       pointsDB ??= [];
       List puntos = [];
-      for(int j = 0;j<pointsDB.length;j++){
-        Map<String,dynamic> ptTmp = Map();
+      for (int j = 0; j < pointsDB.length; j++) {
+        Map<String, dynamic> ptTmp = Map();
 //          print('aaaaa ${problemPoints[i]['lat']},${problemPoints[i]['lng']}');
 
-        ptTmp['latLng'] = LatLng(pointsDB[j]['lat'],pointsDB[j]['lng']);
+        ptTmp['latLng'] = LatLng(pointsDB[j]['lat'], pointsDB[j]['lng']);
         ptTmp['id'] = pointsDB[j]['id'];
         puntos.add(ptTmp);
-
       }
       problem['points'] = puntos;
       problems.add(problem);
@@ -949,24 +937,22 @@ getSpatialData({int pregId, int vId}) async {
 
 //  problemsDB ??= [];
 
-  Map<String,dynamic> resp = Map();
+  Map<String, dynamic> resp = Map();
   resp['studyareas'] = studyAreas;
   resp['problems'] = problems;
 
   return resp;
-
-
 }
 
-convierte({List c,int pId}){
+convierte({List c, int pId}) {
   double lng;
-  if(c[0] < 0 && c[0] < -180){
-    lng = 360+c[0];
-  }else{
+  if (c[0] < 0 && c[0] < -180) {
+    lng = 360 + c[0];
+  } else {
     lng = c[0];
   }
 
-  return {'problemsId':pId,'lat':c[1],'lng':lng};
+  return {'problemsId': pId, 'lat': c[1], 'lng': lng};
 }
 
 Future _downloadFile({
@@ -976,42 +962,39 @@ Future _downloadFile({
   bool chProgress = true,
   bool printAvance = false,
 }) async {
-
   Dio dio = Dio();
   String dir = (await getApplicationDocumentsDirectory()).path;
 
-  if(subdir != null){
+  if (subdir != null) {
     dir = '$dir/$subdir';
 
     var existeDir = await Directory(dir).exists();
-    if(!existeDir){
-      await Directory(dir).create(recursive: true)
-          .then((Directory directory){
+    if (!existeDir) {
+      await Directory(dir).create(recursive: true).then((Directory directory) {
 //            print(directory.path);
       });
     }
   }
 
-  try{
+  try {
     print(url);
-    await dio.download(url, '$dir/$filename', onReceiveProgress: (rec,total){
+    await dio.download(url, '$dir/$filename', onReceiveProgress: (rec, total) {
 //        print('rec: $rec, total: $total');
-      var porcentaje = ((rec/total)*100).toStringAsFixed(0);
-      var totStr = (total/1024/1024).toStringAsFixed(1);
-      var recStr = (rec/1024/1024).toStringAsFixed(1);
-      if(printAvance){
+      var porcentaje = ((rec / total) * 100).toStringAsFixed(0);
+      var totStr = (total / 1024 / 1024).toStringAsFixed(1);
+      var recStr = (rec / 1024 / 1024).toStringAsFixed(1);
+      if (printAvance) {
         print('$recStr MB / $totStr MB : $porcentaje %');
       }
     });
-  }catch(e){
+  } catch (e) {
     print(e);
   }
-
 }
 
-Future<void> emergente({BuildContext context,Widget content,List<Widget> actions}) async {
-
-  if(actions.length == 0){
+Future<void> emergente(
+    {BuildContext context, Widget content, List<Widget> actions}) async {
+  if (actions.length == 0) {
     actions = [
       FlatButton(
         child: Text(Translations.of(context).text('ok')),
@@ -1042,7 +1025,7 @@ checaTamano({String serverPath}) async {
   Dio dio = Dio();
 //  print('SERVER: $SERVER');
 //  print('${serverPath[0]}');
-  if(serverPath[0] == '/'){
+  if (serverPath[0] == '/') {
     serverPath = serverPath.substring(1);
   }
   String url = '${SERVER}$serverPath';
@@ -1050,22 +1033,19 @@ checaTamano({String serverPath}) async {
   var tamano;
 
   CancelToken token = new CancelToken();
-  try{
-    await dio.request(url,cancelToken: token,onReceiveProgress: (parcial,total){
+  try {
+    await dio.request(url, cancelToken: token,
+        onReceiveProgress: (parcial, total) {
 //        print('TOTAL: $total');
-      if(total>=0){
-        tamano = (total/1024/1024).toStringAsFixed(1);;
+      if (total >= 0) {
+        tamano = (total / 1024 / 1024).toStringAsFixed(1);
+        ;
         token.cancel('$total');
       }
     });
-  } on DioError catch(e,x){
-  }
+  } on DioError catch (e, x) {}
 
 //  print('TAMAÑO $tamano');
   return tamano;
 //    print('tamaño: $tamano MB');
-
 }
-
-
-

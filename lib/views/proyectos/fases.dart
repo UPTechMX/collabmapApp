@@ -6,7 +6,6 @@ import 'package:siap/models/componentes/boton.dart';
 import 'package:siap/views/consultations/consultations.dart';
 
 class Fases extends StatelessWidget {
-
   var proyectoId;
   Fases({this.proyectoId});
 
@@ -14,7 +13,7 @@ class Fases extends StatelessWidget {
   Widget build(BuildContext context) {
     return FutureBuilder(
       future: getData(),
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         List<Widget> rows = [];
         switch (snapshot.connectionState) {
           case ConnectionState.none:
@@ -23,11 +22,11 @@ class Fases extends StatelessWidget {
           case ConnectionState.waiting:
             return Text(Translations.of(context).text('waiting'));
           case ConnectionState.done:
-            if (snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
             List elementos = snapshot.data;
-            if(snapshot.data.length == 0){
+            if (snapshot.data.length == 0) {
               return Container(
                 height: 100,
                 child: Center(
@@ -35,24 +34,24 @@ class Fases extends StatelessWidget {
                 ),
               );
             }
-            for(int i = 0; i < elementos.length; i++){
-              rows.add(
-                  Boton(
-                    texto: elementos[i]['name'],
-                    onClick: (){
-                      Navigator.push(context,
-                          new MaterialPageRoute(builder: (context)=>
-                              Consultations(
+            for (int i = 0; i < elementos.length; i++) {
+              rows.add(Boton(
+                texto: elementos[i]['name'],
+                onClick: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => Consultations(
                                 phaseId: elementos[i]['id'],
                                 phaseName: elementos[i]['name'],
-                              )
-                          )
-                      );
-                    },
-                    icono: Icon(Icons.add,color: Colors.white,),
-                    color: Color(0xFF2A6CD5),
-                  )
-              );
+                              )));
+                },
+                icono: Icon(
+                  Icons.add,
+                  color: Colors.white,
+                ),
+                color: Color(0xFFF8B621),
+              ));
             }
             return Container(
               padding: EdgeInsets.all(15),
@@ -69,12 +68,11 @@ class Fases extends StatelessWidget {
   Future<List> getData() async {
     DB db = DB.instance;
 
-    List datos = await db.query("SELECT * FROM phases WHERE project = ${proyectoId}");
+    List datos =
+        await db.query("SELECT * FROM phases WHERE project = ${proyectoId}");
 //    print('DATOS: $datos');
     datos ??= [];
 
     return datos;
   }
-
-
 }

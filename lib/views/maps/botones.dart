@@ -10,8 +10,8 @@ class FancyFab extends StatefulWidget {
   BuildContext context;
   GlobalKey<MapWidgetState> keyMapa;
 
-
-  FancyFab({this.onPressed, this.tooltip, this.icon,this.keyMapa,this.context});
+  FancyFab(
+      {this.onPressed, this.tooltip, this.icon, this.keyMapa, this.context});
 
   @override
   _FancyFabState createState() => _FancyFabState();
@@ -19,7 +19,6 @@ class FancyFab extends StatefulWidget {
 
 class _FancyFabState extends State<FancyFab>
     with SingleTickerProviderStateMixin {
-
   bool isOpened = false;
   AnimationController _animationController;
   Animation<Color> _buttonColor;
@@ -31,14 +30,14 @@ class _FancyFabState extends State<FancyFab>
   @override
   initState() {
     _animationController =
-    AnimationController(vsync: this, duration: Duration(milliseconds: 500))
-      ..addListener(() {
-        setState(() {});
-      });
+        AnimationController(vsync: this, duration: Duration(milliseconds: 500))
+          ..addListener(() {
+            setState(() {});
+          });
     _animateIcon =
         Tween<double>(begin: 0.0, end: 1.0).animate(_animationController);
     _buttonColor = ColorTween(
-      begin: Colors.blue,
+      begin: Colors.amber,
       end: Colors.red,
     ).animate(CurvedAnimation(
       parent: _animationController,
@@ -81,7 +80,7 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         heroTag: "btn1",
-        onPressed: (){
+        onPressed: () {
           widget.keyMapa.currentState.setActividad('addMarker');
           widget.keyMapa.currentState.actividadFncDrag(context: widget.context);
 //          widget.keyMapa.currentState.delPuntos();
@@ -98,14 +97,17 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         heroTag: "btn2",
-        onPressed: (){
+        onPressed: () {
           widget.keyMapa.currentState.setActividad('addPolyline');
           widget.keyMapa.currentState.delPuntos();
           animate();
         },
         tooltip: 'Path',
         mini: true,
-        child: Icono(svgName: 'polyline',width: 30,),
+        child: Icono(
+          svgName: 'polyline',
+          width: 30,
+        ),
       ),
     );
   }
@@ -114,14 +116,17 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         heroTag: "btn3",
-        onPressed: (){
+        onPressed: () {
           widget.keyMapa.currentState.setActividad('addPolygon');
           widget.keyMapa.currentState.delPuntos();
           animate();
         },
         tooltip: 'Polygon',
         mini: true,
-        child: Icono(svgName: 'polygon',width: 30,),
+        child: Icono(
+          svgName: 'polygon',
+          width: 30,
+        ),
       ),
     );
   }
@@ -130,7 +135,7 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         heroTag: "btn4",
-        onPressed: (){
+        onPressed: () {
           myLocation();
         },
         tooltip: 'Location',
@@ -144,7 +149,8 @@ class _FancyFabState extends State<FancyFab>
     return Container(
       child: FloatingActionButton(
         backgroundColor: _buttonColor.value,
-        onPressed: (){
+        heroTag: "btn5",
+        onPressed: () {
           animate();
           widget.keyMapa.currentState.setActividad(null);
         },
@@ -164,7 +170,6 @@ class _FancyFabState extends State<FancyFab>
     return Column(
       mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
-
         Transform(
           transform: Matrix4.translationValues(
             0.0,
@@ -203,14 +208,14 @@ class _FancyFabState extends State<FancyFab>
   }
 
   void myLocation() async {
-    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    widget.keyMapa.currentState.centrar(lat:position.latitude, lng:position.longitude);
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    widget.keyMapa.currentState
+        .centrar(lat: position.latitude, lng: position.longitude);
   }
 }
 
-
 class BotonesBarra extends StatefulWidget {
-
   final Function() onPressed;
   final String tooltip;
   final IconData icon;
@@ -219,39 +224,49 @@ class BotonesBarra extends StatefulWidget {
   bool spatial;
   Map question;
 
-
-  BotonesBarra({Key key,this.onPressed, this.tooltip, this.icon,this.keyMapa,this.context,this.spatial,this.question}):super(key:key);
+  BotonesBarra(
+      {Key key,
+      this.onPressed,
+      this.tooltip,
+      this.icon,
+      this.keyMapa,
+      this.context,
+      this.spatial,
+      this.question})
+      : super(key: key);
 
   @override
   BotonesBarraState createState() => BotonesBarraState();
 }
 
 class BotonesBarraState extends State<BotonesBarra> {
-
   void myLocation() async {
 //      print('aaaa');
 //    Geolocator geolocator = Geolocator();//..forceAndroidLocationManager = true;
-      Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+    Position position = await Geolocator()
+        .getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
 //      print('position: $position');
 
 //    Position position = await geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.low);
 //    Position position = await Geolocator().getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-    widget.keyMapa.currentState.centrar(lat:position.latitude, lng:position.longitude);
+    widget.keyMapa.currentState
+        .centrar(lat: position.latitude, lng: position.longitude);
   }
-
 
   @override
   Widget build(BuildContext context) {
-
 //    print('SPATIAL: ${widget.spatial}');
     Widget add() {
       return Container(
         child: FloatingActionButton(
           heroTag: "btn1",
-          backgroundColor: widget.keyMapa.currentState.actividad == 'addMarker'?Color(0xFF2568D8):Colors.white,
-          onPressed: (){
+          backgroundColor: widget.keyMapa.currentState.actividad == 'addMarker'
+              ? Color(0xFFF8B621)
+              : Colors.white,
+          onPressed: () {
             widget.keyMapa.currentState.setActividad('addMarker');
-            widget.keyMapa.currentState.actividadFncDrag(context: widget.context);
+            widget.keyMapa.currentState
+                .actividadFncDrag(context: widget.context);
             setState(() {});
             print(widget.keyMapa.currentState.actividad);
           },
@@ -259,7 +274,9 @@ class BotonesBarraState extends State<BotonesBarra> {
           mini: true,
           child: Icon(
             Icons.location_on,
-            color: widget.keyMapa.currentState.actividad == 'addMarker'?Colors.white:Colors.grey,
+            color: widget.keyMapa.currentState.actividad == 'addMarker'
+                ? Colors.white
+                : Colors.grey,
           ),
         ),
       );
@@ -269,8 +286,11 @@ class BotonesBarraState extends State<BotonesBarra> {
       return Container(
         child: FloatingActionButton(
           heroTag: "btn2",
-          backgroundColor: widget.keyMapa.currentState.actividad == 'addPolyline'?Color(0xFF2568D8):Colors.white,
-          onPressed: (){
+          backgroundColor:
+              widget.keyMapa.currentState.actividad == 'addPolyline'
+                  ? Color(0xFFF8B621)
+                  : Colors.white,
+          onPressed: () {
             widget.keyMapa.currentState.setActividad('addPolyline');
             widget.keyMapa.currentState.delPuntos();
             setState(() {});
@@ -278,8 +298,11 @@ class BotonesBarraState extends State<BotonesBarra> {
           tooltip: 'Path',
           mini: true,
           child: Icono(
-            svgName: 'polyline',width: 30,
-            color: widget.keyMapa.currentState.actividad == 'addPolyline'?Colors.white:Colors.grey,
+            svgName: 'polyline',
+            width: 30,
+            color: widget.keyMapa.currentState.actividad == 'addPolyline'
+                ? Colors.white
+                : Colors.grey,
           ),
         ),
       );
@@ -289,8 +312,10 @@ class BotonesBarraState extends State<BotonesBarra> {
       return Container(
         child: FloatingActionButton(
           heroTag: "btn3",
-          backgroundColor: widget.keyMapa.currentState.actividad == 'addPolygon'?Color(0xFF2568D8):Colors.white,
-          onPressed: (){
+          backgroundColor: widget.keyMapa.currentState.actividad == 'addPolygon'
+              ? Color(0xFFF8B621)
+              : Colors.white,
+          onPressed: () {
             widget.keyMapa.currentState.setActividad('addPolygon');
             widget.keyMapa.currentState.delPuntos();
             setState(() {});
@@ -298,8 +323,11 @@ class BotonesBarraState extends State<BotonesBarra> {
           tooltip: 'Polygon',
           mini: true,
           child: Icono(
-            svgName: 'polygon',width: 30,
-            color: widget.keyMapa.currentState.actividad == 'addPolygon'?Colors.white:Colors.grey,
+            svgName: 'polygon',
+            width: 30,
+            color: widget.keyMapa.currentState.actividad == 'addPolygon'
+                ? Colors.white
+                : Colors.grey,
           ),
         ),
       );
@@ -310,12 +338,15 @@ class BotonesBarraState extends State<BotonesBarra> {
         child: FloatingActionButton(
           heroTag: "btn4",
           backgroundColor: Colors.white,
-          onPressed: (){
+          onPressed: () {
             myLocation();
           },
           tooltip: 'Location',
           mini: true,
-          child: Icon(Icons.location_searching,color: Colors.grey,),
+          child: Icon(
+            Icons.location_searching,
+            color: Colors.grey,
+          ),
         ),
       );
     }
@@ -325,13 +356,14 @@ class BotonesBarraState extends State<BotonesBarra> {
         child: FloatingActionButton(
           heroTag: "btn5",
           backgroundColor: Colors.white,
-          onPressed: (){
+          onPressed: () {
             Scaffold.of(context).openDrawer();
           },
           tooltip: 'Location',
           mini: true,
           child: Icono(
-            svgName: 'edit',width: 30,
+            svgName: 'edit',
+            width: 30,
             color: Colors.grey,
           ),
         ),
@@ -348,29 +380,27 @@ class BotonesBarraState extends State<BotonesBarra> {
             child: add(),
           ),
           Expanded(
-            flex: (widget.question['tipo'] == 'op')?0:1,
-            child: (widget.question['tipo'] == 'op')?Container():linea(),
+            flex: (widget.question['tipo'] == 'op') ? 0 : 1,
+            child: (widget.question['tipo'] == 'op') ? Container() : linea(),
           ),
           Expanded(
-            flex: (widget.question['tipo'] == 'op')?0:1,
-            child: (widget.question['tipo'] == 'op')?Container():area(),
+            flex: (widget.question['tipo'] == 'op') ? 0 : 1,
+            child: (widget.question['tipo'] == 'op') ? Container() : area(),
           ),
           Expanded(
-            flex: (widget.question['tipo'] == 'op')?0:1,
-            child: (widget.question['tipo'] == 'op')?Container():miUbic(),
+            flex: (widget.question['tipo'] == 'op') ? 0 : 1,
+            child: (widget.question['tipo'] == 'op') ? Container() : miUbic(),
           ),
           Expanded(
-            flex: (widget.question['tipo'] == 'cm')?1:0,
-            child: (widget.question['tipo'] == 'cm')?edit():Container(),
+            flex: (widget.question['tipo'] == 'cm') ? 1 : 0,
+            child: (widget.question['tipo'] == 'cm') ? edit() : Container(),
           )
         ],
       ),
     );
   }
 
-  actualizaEstado(){
+  actualizaEstado() {
     setState(() {});
   }
-
 }
-

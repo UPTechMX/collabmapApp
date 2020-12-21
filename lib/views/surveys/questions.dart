@@ -6,16 +6,13 @@ import 'package:siap/models/translations.dart';
 import 'package:siap/models/conexiones/api.dart';
 import 'package:siap/models/componentes/iconos.dart';
 
-
 class Question extends StatefulWidget {
-
   Map question;
   var setQIndex;
   int numPregs;
   int qIndex;
   List questions;
   var value;
-
 
   Question({
     this.question,
@@ -28,16 +25,15 @@ class Question extends StatefulWidget {
 
   @override
   QuestionState createState() => QuestionState(
-    qIndex: qIndex,
-    numPregs: numPregs,
-    question: question,
-    setQIndex: setQIndex,
-    value: value,
-  );
+        qIndex: qIndex,
+        numPregs: numPregs,
+        question: question,
+        setQIndex: setQIndex,
+        value: value,
+      );
 }
 
 class QuestionState extends State<Question> {
-
   var value;
 
   Map question;
@@ -45,21 +41,15 @@ class QuestionState extends State<Question> {
   int numPregs;
   int qIndex;
 
-  QuestionState({
-    this.question,
-    this.setQIndex,
-    this.numPregs,
-    this.qIndex,
-    this.value
-  });
+  QuestionState(
+      {this.question, this.setQIndex, this.numPregs, this.qIndex, this.value});
 
   @override
   Widget build(BuildContext context) {
-
 //    print(widget.question);
 
     return Container(
-      padding: EdgeInsets.only(top:10,left: 15,right: 15),
+      padding: EdgeInsets.only(top: 10, left: 15, right: 15),
       child: Column(
         children: <Widget>[
           Container(
@@ -90,18 +80,16 @@ class QuestionState extends State<Question> {
     );
   }
 
-  setValue(valor){
+  setValue(valor) {
     value = valor;
   }
 
-  getValue(){
+  getValue() {
     return value;
   }
-
 }
 
 class Botones extends StatelessWidget {
-
   var setQIndex;
   var qIndex;
   var numPregs;
@@ -125,116 +113,117 @@ class Botones extends StatelessWidget {
   Widget build(BuildContext context) {
 //    print('qIndex+1 = ${(qIndex+1)}');
     return Container(
-      padding: EdgeInsets.only(top: 35,left: 15,right: 15),
+      padding: EdgeInsets.only(top: 35, left: 15, right: 15),
       child: Row(
         children: <Widget>[
           Expanded(
             flex: 2,
-            child: qIndex != 0 ?
-              RaisedButton(
-                onPressed: (){
-                  cambiaPreg(avanza: false);
-                },
-                color: Color(0xFF2568D8),
-                child: Icon(
-                  Icons.chevron_left,
-                  color: Colors.white,
-                )
-              ):
-              Container(),
+            child: qIndex != 0
+                ? RaisedButton(
+                    onPressed: () {
+                      cambiaPreg(avanza: false);
+                    },
+                    color: Color(0xFFF8B621),
+                    child: Icon(
+                      Icons.chevron_left,
+                      color: Colors.white,
+                    ))
+                : Container(),
           ),
           Expanded(
             flex: 3,
             child: Container(
               child: Center(
                 child: Text(
-                  '${qIndex+1}/$numPregs',
+                  '${qIndex + 1}/$numPregs',
                   style: TextStyle(
-                    color: Color(0xFF2568D8),
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold
-                  ),
+                      color: Color(0xFFF8B621),
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold),
                 ),
               ),
             ),
           ),
           Expanded(
             flex: 2,
-            child: (qIndex+1) != numPregs ?
-            RaisedButton(
-              onPressed: (){
-                cambiaPreg(avanza: true);
-              },
-              color: Color(0xFF2568D8),
-                child: Icon(
-                  Icons.chevron_right,
-                  color: Colors.white,
-                )
-            ):
-            RaisedButton(
-                onPressed: (){
-                  var valor = getValue();
-                  if(valor != null){
-                    guardaResp();
-                    emergente(
-                      context: context,
-                      actions: [
-                        FlatButton(
-                          child: Text(Translations.of(context).text('ok')),
-                          onPressed: () {
-                            Navigator.of(context).pop();
-                            Navigator.of(context).pop();
-                          },
-                        )
-                      ],
-                      content: Container(
-                        child: Column(
-                          children: <Widget>[
-                            Icono(
-                              svgName: 'finish',
-                              color: Color(0xFF2568D8),
-                              width: MediaQuery.of(context).size.height * .18,
-                            ),
-                            SizedBox(height: 15,),
-                            Text(
-                              Translations.of(context).text('syncrecomendation').toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Color(0xFF2568D8),
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
-                            SizedBox(height: 15,),
-                            Text(
-                              Translations.of(context).text('syncreason').toUpperCase(),
-                              textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: Colors.grey,
-                                fontWeight: FontWeight.bold
-                              ),
-                            ),
+            child: (qIndex + 1) != numPregs
+                ? RaisedButton(
+                    onPressed: () {
+                      cambiaPreg(avanza: true);
+                    },
+                    color: Color(0xFFF8B621),
+                    child: Icon(
+                      Icons.chevron_right,
+                      color: Colors.white,
+                    ))
+                : RaisedButton(
+                    onPressed: () {
+                      var valor = getValue();
+                      if (valor != null) {
+                        guardaResp();
+                        emergente(
+                          context: context,
+                          actions: [
+                            FlatButton(
+                              child: Text(Translations.of(context).text('ok')),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.of(context).pop();
+                              },
+                            )
                           ],
-                        ),
-                      ),
-                    );
+                          content: Container(
+                            child: Column(
+                              children: <Widget>[
+                                Icono(
+                                  svgName: 'finish',
+                                  color: Color(0xFFF8B621),
+                                  width:
+                                      MediaQuery.of(context).size.height * .18,
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  Translations.of(context)
+                                      .text('syncrecomendation')
+                                      .toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Color(0xFFF8B621),
+                                      fontWeight: FontWeight.bold),
+                                ),
+                                SizedBox(
+                                  height: 15,
+                                ),
+                                Text(
+                                  Translations.of(context)
+                                      .text('syncreason')
+                                      .toUpperCase(),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      color: Colors.grey,
+                                      fontWeight: FontWeight.bold),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
 //                    Navigator.pop(context);
-                  }
-                },
-                color: Color(0xFF2568D8),
-                child: Text(
-                  Translations.of(context).text('finalize'),
-                  style: TextStyle(color: Colors.white),
-                )
-            ),
+                      }
+                    },
+                    color: Color(0xFFF8B621),
+                    child: Text(
+                      Translations.of(context).text('finalize'),
+                      style: TextStyle(color: Colors.white),
+                    )),
           ),
-
         ],
       ),
     );
   }
 
   void guardaResp() async {
-
     DB db = DB.instance;
 
     Map resp = Map();
@@ -242,16 +231,17 @@ class Botones extends StatelessWidget {
     resp['question_id'] = question['id'];
     resp['survey_id'] = question['survey_id'];
 
-    var ansDB = await db.query("SELECT * FROM answers WHERE survey_id = ${question['survey_id']} AND question_id = ${question['id']}");
-    var ansId = ansDB == null?null:ansDB[0]['id'];
+    var ansDB = await db.query(
+        "SELECT * FROM answers WHERE survey_id = ${question['survey_id']} AND question_id = ${question['id']}");
+    var ansId = ansDB == null ? null : ansDB[0]['id'];
 
-    if(ansId != null){
+    if (ansId != null) {
       Map ans = ansDB[0];
       resp['id'] = ansId;
-      if(ans['value'] != resp['value']){
+      if (ans['value'] != resp['value']) {
         resp['edit'] = 1;
       }
-    }else{
+    } else {
       resp['new'] = 1;
     }
 
@@ -263,47 +253,52 @@ class Botones extends StatelessWidget {
   void cambiaPreg({bool avanza = true}) async {
     var valor = getValue();
 
-    if(valor != null && valor != ''){
+    if (valor != null && valor != '') {
       await guardaResp();
       Map nPreg;
-      if(avanza){
-        nPreg = questions[qIndex+1];
-      }else{
-        nPreg = questions[qIndex-1];
+      if (avanza) {
+        nPreg = questions[qIndex + 1];
+      } else {
+        nPreg = questions[qIndex - 1];
       }
-      var nextAns = await getAnswerDB(questionId: nPreg['id'],surveyId: nPreg['survey_id'], type: nPreg['type']);
+      var nextAns = await getAnswerDB(
+          questionId: nPreg['id'],
+          surveyId: nPreg['survey_id'],
+          type: nPreg['type']);
 
       var nextVal = nextAns['value'];
       setValue(nextVal);
 
-      if(avanza){
-        setQIndex(q:qIndex+1);
-      }else{
-        setQIndex(q:qIndex-1);
+      if (avanza) {
+        setQIndex(q: qIndex + 1);
+      } else {
+        setQIndex(q: qIndex - 1);
       }
-    }else{
+    } else {
 //      print('respVacia');
-      if(!avanza){
+      if (!avanza) {
         Map nPreg;
-        nPreg = questions[qIndex-1];
-        var nextAns = await getAnswerDB(questionId: nPreg['id'],surveyId: nPreg['survey_id'], type: nPreg['type']);
+        nPreg = questions[qIndex - 1];
+        var nextAns = await getAnswerDB(
+            questionId: nPreg['id'],
+            surveyId: nPreg['survey_id'],
+            type: nPreg['type']);
         var nextVal = nextAns['value'];
         setValue(nextVal);
-        setQIndex(q:qIndex-1);
+        setQIndex(q: qIndex - 1);
       }
     }
-
   }
 
-
-  getAnswerDB({int surveyId,int questionId,String type}) async {
+  getAnswerDB({int surveyId, int questionId, String type}) async {
     DB db = DB.instance;
 
 //    print('survey: $surveyId, question: $questionId');
 
     Map answer = Map();
 
-    var resp = await db.query('SELECT id,value FROM answers WHERE question_id = $questionId AND survey_id = $surveyId');
+    var resp = await db.query(
+        'SELECT id,value FROM answers WHERE question_id = $questionId AND survey_id = $surveyId');
     var answer_id = resp == null ? null : resp[0]['id'];
 //    if(resp == null){
 //      Map<String,dynamic> datAns =  {'question_id':questionId,'survey_id':surveyId};
@@ -318,9 +313,5 @@ class Botones extends StatelessWidget {
     answer['answer_id'] = answer_id;
 
     return answer;
-
   }
-
 }
-
-

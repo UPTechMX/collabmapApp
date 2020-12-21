@@ -1,11 +1,15 @@
+import 'package:siap/views/consultations/consultationsHome.dart';
 import 'package:siap/views/drawer.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:siap/views/home/sync.dart';
 import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap/models/translations.dart';
 
-class Barra extends StatefulWidget with PreferredSizeWidget{
+import '../main.dart';
+import 'locales.dart';
 
+class Barra extends StatefulWidget with PreferredSizeWidget {
   bool sync;
   bool botonBack;
   bool sinBoton;
@@ -17,19 +21,22 @@ class Barra extends StatefulWidget with PreferredSizeWidget{
 
   @override
   Size get preferredSize => Size.fromHeight(kToolbarHeight);
-
 }
 
-class BarraState extends State<Barra>{
-
+class BarraState extends State<Barra> {
   bool _isLoading = false;
+
+  void _changeLanguage(Language language) {
+    Locale _temp;
+    _temp = Locale(language.languageCode);
+    MyApp.setLocale(context, _temp);
+  }
 
   @override
   Widget build(BuildContext context) {
-
     final conectando = Container(
-      padding: EdgeInsets.only(top:20,bottom:15,right: 15, left: 15),
-      width:50,
+      padding: EdgeInsets.only(top: 20, bottom: 15, right: 15, left: 15),
+      width: 50,
       height: 30,
       child: CircularProgressIndicator(
         strokeWidth: 3,
@@ -37,23 +44,28 @@ class BarraState extends State<Barra>{
     );
 
     return AppBar(
-      title:Center(
+      title: Center(
         child: Image.asset(
-          'images/logo.png',
-          height: MediaQuery.of(context).size.height*.07,
+          'images/icons/tacumbu/Tacumbu_ikatu.png',
+          height: MediaQuery.of(context).size.height * 3,
         ),
       ),
       backgroundColor: Colors.white,
       iconTheme: IconThemeData(
         color: Colors.grey,
       ),
-      leading: widget.sinBoton?Container():
-      (widget.botonBack?
-      IconButton(
-        icon: Icon(Icons.arrow_back_ios, color: Colors.grey),
-        onPressed: () => Navigator.of(context).pop(),
-      ):
-      Opciones()),
+      leading: widget.sinBoton
+          ? Container()
+          : (widget.botonBack
+              ? IconButton(
+                  icon: Icon(Icons.arrow_back_ios, color: Colors.grey),
+                  onPressed: () => Navigator.of(context).pop(),
+                  //onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //    builder: (context) => ConsultationsHome())),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //    builder: (context) => targetsHome())),
+                )
+              : Opciones()),
 
 //      IconButton(
 //        icon: Icon(Icons.menu,color: Colors.grey,),
@@ -65,25 +77,76 @@ class BarraState extends State<Barra>{
 //      ),
 
       actions: <Widget>[
-        !widget.sync?IconButton(
-          icon: Icono(
-            svgName: 'sync',
-            color: Colors.grey,
-            width: 30,
+        Padding(
+          padding: EdgeInsets.all(3.0),
+          child: DropdownButton<Language>(
+            onChanged: (Language language) {
+              _changeLanguage(language);
+            },
+            icon: Icon(Icons.language, color: Colors.grey),
+            items: Language.languageList()
+                .map<DropdownMenuItem<Language>>(
+                    (Language lang) => DropdownMenuItem(
+                          value: lang,
+                          child: Row(
+                            children: <Widget>[Text(lang.name)],
+                          ),
+                        ))
+                .toList(),
+            underline: SizedBox(),
           ),
-          onPressed: (){
-            Navigator.push(context,
-                new MaterialPageRoute(builder: (context)=>
-                    Sync(ventana: true,firstSync: false,)
-                )
-            );
-          },
-        ):Container(),
+        ),
+        !widget.sync
+            ? Padding(
+                padding: EdgeInsets.all(3.0),
+                child: IconButton(
+                  icon: Icon(Icons.home, color: Colors.grey),
+                  onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                      builder: (context) => ConsultationsHome())),
+                  // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+                  //    builder: (context) => targetsHome())),
+                ),
+              )
+            : Container(),
+        !widget.sync
+            ? IconButton(
+                icon: Icono(
+                  svgName: 'sync',
+                  color: Colors.grey,
+                  width: 25,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                      context,
+                      new MaterialPageRoute(
+                          builder: (context) => Sync(
+                                ventana: true,
+                                firstSync: false,
+                              )));
+                },
+              )
+            : Container(),
       ],
     );
   }
 
-
-
+  /* botonBackCond() async {
+    bool logueado;
+    SharedPreferences userData = await SharedPreferences.getInstance();
+    logueado = userData.getBool('login');
+    if (logueado) {
+      return IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: Colors.grey),
+        onPressed: () => Navigator.of(context)
+            .push(MaterialPageRoute(builder: (context) => ConsultationsHome())),
+        // onPressed: () => Navigator.of(context).push(MaterialPageRoute(
+        //    builder: (context) => targetsHome())),
+      );
+    } else {
+      return IconButton(
+        icon: Icon(Icons.arrow_back_ios, color: Colors.grey),
+        onPressed: () => Navigator.of(context).pop(),
+      );
+    }
+  } */
 }
-

@@ -2,9 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:siap/models/componentes/iconos.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-
 class Tarjeta extends StatelessWidget {
-
   Map datos;
   Tarjeta({this.datos});
 
@@ -14,7 +12,7 @@ class Tarjeta extends StatelessWidget {
     return Card(
       shape: RoundedRectangleBorder(
         side: BorderSide(
-          color: Color(0xFFA27AE4),
+          color: Color(0xFFF8B621),
           width: 2.0,
         ),
         borderRadius: BorderRadius.circular(8),
@@ -37,13 +35,13 @@ class Tarjeta extends StatelessWidget {
                     ),
                   ),
                   Divider(
-                    color: Color(0xFFA27AE4),
+                    color: Color(0xFFF8B621),
                     thickness: 2,
                   ),
                   Text(
                     'CÓDIGO',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.amber,
 //                      fontWeight: FontWeight.bold,
                       fontSize: 17,
                     ),
@@ -51,7 +49,7 @@ class Tarjeta extends StatelessWidget {
                   Text(
                     'CONSULTA TITULO NUM 03 ------',
                     style: TextStyle(
-                      color: Colors.blue,
+                      color: Colors.amber,
                       fontWeight: FontWeight.bold,
                       fontSize: 25,
                     ),
@@ -63,7 +61,7 @@ class Tarjeta extends StatelessWidget {
           Expanded(
             flex: 1,
             child: Container(
-              padding: EdgeInsets.only(left: 10,right: 10,top: 40),
+              padding: EdgeInsets.only(left: 10, right: 10, top: 40),
               child: Stack(
                 children: <Widget>[
                   Container(

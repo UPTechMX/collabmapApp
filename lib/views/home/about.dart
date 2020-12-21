@@ -6,7 +6,6 @@ import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_html/flutter_html.dart';
 
-
 class About extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -17,7 +16,7 @@ class About extends StatelessWidget {
         nombrePagina: null,
         elemento: FutureBuilder(
           future: getData(),
-          builder: (context,snapshot){
+          builder: (context, snapshot) {
             switch (snapshot.connectionState) {
               case ConnectionState.none:
                 return Text('');
@@ -25,7 +24,7 @@ class About extends StatelessWidget {
               case ConnectionState.waiting:
                 return Text(Translations.of(context).text('waiting'));
               case ConnectionState.done:
-                if (snapshot.hasError){
+                if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 }
                 Map datos = snapshot.data;
@@ -33,7 +32,8 @@ class About extends StatelessWidget {
                   padding: EdgeInsets.all(10),
                   child: Container(
                     color: Colors.white.withAlpha(200),
-                    padding: EdgeInsets.only(left: 5,bottom: 15,right: 5,top: 15),
+                    padding:
+                        EdgeInsets.only(left: 5, bottom: 15, right: 5, top: 15),
                     child: Column(
                       children: <Widget>[
                         Text(
@@ -41,16 +41,17 @@ class About extends StatelessWidget {
                           style: TextStyle(
                             fontWeight: FontWeight.bold,
                             fontSize: MediaQuery.of(context).size.height * .03,
-                            color: Color(0xFF2568D8),
+                            color: Color(0xFFF8B621),
                           ),
                         ),
-                        SizedBox(height: 10,),
+                        SizedBox(
+                          height: 10,
+                        ),
                         Html(
-                          data:'${datos['texto']}',
+                          data: '${datos['texto']}',
                           customTextAlign: (a) {
                             return TextAlign.justify;
                           },
-
                         ),
 //                        SizedBox(height: 10,),
 //                        Container(
@@ -89,9 +90,6 @@ class About extends StatelessWidget {
 //    Image img = Image.file(file);
 //    dat['image'] = img;
 
-
     return dat;
-
   }
-
 }
