@@ -1,43 +1,43 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 
-class InstalacionSel extends StatefulWidget{
-
+class InstalacionSel extends StatefulWidget {
   Checklist chk;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
-
+  GlobalKey<UserTargetState> keyUser;
 
   InstalacionSel({
     this.chk,
     this.keyBloques,
     this.keyAreas,
-    this.keyPreguntas
+    this.keyPreguntas,
+    this.keyUser,
   });
 
   @override
   InstalacionSelState createState() => InstalacionSelState(
-    chk:chk,
-    keyPreguntas: keyPreguntas,
-    keyBloques: keyBloques,
-    keyAreas: keyAreas
-  );
-
-
+        chk: chk,
+        keyPreguntas: keyPreguntas,
+        keyBloques: keyBloques,
+        keyAreas: keyAreas,
+        keyUser: keyUser,
+      );
 }
 
-class InstalacionSelState extends State<InstalacionSel>{
-
+class InstalacionSelState extends State<InstalacionSel> {
   Checklist chk;
   GlobalKey<PreguntasContState> keyPreguntas;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
-
+  GlobalKey<UserTargetState> keyUser;
 
   var chkId;
   var datosVis;
@@ -51,12 +51,12 @@ class InstalacionSelState extends State<InstalacionSel>{
     this.chk,
     this.keyBloques,
     this.keyAreas,
-    this.keyPreguntas
+    this.keyPreguntas,
+    this.keyUser,
   });
 
   @override
   Widget build(BuildContext context) {
-    
 //    print(chk.vId);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -68,23 +68,22 @@ class InstalacionSelState extends State<InstalacionSel>{
         ),
         FutureBuilder<List>(
           future: getInstalaciones(),
-          builder: (context,snapshot){
-            if(!snapshot.hasData) return Center(child: Text('No se encontraron instalaciones.'));
+          builder: (context, snapshot) {
+            if (!snapshot.hasData)
+              return Center(child: Text('No se encontraron instalaciones.'));
             return Column(
-              children: snapshot.data.map(
-                (lista){
-                  return DropdownButton(
-                    items: lista,
-                    value: selected2 == null? selected:selected2,
-                    hint: Text('Selecciona una instalacion'),
-                    onChanged: (value){
-                      setState(() {
-                        selected2 = value;
-                      });
-                    },
-                  );
-                }
-              ).toList(),
+              children: snapshot.data.map((lista) {
+                return DropdownButton(
+                  items: lista,
+                  value: selected2 == null ? selected : selected2,
+                  hint: Text('Selecciona una instalacion'),
+                  onChanged: (value) {
+                    setState(() {
+                      selected2 = value;
+                    });
+                  },
+                );
+              }).toList(),
             );
           },
         ),
@@ -93,29 +92,27 @@ class InstalacionSelState extends State<InstalacionSel>{
     );
   }
 
-
   Future<List> getInstalaciones() async {
-
-    datosVis =  await chk.datosVisita(true);
+    datosVis = await chk.datosVisita(true);
     datosChk = await chk.datosChk(false);
     chkId = await chk.chkId();
 
-    switch(datosChk['etapa']){
+    switch (datosChk['etapa']) {
       case 'visita':
         selected = datosVis['instalacionSug'];
         break;
       case 'instalacion':
         selected = datosVis['instalacionRealizada'];
         break;
-
     }
 
-    var insts = await db.query('SELECT * FROM Instalaciones WHERE proyectosId = ${datosVis['proyectosId']}');
+    var insts = await db.query(
+        'SELECT * FROM Instalaciones WHERE proyectosId = ${datosVis['proyectosId']}');
 
     List items = new List<DropdownMenuItem>();
-    for(int i = 0; i<insts.length; i++){
+    for (int i = 0; i < insts.length; i++) {
       var inst = insts[i];
-      if(inst['elim'] == 1){
+      if (inst['elim'] == 1) {
         continue;
       }
       var item = DropdownMenuItem(
@@ -124,19 +121,17 @@ class InstalacionSelState extends State<InstalacionSel>{
           style: TextStyle(fontSize: 14),
         ),
         value: inst['id'],
-
       );
       items.add(item);
     }
     List list = [];
     list.add(items);
     return list;
-
   }
 
-  botonesContinuar(){
+  botonesContinuar() {
     return Container(
-      padding: EdgeInsets.only(top:50),
+      padding: EdgeInsets.only(top: 50),
       child: Row(
         children: <Widget>[
           Expanded(
@@ -161,26 +156,26 @@ class InstalacionSelState extends State<InstalacionSel>{
                   'Siguiente',
                 ),
                 onPressed: avanza,
-              )
-          ),
+              )),
         ],
       ),
     );
   }
 
   avanza() async {
-    
-    var instSel = selected2 == null?selected:selected2;
+    var instSel = selected2 == null ? selected : selected2;
 
     var datosVis = await chk.datosVisita(false);
     var datosChk = await chk.datosChk(false);
-    switch(datosChk['etapa']){
+    switch (datosChk['etapa']) {
       case 'visita':
-        await db.query('UPDATE Clientes SET instalacionSug = $instSel WHERE id = ${datosVis['cId']}');
+        await db.query(
+            'UPDATE Clientes SET instalacionSug = $instSel WHERE id = ${datosVis['cId']}');
         break;
       case 'instalacion':
 //        print('acá $instSel');
-        await db.query('UPDATE Clientes SET instalacionRealizada = $instSel WHERE id = ${datosVis['cId']}');
+        await db.query(
+            'UPDATE Clientes SET instalacionRealizada = $instSel WHERE id = ${datosVis['cId']}');
         break;
     }
 
@@ -192,27 +187,24 @@ class InstalacionSelState extends State<InstalacionSel>{
     keyPreguntas.currentState.cambiaPagina('fotografias');
     keyAreas.currentState.actualizaAreas(areas);
     keyAreas.currentState.updAreaActivo('_fotos_');
-
   }
 
   regresa() async {
-
-    var instSel = selected2 == null?selected:selected2;
+    var instSel = selected2 == null ? selected : selected2;
 
     var datosVis = await chk.datosVisita(false);
     var datosChk = await chk.datosChk(false);
-    switch(datosChk['etapa']){
+    switch (datosChk['etapa']) {
       case 'visita':
-        await db.query('UPDATE Clientes SET instalacionSug = $instSel WHERE id = ${datosVis['cId']}');
+        await db.query(
+            'UPDATE Clientes SET instalacionSug = $instSel WHERE id = ${datosVis['cId']}');
         break;
       case 'instalacion':
-        await db.query('UPDATE Clientes SET instalacionRealizada = $instSel WHERE id = ${datosVis['cId']}');
+        await db.query(
+            'UPDATE Clientes SET instalacionRealizada = $instSel WHERE id = ${datosVis['cId']}');
         break;
     }
 
     widget.keyPreguntas.currentState.cambiaPagina('preguntas');
   }
-
-
-
 }

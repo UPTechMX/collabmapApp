@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'dart:async';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -227,6 +227,7 @@ class DatosDB {
   getMult(int vId) async {
     List mResult = await db.query("SELECT * FROM Multimedia WHERE visitasId = $vId");
     List mult = [];
+    mult ??= [];
     mResult ??= List();
     for(int i = 0;i<mResult.length; i++){
       Map m = Map();

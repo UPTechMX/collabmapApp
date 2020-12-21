@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:siap/views/barra.dart';
+import 'package:siap_monitoring/views/barra.dart';
 import 'questions.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 import 'tipeaValor.dart';
-import 'package:siap/views/maps/map.dart';
+import 'package:siap_monitoring/views/maps/map.dart';
 
 class Survey extends StatefulWidget {
   var id;

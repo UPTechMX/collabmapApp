@@ -30,7 +30,7 @@ class BarraState extends State<Barra>{
     return AppBar(
       title:Center(
         child: Image.asset(
-          'images/logo.png',
+          'images/icons/chacarita/chacarita.png',
           height: MediaQuery.of(context).size.height*.07,
         ),
       ),

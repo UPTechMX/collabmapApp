@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 
 class SendProblems extends StatefulWidget {
 

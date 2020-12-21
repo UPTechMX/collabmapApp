@@ -1,9 +1,10 @@
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/layout/sliderPagina.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/layout/sliderPagina.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:strings/strings.dart';
@@ -11,6 +12,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'userTarget.dart';
 
 class TargetsHome extends StatelessWidget {
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
   @override
   Widget build(BuildContext context) {
     return Pagina(
@@ -40,10 +42,12 @@ class TargetsHome extends StatelessWidget {
     ''');
 
     trgts ??= [];
-    for(int i = 0; i<trgts.length;i++){
-      var dims = await db.query("SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${trgts[i]['id']} ");
+    print(trgts);
+    for (int i = 0; i < trgts.length; i++) {
+      var dims = await db.query(
+          "SELECT * FROM Dimensiones WHERE type = 'structure' AND elemId = ${trgts[i]['id']} ");
       dims ??= [];
-      if(dims.length>0){
+      if (dims.length > 0) {
         targets.add(trgts[i]);
       }
     }
@@ -51,8 +55,11 @@ class TargetsHome extends StatelessWidget {
     return targets;
   }
 
-  elemento({var datos}){
-    return UserTarget(datos: datos,);
+  elemento({var datos}) {
+    return UserTarget(
+      datos: datos,
+      //key: keyUser,
+      keyUser: keyUser,
+    );
   }
 }
-

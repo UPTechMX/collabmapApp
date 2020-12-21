@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/models/componentes/colorLoader.dart';
-import 'package:siap/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/componentes/colorLoader.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/views/home/home.dart';
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/views/home/home.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 
 class Sync extends StatefulWidget {
   bool ventana;
@@ -115,7 +115,6 @@ class SyncState extends State<Sync> {
     });
 //
     List<Widget> actions = [];
-    if(!ventana){
       actions.add(
           FlatButton(
             child: Text(Translations.of(context).text('ok')),
@@ -125,7 +124,7 @@ class SyncState extends State<Sync> {
             },
           )
       );
-    }
+    
 
     emergente(
       context: context,

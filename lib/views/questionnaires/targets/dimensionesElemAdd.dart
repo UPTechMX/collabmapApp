@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'dimSelector.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 
 class DimensionesElemAdd extends StatelessWidget {
 

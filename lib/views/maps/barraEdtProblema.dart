@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 
 class BarritaEdtProblema extends StatefulWidget {
 

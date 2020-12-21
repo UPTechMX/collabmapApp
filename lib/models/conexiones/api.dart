@@ -4,17 +4,17 @@ import 'package:http/http.dart' as http;
 //import 'package:http/http.dart';
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/conexiones/sendDatos.dart';
-import 'package:siap/views/login/conexion.dart';
+import 'package:siap_monitoring/models/conexiones/sendDatos.dart';
+import 'package:siap_monitoring/views/login/conexion.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:latlong/latlong.dart';
 
 //String urlHtml = 'http://paraguaytest.collabmap.in';
-String urlHtml = 'http://192.168.1.104/~juanma/collabmap';
+String urlHtml = 'http://chacarita.collabmap.in';
 String SERVER = '$urlHtml/api/public/siapApp/';
 
 Future getDatos({String opt,String varNom = null, bool imprime,bool cache = false}) async {
@@ -545,7 +545,11 @@ sendData() async {
   }
 
   for(int j = 0; j<uccs.length; j++){
-    var ucc = uccs[j]['trgtElem'];
+    var ucc = uccs[j]['id'];
+    if(ucc == null){
+      continue;
+    }
+
     await db.query("DELETE FROM UserConsultationsChecklist WHERE id = ${ucc['id']}");
 
     var visitas = uccs[j]['visitas'];

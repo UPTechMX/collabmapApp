@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/componentes/boton.dart';
-import 'package:siap/views/consultations/consultations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/componentes/boton.dart';
+import 'package:siap_monitoring/views/consultations/consultations.dart';
 
 class Fases extends StatelessWidget {
 

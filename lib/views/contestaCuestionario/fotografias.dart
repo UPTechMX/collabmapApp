@@ -1,41 +1,44 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/multimedia.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/multimedia.dart';
+import 'package:siap_monitoring/views/verCuestionario/verCuestionario.dart';
+import 'package:siap_monitoring/views/verCuestionario/cuestionario.dart';
 
 import 'dart:io';
 import 'dart:async';
 import 'package:image_picker/image_picker.dart';
 import 'package:path_provider/path_provider.dart';
 
-class Fotografias extends StatefulWidget{
-
+class Fotografias extends StatefulWidget {
   Checklist chk;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntasContState> keyPreguntas;
-
-
+  GlobalKey<VerCuestionarioState> keyCuestionario;
+  GlobalKey<UserTargetState> keyUser;
 
   Fotografias({
     this.chk,
     this.keyBloques,
     this.keyAreas,
-    this.keyPreguntas
+    this.keyPreguntas,
+    this.keyCuestionario,
+    this.keyUser,
   });
 
   @override
   FotografiasState createState() => FotografiasState(
-    chk: chk,
-  );
-
+        chk: chk,
+      );
 }
 
-class FotografiasState extends State<Fotografias>{
-
+class FotografiasState extends State<Fotografias> {
   Checklist chk;
   String etapa;
   String justif;
@@ -47,14 +50,15 @@ class FotografiasState extends State<Fotografias>{
     File picture = await ImagePicker.pickImage(
         source: ImageSource.camera, maxWidth: 1000.0, maxHeight: 1000.0);
 
-    if(picture != null){
-      var directory = await getApplicationDocumentsDirectory(); // AppData folder path
+    if (picture != null) {
+      var directory =
+          await getApplicationDocumentsDirectory(); // AppData folder path
       var vId = chk.vId;
 
       var path = '${directory.path}/$vId';
 
       var existeDirVisita = await Directory(path).exists();
-      if(!existeDirVisita){
+      if (!existeDirVisita) {
         await creaDirectorio(path);
       }
 
@@ -72,14 +76,15 @@ class FotografiasState extends State<Fotografias>{
   Future usarFoto() async {
     File picture = await ImagePicker.pickImage(
         source: ImageSource.gallery, maxWidth: 1000.0, maxHeight: 1000.0);
-    if(picture != null){
-      var directory = await getApplicationDocumentsDirectory(); // AppData folder path
+    if (picture != null) {
+      var directory =
+          await getApplicationDocumentsDirectory(); // AppData folder path
       var vId = chk.vId;
 
       var path = '${directory.path}/$vId';
 
       var existeDirVisita = await Directory(path).exists();
-      if(!existeDirVisita){
+      if (!existeDirVisita) {
         await creaDirectorio(path);
       }
 
@@ -91,42 +96,42 @@ class FotografiasState extends State<Fotografias>{
       setState(() {
         image = picture;
       });
-
     }
   }
 
   creaDirectorio(path) async {
-    await Directory(path).create(recursive: true)
-        .then((Directory directory){
-          print(directory.path);
-        });
+    await Directory(path).create(recursive: true).then((Directory directory) {
+      print(directory.path);
+    });
   }
 
   FotografiasState({
     this.chk,
-  }){
+  }) {
     viable = Viable();
   }
 
   @override
   Widget build(BuildContext context) {
-    
     return Container(
       padding: EdgeInsets.all(15),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: <Widget>[
-          chk.datosVis['etapa'] != 'instalacion'?botonesFotografia():Container(),
+          chk.datosVis['etapa'] != 'instalacion'
+              ? botonesFotografia()
+              : Container(),
 //          fotografia(),
-          Multimedia(chk: chk,),
+          Multimedia(
+            chk: chk,
+          ),
           botonesContinuar()
-
         ],
       ),
     );
   }
 
-  botonesFotografia(){
+  botonesFotografia() {
     return Align(
       alignment: Alignment.topRight,
       child: Container(
@@ -143,14 +148,13 @@ class FotografiasState extends State<Fotografias>{
               child: Icon(Icons.camera_enhance),
               onPressed: tomarFoto,
             ),
-
           ],
         ),
       ),
     );
   }
 
-  fotografia(){
+  fotografia() {
     return Center(
       child: image == null
           ? Text('No hay imagen seleccionada')
@@ -158,35 +162,34 @@ class FotografiasState extends State<Fotografias>{
     );
   }
 
-  botonesContinuar(){
+  botonesContinuar() {
     return Container(
-      padding: EdgeInsets.only(top:50),
+      padding: EdgeInsets.only(top: 50),
       child: Row(
         children: <Widget>[
           Expanded(
-              flex: 5,
-              child: RaisedButton(
-                color: Colors.blue,
-                child: Text(
-                  'Regresar',
-                ),
-                onPressed: aPregs,
+            flex: 5,
+            child: RaisedButton(
+              color: Colors.blue,
+              child: Text(
+                'Regresar',
               ),
+              onPressed: aPregs,
+            ),
           ),
           Expanded(
             flex: 1,
             child: Text(''),
           ),
           Expanded(
-            flex: 5,
-            child: RaisedButton(
-              color: Colors.blue,
-              child: Text(
-                'Finalizar cuestionario',
-              ),
-              onPressed: finalizar,
-            )
-          ),
+              flex: 5,
+              child: RaisedButton(
+                color: Colors.blue,
+                child: Text(
+                  'Finalizar cuestionario',
+                ),
+                onPressed: finalizar,
+              )),
         ],
       ),
     );
@@ -194,8 +197,7 @@ class FotografiasState extends State<Fotografias>{
 
   aPregs() async {
     var chkDatos = await chk.datosChk(false);
-    if(chkDatos['etapa'] == 'visita' || chkDatos['etapa'] == 'instalacion'){
-
+    if (chkDatos['etapa'] == 'visita' || chkDatos['etapa'] == 'instalacion') {
       var bloque = '__instalaciones__';
 
       var areas = new Map();
@@ -207,10 +209,9 @@ class FotografiasState extends State<Fotografias>{
       widget.keyAreas.currentState.updAreaActivo(areaAct);
 
       widget.keyPreguntas.currentState.cambiaPagina('instalacion');
-    }else{
+    } else {
       widget.keyPreguntas.currentState.cambiaPagina('preguntas');
     }
-
   }
 
   test() async {
@@ -228,7 +229,7 @@ class FotografiasState extends State<Fotografias>{
                   'Una vez finalizado ya no podrá modificarse',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-              ] ,
+              ],
             ),
           ),
           actions: <Widget>[
@@ -244,10 +245,9 @@ class FotografiasState extends State<Fotografias>{
     );
   }
 
-
   finalizar() async {
     var faltaPreg = await chk.faltaPreg();
-    if(faltaPreg != null){
+    if (faltaPreg != null) {
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
@@ -262,7 +262,7 @@ class FotografiasState extends State<Fotografias>{
                     'Existen preguntas sin respuesta.',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ] ,
+                ],
               ),
             ),
             actions: <Widget>[
@@ -281,7 +281,7 @@ class FotografiasState extends State<Fotografias>{
 
     bool faltaFoto = false;
     String fotoFaltante;
-    for(var i in chk.fotosInst.keys){
+    for (var i in chk.fotosInst.keys) {
       DB db = DB.instance;
       String sql = '''
         SELECT * 
@@ -291,18 +291,19 @@ class FotografiasState extends State<Fotografias>{
 
       var foto = await db.query(sql);
 
-      if(foto == null){
+      if (foto == null) {
         faltaFoto = true;
         fotoFaltante = chk.fotosInst[i];
         break;
       }
     }
 
-    if(faltaFoto && chk.datosVis['etapa'] == 'instalacion'){
+    if (faltaFoto && chk.datosVis['etapa'] == 'instalacion') {
       return showDialog<void>(
         context: context,
         barrierDismissible: false, // user must tap button!
         builder: (BuildContext context) {
+          //return verCuestionario();
           return AlertDialog(
             title: Text('Faltan fotografías por subir'),
             content: SingleChildScrollView(
@@ -313,7 +314,7 @@ class FotografiasState extends State<Fotografias>{
                     'Falta al menos la fotografía $fotoFaltante.',
                     style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                ] ,
+                ],
               ),
             ),
             actions: <Widget>[
@@ -329,7 +330,6 @@ class FotografiasState extends State<Fotografias>{
         },
       );
     }
-
     var chkDatos = await chk.datosChk(false);
     return showDialog<void>(
       context: context,
@@ -342,11 +342,21 @@ class FotografiasState extends State<Fotografias>{
               crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
                 Text(
+                  'Resumen del cuestionario:',
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+                Cuestionario(chk.vId),
+                Text(
                   'Una vez finalizado ya no podrá modificarse',
                   style: TextStyle(fontWeight: FontWeight.bold),
                 ),
-                chkDatos['etapa'] == 'visita'?viable:Container(width: 0,height: 0,),
-              ] ,
+                chkDatos['etapa'] == 'visita'
+                    ? viable
+                    : Container(
+                        width: 0,
+                        height: 0,
+                      ),
+              ],
             ),
           ),
           actions: <Widget>[
@@ -362,19 +372,17 @@ class FotografiasState extends State<Fotografias>{
                 var viableInst = viable.viable;
                 var justifViable = viable.justif;
 
-                if(chkDatos['etapa'] == 'visita'){
-                  if(viableInst == 1){
-
+                if (chkDatos['etapa'] == 'visita') {
+                  if (viableInst == 1) {
                     print('finaliza');
                     finVis(viable: true);
-
-                  }else{
-                    if(justifViable != null && justifViable != ''){
+                  } else {
+                    if (justifViable != null && justifViable != '') {
                       print('cancela por no viable');
                       finVis(viable: false, justifViable: justifViable);
                     }
                   }
-                }else{
+                } else {
                   print('finaliza');
                   finVis(viable: true);
                 }
@@ -386,63 +394,53 @@ class FotografiasState extends State<Fotografias>{
     );
   }
 
-  finVis({bool viable = true,String justifViable = ''}) async {
+  finVis({bool viable = true, String justifViable = ''}) async {
     await chk.finalizaVisita(viable: viable, justifViable: justifViable);
     Navigator.of(context).pop();
     Navigator.of(context).pop();
-    Navigator.of(context).setState( (){} );
+    Navigator.of(context).setState(() {});
+    widget.keyUser.currentState.finishSurvey();
   }
-
-
 }
 
-class Viable extends StatefulWidget{
-
+class Viable extends StatefulWidget {
   String justif;
   var viable;
 
-  Viable(){
+  Viable() {
     justif = null;
     viable = null;
   }
 
   @override
   ViableState createState() => ViableState();
-  
 }
 
-class ViableState extends State<Viable>{
+class ViableState extends State<Viable> {
   var selected;
   TextEditingController justifController = TextEditingController();
 
-
   List items = new List<DropdownMenuItem>();
-  ViableState(){
-    items.add(
-        DropdownMenuItem(
-          child: Text(
-            'Sí',
-            style: TextStyle(fontSize: 14),
-          ),
-          value: 1,
-        )
-    );
-    items.add(
-        DropdownMenuItem(
-          child: Text(
-            'No',
-            style: TextStyle(fontSize: 14),
-          ),
-          value: 0,
-        )
-    );
-
+  ViableState() {
+    items.add(DropdownMenuItem(
+      child: Text(
+        'Sí',
+        style: TextStyle(fontSize: 14),
+      ),
+      value: 1,
+    ));
+    items.add(DropdownMenuItem(
+      child: Text(
+        'No',
+        style: TextStyle(fontSize: 14),
+      ),
+      value: 0,
+    ));
   }
 
   @override
   Widget build(BuildContext context) {
-    
-    justifController = TextEditingController(text:widget.justif);
+    justifController = TextEditingController(text: widget.justif);
     return Container(
       child: Column(
         children: <Widget>[
@@ -452,7 +450,7 @@ class ViableState extends State<Viable>{
             items: items,
             value: selected,
             hint: Text('¿Es viable?'),
-            onChanged: (value){
+            onChanged: (value) {
               setState(() {
                 selected = value;
                 widget.viable = value;
@@ -460,27 +458,28 @@ class ViableState extends State<Viable>{
             },
           ),
           selected == 0
-              ?Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: <Widget>[
-                  SizedBox(height: 48.0),
-                  Text('¿Por qué no es viable?'),
-                  TextField(
-                      controller: justifController,
-                      keyboardType: TextInputType.multiline,
-                      maxLines: null,
-                      onChanged: (text){
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    SizedBox(height: 48.0),
+                    Text('¿Por qué no es viable?'),
+                    TextField(
+                        controller: justifController,
+                        keyboardType: TextInputType.multiline,
+                        maxLines: null,
+                        onChanged: (text) {
 //                  print(text);
-                        widget.justif = text;
+                          widget.justif = text;
 //                  print(justif);
-                      }
-                  )
-                ],
-              )
-              :Container(width: 0,height: 0,),
+                        })
+                  ],
+                )
+              : Container(
+                  width: 0,
+                  height: 0,
+                ),
         ],
       ),
     );
   }
-
 }

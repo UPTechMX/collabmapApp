@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/fotografiasInst.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/fotografiasInst.dart';
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 
 
 class Multimedia extends StatefulWidget{

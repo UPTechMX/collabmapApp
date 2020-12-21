@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:io';
 import 'package:flutter_html/flutter_html.dart';

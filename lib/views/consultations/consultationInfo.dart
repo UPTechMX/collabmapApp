@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/models/componentes/iconos.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'consultation.dart';
 import 'package:flutter_html/flutter_html.dart';
 

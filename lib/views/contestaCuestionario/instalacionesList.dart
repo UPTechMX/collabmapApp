@@ -1,45 +1,49 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/bloques.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/pregunta.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/views/contestaCuestionario/instalacion.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/bloques.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/instalacion.dart';
 
-
-class InstalacionesList extends StatefulWidget{
+class InstalacionesList extends StatefulWidget {
   Checklist chk;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> keyPreguntas;
+  GlobalKey<UserTargetState> keyUser;
 
   InstalacionesList({
     this.chk,
     this.keyBloques,
     this.keyAreas,
     this.keyPreguntas,
-    this.keyPregunta
+    this.keyPregunta,
+    this.keyUser,
   });
 
   @override
   InstalacionesListState createState() => InstalacionesListState(
-    chk: chk,
-    keyPreguntas: key,
-    keyAreas: keyAreas,
-    keyBloques: keyBloques,
-    keyPregunta: keyPregunta,
-  );
+        chk: chk,
+        keyPreguntas: key,
+        keyAreas: keyAreas,
+        keyBloques: keyBloques,
+        keyPregunta: keyPregunta,
+        keyUser: keyUser,
+      );
 }
 
-class InstalacionesListState extends State<InstalacionesList>{
-
+class InstalacionesListState extends State<InstalacionesList> {
   Checklist chk;
   GlobalKey<BloquesBtnState> keyBloques;
   GlobalKey<AreasState> keyAreas;
   GlobalKey<PreguntaState> keyPregunta;
   GlobalKey<PreguntasContState> keyPreguntas;
+  GlobalKey<UserTargetState> keyUser;
 
   var db = DB.instance;
 
@@ -51,22 +55,26 @@ class InstalacionesListState extends State<InstalacionesList>{
     this.keyBloques,
     this.keyAreas,
     this.keyPreguntas,
-    this.keyPregunta
+    this.keyPregunta,
+    this.keyUser,
   });
-
 
   @override
   Widget build(BuildContext context) {
-    
     getInstalaciones();
     return FutureBuilder<List>(
       future: getInstalaciones(),
-      builder: (context,snapshot){
-        if(!snapshot.hasData) return Center(child: Text('No se encontraron instalaciones.'));
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(child: Text('No se encontraron instalaciones.'));
         return Column(
-          children: snapshot.data.map((inst){
+          children: snapshot.data.map((inst) {
 //            print(inst);
-            return Instalacion(chk: chk,instId: inst['id'],nombre: inst['nombre'],);
+            return Instalacion(
+              chk: chk,
+              instId: inst['id'],
+              nombre: inst['nombre'],
+            );
             ;
           }).toList(),
         );
@@ -74,16 +82,13 @@ class InstalacionesListState extends State<InstalacionesList>{
     );
   }
 
-
   Future<List> getInstalaciones() async {
-    
-    datosChk =  await chk.datosVisita(false);
+    datosChk = await chk.datosVisita(false);
     chkId = await chk.chkId();
-    
-    var insts = await db.query('SELECT * FROM Instalaciones WHERE proyectosId = ${datosChk['proyectosId']}');
+
+    var insts = await db.query(
+        'SELECT * FROM Instalaciones WHERE proyectosId = ${datosChk['proyectosId']}');
 //    print(insts);
     return insts;
-    
   }
-
 }

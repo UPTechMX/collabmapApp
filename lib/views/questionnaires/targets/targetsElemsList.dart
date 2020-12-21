@@ -1,32 +1,36 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/views/questionnaires/targets/chkAction.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/chkAction.dart';
 
 class TargetsElemsList extends StatefulWidget {
-
   int targetsId;
   int usersTargetsId;
-
+  GlobalKey<UserTargetState> keyUser = GlobalKey();
   TargetsElemsList({
     Key key,
     this.targetsId,
-    this.usersTargetsId
-  }):super(key:key);
+    this.usersTargetsId,
+    this.keyUser,
+  }) : super(key: key);
 
   @override
   TargetsElemsListState createState() => TargetsElemsListState();
 }
 
 class TargetsElemsListState extends State<TargetsElemsList> {
+  finishSurvey() {
+    setState(() {});
+  }
 
   @override
   Widget build(BuildContext context) {
     getTargetsElems();
     return FutureBuilder(
       future: getTargetsElems(),
-      builder: (context,snapshot){
+      builder: (context, snapshot) {
         switch (snapshot.connectionState) {
           case ConnectionState.none:
             return Text('');
@@ -34,79 +38,66 @@ class TargetsElemsListState extends State<TargetsElemsList> {
           case ConnectionState.waiting:
             return Text(Translations.of(context).text('waiting'));
           case ConnectionState.done:
-            if (snapshot.hasError){
+            if (snapshot.hasError) {
               return Text('Error: ${snapshot.error}');
             }
 
             List chks = snapshot.data['targetsChecklist'];
 //            print('CHKS: $chks');
             var hElems = <Widget>[];
-            hElems.add(
-                Expanded(
-                  flex: 1,
+            hElems.add(Expanded(
+              flex: 1,
+              child: Text(
+                Translations.of(context).text('name'),
+                style: TextStyle(fontWeight: FontWeight.bold),
+              ),
+            ));
+            for (int i = 0; i < chks.length; i++) {
+              hElems.add(Expanded(
+                flex: 1,
+                child: Center(
                   child: Text(
-                    Translations.of(context).text('name'),
-                    style: TextStyle(
-                        fontWeight: FontWeight.bold
-                    ),
+                    Translations.of(context).text(chks[i]['code']),
+                    style: TextStyle(fontWeight: FontWeight.bold),
                   ),
-                )
-            );
-            for(int i = 0;i<chks.length;i++){
-              hElems.add(
-                Expanded(
-                  flex: 1,
-                  child: Center(
-                    child: Text(
-                      Translations.of(context).text(chks[i]['code']),
-                      style: TextStyle(
-                          fontWeight: FontWeight.bold
-                      ),
-                    ),
-                  ),
-                )
-              );
+                ),
+              ));
             }
             List rows = <Widget>[];
+            rows.add(Row(
+              children: hElems,
+            ));
             rows.add(
-                Row(
-                  children: hElems ,
-                )
-            );
-            rows.add(
-              SizedBox(height: 10,),
+              SizedBox(
+                height: 10,
+              ),
             );
 
             List tes = snapshot.data['TargetsElems'];
 
-            for(int j = 0;j<tes.length;j++){
+            for (int j = 0; j < tes.length; j++) {
 //              print('tes: ${tes[j]}');
               var bElems = <Widget>[];
-              bElems.add(
-                  Expanded(
-                    flex: 1,
-                    child: Text(
-                      tes[j]['deName'],
-                    ),
-                  )
-              );
+              bElems.add(Expanded(
+                flex: 1,
+                child: Text(
+                  tes[j]['deName'],
+                ),
+              ));
 
-              for(int i = 0;i<chks.length;i++){
-                bElems.add(
-                    Expanded(
-                      flex: 1,
-                      child: ChkAction(
-                        datTE: tes[j],
-                        datChk: chks[i],
-                      ),
-                    )
-                );
+              for (int i = 0; i < chks.length; i++) {
+                bElems.add(Expanded(
+                  flex: 1,
+                  child: ChkAction(
+                    datTE: tes[j],
+                    datChk: chks[i],
+                    keyUser: widget.keyUser,
+                  ),
+                ));
               }
-              rows.add(
-                  Row(
-                    children: bElems ,
-                  )
-              );
+              rows.add(Row(
+                children: bElems,
+              ));
             }
 
             return Column(
@@ -115,12 +106,11 @@ class TargetsElemsListState extends State<TargetsElemsList> {
           default:
             return Column();
         }
-
       },
     );
   }
 
-  refresh(){
+  refresh() {
     print('refresh');
     setState(() {});
   }
@@ -162,5 +152,4 @@ class TargetsElemsListState extends State<TargetsElemsList> {
 //    print('Resp: $resp');
     return resp;
   }
-
 }

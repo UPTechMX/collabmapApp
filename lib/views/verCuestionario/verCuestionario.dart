@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/views/barra.dart';
-import 'package:siap/views/verCuestionario/cuestionario.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/views/barra.dart';
+import 'package:siap_monitoring/views/verCuestionario/cuestionario.dart';
 
 
 

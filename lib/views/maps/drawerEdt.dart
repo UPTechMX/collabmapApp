@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'map.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/layout/iconos.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/layout/iconos.dart';
 import 'package:poly/poly.dart' as Poly;
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 
 
 

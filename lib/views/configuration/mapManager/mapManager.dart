@@ -1,14 +1,14 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:siap/views/barra.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/views/barra.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:quiver/io.dart';
 import 'package:path_provider/path_provider.dart';
 import 'dart:convert';
 import 'tarjetaInfo.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 
 class MapManager extends StatefulWidget {
   @override

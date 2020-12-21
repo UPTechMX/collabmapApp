@@ -1,11 +1,11 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:siap/views/barra.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/layout/paginaList.dart';
-import 'package:siap/views/home/privacidad.dart';
+import 'package:siap_monitoring/views/barra.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/layout/paginaList.dart';
+import 'package:siap_monitoring/views/home/privacidad.dart';
 
 class Registro extends StatefulWidget {
   @override
@@ -88,6 +88,32 @@ class RegistroState extends State<Registro> {
               FlatButton(
                 child: Text(Translations.of(context).text('ok')),
                 onPressed: () {
+                  Navigator.of(context).pop();
+                },
+              ),
+            ],
+          );
+        },
+      );
+    }
+
+    Future<void> RegistroExitoso({BuildContext context,String texto}) async {
+      return showDialog<void>(
+        context: context,
+        barrierDismissible: false, // user must tap button!
+        builder: (BuildContext context) {
+          return AlertDialog(
+//          title: Text('Point alert'),
+            content: SingleChildScrollView(
+              child: Center(
+                child: Text(texto),
+              ),
+            ),
+            actions: <Widget>[
+              FlatButton(
+                child: Text(Translations.of(context).text('ok')),
+                onPressed: () {
+                  Navigator.of(context).pop();
                   Navigator.of(context).pop();
                 },
               ),
@@ -314,8 +340,8 @@ class RegistroState extends State<Registro> {
                       );
                       print(resp);
                       if(resp != null && resp['ok'] == 1){
-                        Navigator.of(context).pop();
-                        Alert(texto: Translations.of(context).text('user_created'));
+                        //Navigator.of(context).pop();
+                        RegistroExitoso(context: context, texto: Translations.of(context).text('user_created'));
                       }else
                       if(resp != null && resp['ok'] == 2){
                         Alert(context: context,texto: Translations.of(context).text('userExist'));

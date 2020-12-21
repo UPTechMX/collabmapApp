@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:siap/models/cuestionario/checklist.dart';
-import 'package:siap/views/contestaCuestionario/areas.dart';
-import 'package:siap/views/contestaCuestionario/preguntasCont.dart';
-import 'package:siap/views/contestaCuestionario/pregunta.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/userTarget.dart';
+import 'package:siap_monitoring/views/questionnaires/targets/targetsElemsList.dart';
+import 'package:siap_monitoring/models/cuestionario/checklist.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/areas.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/preguntasCont.dart';
+import 'package:siap_monitoring/views/contestaCuestionario/pregunta.dart';
 
-class BloquesBtn extends StatefulWidget{
-
+class BloquesBtn extends StatefulWidget {
   Checklist chk;
   GlobalKey<AreasState> KeyAreas;
   GlobalKey<PreguntasContState> KeyPreguntas;
   GlobalKey<PreguntaState> KeyPregunta;
+  GlobalKey<UserTargetState> keyUser;
   Map bloquesAct;
   String activo;
 
@@ -19,21 +21,21 @@ class BloquesBtn extends StatefulWidget{
     this.KeyAreas,
     this.KeyPreguntas,
     this.KeyPregunta,
+    this.keyUser,
     this.bloquesAct,
     this.activo,
-  }) : super(key : key);
+  }) : super(key: key);
 
   @override
-  BloquesBtnState createState() => BloquesBtnState(chk:chk,bloquesAct:bloquesAct,activo: activo);
-
+  BloquesBtnState createState() =>
+      BloquesBtnState(chk: chk, bloquesAct: bloquesAct, activo: activo);
 }
 
-class BloquesBtnState extends State<BloquesBtn>{
-
+class BloquesBtnState extends State<BloquesBtn> {
   Checklist chk;
   Map bloquesAct = new Map();
   String activo;
-  BloquesBtnState({this.chk,this.bloquesAct,this.activo}){
+  BloquesBtnState({this.chk, this.bloquesAct, this.activo}) {
     this.bloquesAct['__general__'] = 1;
     this.bloquesAct['__fotografias__'] = 1;
     this.bloquesAct['__instalaciones__'] = 1;
@@ -41,68 +43,70 @@ class BloquesBtnState extends State<BloquesBtn>{
 
   @override
   Widget build(BuildContext context) {
-    
     return FutureBuilder<List>(
       future: bloquesList(),
-      builder: (context,snapshot){
-        if(!snapshot.hasData) return Center(child: Text('No se encontraron bloques.'));
+      builder: (context, snapshot) {
+        if (!snapshot.hasData)
+          return Center(child: Text('No se encontraron bloques.'));
         return ListView(
             scrollDirection: Axis.horizontal,
-            children:snapshot.data.map(
-                (bloque){
-                  if(bloque['muestra'] == 0){
-                    return Container(width: 0,height: 0,);
-                  }
+            children: snapshot.data.map((bloque) {
+              if (bloque['muestra'] == 0) {
+                return Container(
+                  width: 0,
+                  height: 0,
+                );
+              }
 
-                  return Container(
-                    padding: const EdgeInsets.only(bottom: 10),
-                    child: FlatButton(
-                        onPressed: (){
-                          if(bloquesAct[bloque['identificador']] == 1){
-                            setState(() {
-                              activo = bloque['identificador'];
-                            });
-                            clickBloque(bloque);
-                          }
-                        },
-                        child:Column(
-                          children: <Widget>[
-                            Container(
-                              padding: EdgeInsets.only(top:15,bottom: 5),
-                              child: Text(
-                                bloque['nombre'],
-                                style: TextStyle(
-                                  color: bloquesAct[bloque['identificador']] == 1?Colors.blue:Colors.grey,
-                                ),
-                              ),
+              return Container(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: FlatButton(
+                    onPressed: () {
+                      if (bloquesAct[bloque['identificador']] == 1) {
+                        setState(() {
+                          activo = bloque['identificador'];
+                        });
+                        clickBloque(bloque);
+                      }
+                    },
+                    child: Column(
+                      children: <Widget>[
+                        Container(
+                          padding: EdgeInsets.only(top: 15, bottom: 5),
+                          child: Text(
+                            bloque['nombre'],
+                            style: TextStyle(
+                              color: bloquesAct[bloque['identificador']] == 1
+                                  ? Colors.blue
+                                  : Colors.grey,
+                              fontSize: 15,
                             ),
-                            Container(
-                              height: 4,
-                              width: 40,
-                              decoration: BoxDecoration(
-                                color: this.activo == bloque['identificador']?Colors.blue:Colors.transparent,
-                              ),
-                            )
-                          ],
+                          ),
+                        ),
+                        Container(
+                          height: 4,
+                          width: 40,
+                          decoration: BoxDecoration(
+                            color: this.activo == bloque['identificador']
+                                ? Colors.blue
+                                : Colors.transparent,
+                          ),
                         )
-                    ),
-                  );
-                }
-            ).toList()
-        );
+                      ],
+                    )),
+              );
+            }).toList());
       },
     );
   }
 
   Future<List> bloquesList() async {
-
     List bloques = await chk.getBloques();
 //    print('Bloques $bloques');
 //    List bloques = await chk.getBloquesCalc();
 //    print(bloques);
     var datos = await chk.datosChk(false);
 //    print('Datos $datos');
-
 
     Map bloque = new Map();
     bloque['valor'] = 0;
@@ -114,7 +118,7 @@ class BloquesBtnState extends State<BloquesBtn>{
     bloque['areas']['_datGral_']['nombre'] = 'Datos generales';
 //    bloques.insert(0, bloque);
 
-    if(datos['etapa'] == 'visita' || datos['etapa'] == 'instalacion'){
+    if (datos['etapa'] == 'visita' || datos['etapa'] == 'instalacion') {
       bloque = new Map();
       bloque['valor'] = 0;
       bloque['muestra'] = 1;
@@ -139,13 +143,13 @@ class BloquesBtnState extends State<BloquesBtn>{
     return bloques;
   }
 
-  updBloquesAct(String identificador){
+  updBloquesAct(String identificador) {
     setState(() {
       this.bloquesAct[identificador] = 1;
     });
   }
 
-  updBloqueActivo(String identificador){
+  updBloqueActivo(String identificador) {
     setState(() {
       this.activo = identificador;
     });
@@ -154,13 +158,13 @@ class BloquesBtnState extends State<BloquesBtn>{
   clickBloque(bloque) async {
     widget.KeyAreas.currentState.actualizaAreas(bloque['areas']);
     Map area;
-    for(var i in bloque['areas'].keys){
+    for (var i in bloque['areas'].keys) {
       area = bloque['areas'][i];
       widget.KeyAreas.currentState.updAreaActivo(i);
       break;
     }
 
-    switch(bloque['identificador']){
+    switch (bloque['identificador']) {
       case '__general__':
         widget.KeyPreguntas.currentState.cambiaPagina('general');
         break;
@@ -171,31 +175,30 @@ class BloquesBtnState extends State<BloquesBtn>{
         widget.KeyPreguntas.currentState.cambiaPagina('instalacion');
         break;
       default:
-        if(widget.KeyPreguntas.currentState.pagina != 'preguntas'){
+        if (widget.KeyPreguntas.currentState.pagina != 'preguntas') {
           widget.KeyPreguntas.currentState.cambiaPagina('preguntas');
         }
 
         var pregs = await chk.resultados(true);
 
         var pId;
-        for(var i in area['preguntas'].keys){
+        for (var i in area['preguntas'].keys) {
           pId = i;
           break;
         }
         var preg = pregs[pId];
-        if(preg['muestra'] == 1){
-
+        if (preg['muestra'] == 1) {
           widget.KeyPregunta.currentState.cambiaPregunta(pId, 'siguiente');
-        }else{
+        } else {
           var p = chk.sigPregSaltos(pId, pregs);
-          if(p['pId'] != null){
-            widget.KeyPregunta.currentState.cambiaPregunta(p['pId'], 'siguiente');
+          if (p['pId'] != null) {
+            widget.KeyPregunta.currentState
+                .cambiaPregunta(p['pId'], 'siguiente');
             updBloqueActivo(p['bId']);
             var est = await chk.estructura();
             var areas = est['bloques'][p['bId']]['areas'];
             widget.KeyAreas.currentState.actualizaAreas(areas);
             widget.KeyAreas.currentState.updAreaActivo(p['aId']);
-
           }
         }
         break;

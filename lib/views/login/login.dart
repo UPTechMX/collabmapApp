@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/views/login/conexion.dart';
+import 'package:siap_monitoring/views/login/conexion.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/models/translations.dart';
+import 'package:siap_monitoring/models/translations.dart';
 import 'registro.dart';
 
 class Login extends StatefulWidget{
@@ -180,59 +180,40 @@ class _Login extends State<Login>{
       ),
     );
 
-    return Scaffold(
-      backgroundColor: Colors.white,
-      body: Stack(
-        children: <Widget>[
-          Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topCenter,
-                end: Alignment.bottomCenter,
-                colors: [
-                  Color(0xFFE9E9E9),
-                  Color(0xFFFBFBFB),
-                ],
-              ),
-            ),
-          ),
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
-            mainAxisSize: MainAxisSize.max,
-            mainAxisAlignment: MainAxisAlignment.end,
+    return Container(
+      decoration: BoxDecoration(
+          image: DecorationImage(
+        image: AssetImage('images/loginChacarita.png'),
+        fit: BoxFit.cover,
+      )),
+      child: Scaffold(
+          backgroundColor: Colors.transparent,
+          body: Stack(
             children: <Widget>[
-              Image.asset('images/login2.png')
-            ],
-          ),
-          Center(
-            child: Column(
-              children: <Widget>[
-                SizedBox(height: MediaQuery.of(context).padding.top ),
-                Image.asset('images/login1.png')
-              ],
-            ),
-          ),
-          Center(
-              child:ListView(
+              Center(
+                child: Column(
+                  children: <Widget>[
+                    SizedBox(height: 175.0),
+                    Image.asset('images/icons/chacarita/chacarita.png')
+                  ],
+                ),
+              ),
+              Center(
+                  child: ListView(
                 shrinkWrap: true,
-                padding: EdgeInsets.only(left: 24.0,right:24.0),
+                padding: EdgeInsets.only(left: 24.0, right: 24.0),
                 children: <Widget>[
-//                  SizedBox(height: MediaQuery.of(context).padding.top ),
-//                  Image.asset('images/login1.png'),
-//                  SizedBox(height: 15),
-//                  SizedBox(height: MediaQuery.of(context).size.width+10),
                   SizedBox(height: MediaQuery.of(context).size.height * .58),
                   usuario,
                   SizedBox(height: 20.0),
                   password,
                   SizedBox(height: 20.0),
-                  _isLoading?conectando:loginButton,
+                  _isLoading ? conectando : loginButton,
 //            loginButton,
                 ],
-              )
-          ),
-        ],
-      )
+              )),
+            ],
+          )),
     );
   }
 

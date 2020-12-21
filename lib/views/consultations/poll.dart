@@ -1,12 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:siap/views/consultations/consultation.dart';
-import 'package:siap/views/consultations/healthPoll.dart';
+import 'package:siap_monitoring/views/consultations/consultation.dart';
+import 'package:siap_monitoring/views/consultations/healthPoll.dart';
 import 'package:flutter/material.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/conexiones/DB.dart';
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 import 'dart:convert';
 
 class Poll extends StatefulWidget {
@@ -26,7 +26,7 @@ class PollState extends State<Poll> {
   Widget build(BuildContext context) {
 
     var palomita = Container(
-      padding: EdgeInsets.all(MediaQuery.of(context).size.width*.025),
+      padding: EdgeInsets.all(MediaQuery.of(context).size.width*.012),
       child: Align(
         alignment: Alignment.topRight,
         child: Icon(

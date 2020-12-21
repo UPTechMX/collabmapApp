@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:siap/views/maps/map.dart';
+import 'package:siap_monitoring/views/maps/map.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:siap/models/layout/iconos.dart';
+import 'package:siap_monitoring/models/layout/iconos.dart';
 
 class FancyFab extends StatefulWidget {
   final Function() onPressed;

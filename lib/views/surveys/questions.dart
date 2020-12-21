@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'respuestas.dart';
-import 'package:siap/models/conexiones/DB.dart';
+import 'package:siap_monitoring/models/conexiones/DB.dart';
 import 'tipeaValor.dart';
-import 'package:siap/models/translations.dart';
-import 'package:siap/models/conexiones/api.dart';
-import 'package:siap/models/componentes/iconos.dart';
+import 'package:siap_monitoring/models/translations.dart';
+import 'package:siap_monitoring/models/conexiones/api.dart';
+import 'package:siap_monitoring/models/componentes/iconos.dart';
 
 
 class Question extends StatefulWidget {
