@@ -14,7 +14,7 @@ import 'package:siap_monitoring/models/translations.dart';
 import 'package:latlong/latlong.dart';
 
 //String urlHtml = 'http://paraguaytest.collabmap.in';
-String urlHtml = 'http://chacarita.collabmap.in';
+String urlHtml = 'http://colabmap.muvh.gov.py';
 String SERVER = '$urlHtml/api/public/siapApp/';
 
 Future getDatos({String opt,String varNom = null, bool imprime,bool cache = false}) async {
